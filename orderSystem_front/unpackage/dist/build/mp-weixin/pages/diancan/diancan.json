@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "点餐",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "search": "/components/search",
+    "settlement": "/components/settlement",
+    "good-list": "/components/goodList"
+  }
+}

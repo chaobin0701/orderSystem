@@ -1,0 +1,76 @@
+@charset "UTF-8";
+/* 水平间距 */
+/* 水平间距 */
+.register {
+  padding-top: 100rpx;
+  width: 100%;
+}
+.register .box {
+  display: flex;
+  height: 900rpx;
+  width: 75%;
+  padding: 40rpx;
+  margin: 0 auto;
+  border-radius: 26rpx;
+  background-color: #fff;
+  flex-direction: column;
+  color: #25ABBE;
+  justify-content: space-between;
+}
+.register .box .title {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 70rpx;
+  line-height: 70rpx;
+  margin: 22rpx 0;
+}
+.register .box .title .title_1 {
+  font-size: 28rpx;
+  border-bottom: 1px solid #25ABBE;
+}
+.register .box .title .title_2 {
+  font-weight: bold;
+  color: #2096a6;
+  font-size: 44rpx;
+}
+.register .box input {
+  width: 100%;
+  padding-left: 15rpx;
+  height: 90%;
+}
+.register .box .user, .register .box .password, .register .box .phone, .register .box .name {
+  display: flex;
+  margin: 20rpx 0;
+  height: 120rpx;
+  flex-direction: column;
+}
+.register .box .user .userInput, .register .box .user .userPwd, .register .box .user .userPhone, .register .box .user .userName, .register .box .password .userInput, .register .box .password .userPwd, .register .box .password .userPhone, .register .box .password .userName, .register .box .phone .userInput, .register .box .phone .userPwd, .register .box .phone .userPhone, .register .box .phone .userName, .register .box .name .userInput, .register .box .name .userPwd, .register .box .name .userPhone, .register .box .name .userName {
+  display: flex;
+  height: 60rpx;
+  box-sizing: border-box;
+  height: 60rpx;
+  margin: 10rpx 0;
+  border-bottom: 1px solid rgba(49, 148, 167, 0.3);
+}
+.register .box .tips {
+  align-self: flex-start;
+  font-size: 28rpx;
+  height: 40rpx;
+  line-height: 40rpx;
+  padding-bottom: 20rpx;
+}
+.register .box .tips.error {
+  color: red;
+}
+.register .box button {
+  margin: 80rpx 0 0;
+  border: none;
+  height: 70rpx;
+  line-height: 70rpx;
+  font-size: 40rpx;
+  background-color: #22a2b3;
+  color: #fff;
+  border-radius: 100rpx;
+}
+

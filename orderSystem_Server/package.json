@@ -1,0 +1,25 @@
+{
+  "name": "www",
+  "version": "1.0.0",
+  "description": "点餐项目后端设计-新版",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-jwt": "^7.7.7",
+    "jsonwebtoken": "^8.5.1",
+    "log4js": "^6.7.1",
+    "moment": "^2.29.4",
+    "mongodb": "^4.12.1",
+    "mongoose": "^6.8.4",
+    "multiparty": "^4.2.3",
+    "mysql": "^2.18.1"
+  }
+}

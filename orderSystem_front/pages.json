@@ -1,0 +1,108 @@
+{
+  "pages": [{
+    "path": "pages/home/home",
+    "style": {
+      "navigationBarTitleText": "主页",
+      "enablePullDownRefresh": false
+    }
+
+  }, {
+    "path": "pages/diancan/diancan",
+    "style": {
+      "navigationBarTitleText": "点餐",
+      "enablePullDownRefresh": false
+    }
+
+  }, {
+    "path": "pages/user/user",
+    "style": {
+      "navigationBarTitleText": "我的",
+      "enablePullDownRefresh": false
+    }
+
+  }, {
+    "path": "pages/diancan/searchGood",
+    "style": {
+      "navigationBarTitleText": "搜索商品",
+      "enablePullDownRefresh": false
+    }
+
+  }, {
+    "path": "pages/diancan/confirmOrder",
+    "style": {
+      "navigationBarTitleText": "确认下单",
+      "enablePullDownRefresh": false
+    }
+
+  }, {
+    "path": "pages/user/login",
+    "style": {
+      "navigationBarTitleText": "登陆",
+      "enablePullDownRefresh": false
+    }
+
+  }, {
+    "path": "pages/order/order",
+    "style": {
+      "navigationBarTitleText": "订单",
+      "enablePullDownRefresh": true
+    }
+
+  }, {
+    "path": "pages/order/orderDetail",
+    "style": {
+      "navigationBarTitleText": "订单详情",
+      "enablePullDownRefresh": false
+    }
+
+  }, {
+    "path": "pages/order/orderAccess",
+    "style": {
+      "navigationBarTitleText": "订单支付",
+      "enablePullDownRefresh": false
+    }
+
+  }],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app",
+    "navigationBarBackgroundColor": "#fff",
+    "backgroundColor": "#F8F8F8",
+    "app-plus": {
+      "background": "#efeff4"
+    }
+  },
+  "tabBar": {
+    "color": "#909399",
+    "selectedColor": "#25abbe",
+    "backgroundColor": "#F8F8F8",
+    "borderStyle": "white",
+    "fontSize": "20px",
+    "list": [{
+        "pagePath": "pages/home/home",
+        "iconPath": "./static/tablebar/home.png",
+        "selectedIconPath": "./static/tablebar/home-active.png",
+        "text": "主页"
+      },
+      {
+        "pagePath": "pages/diancan/diancan",
+        "text": "点餐",
+        "iconPath": "./static/tablebar/diancan.png",
+        "selectedIconPath": "./static/tablebar/diancan-active.png"
+      },
+      {
+        "pagePath": "pages/order/order",
+        "text": "订单",
+        "iconPath": "./static/tablebar/order.png",
+        "selectedIconPath": "./static/tablebar/order-active.png"
+      },
+      {
+        "pagePath": "pages/user/user",
+        "text": "我的",
+        "iconPath": "./static/tablebar/user.png",
+        "selectedIconPath": "./static/tablebar/user-active.png"
+      }
+    ]
+
+  }
+}

@@ -1,0 +1,116 @@
+@charset "UTF-8";
+/* 水平间距 */
+/* 水平间距 */
+page {
+  background-color: #F3F3F3;
+}
+.not-good {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 800rpx;
+  color: #b4b4b4;
+}
+.not-good uni-icons {
+  margin: 50rpx 0;
+}
+.not-login {
+  height: 800rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.not-login button {
+  margin: 30rpx 0;
+}
+.box {
+  padding: 70rpx 15rpx 15rpx;
+  overflow-y: auto;
+}
+.box .order {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  border-radius: 20rpx;
+  margin: 20rpx 0;
+  height: 290rpx;
+  padding: 20rpx;
+  background-color: #fff;
+}
+.box .order .top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 0 20rpx;
+}
+.box .order .top .left {
+  display: flex;
+  align-items: center;
+}
+.box .order .top .left .name {
+  padding-left: 14rpx;
+  color: #25abbe;
+  font-weight: 700;
+  font-size: 16px;
+}
+.box .order .top .right .order-state {
+  color: orange;
+  font-size: 28rpx;
+}
+.box .order .img {
+  display: flex;
+  align-items: center;
+  height: 140rpx;
+  justify-content: space-between;
+}
+.box .order .img .img-content {
+  margin: 0 6rpx;
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 10rpx;
+  overflow: hidden;
+  display: inline-block;
+}
+.box .order .img .img-content ._img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.box .order .img .order-number {
+  display: flex;
+  align-items: center;
+}
+.box .order .img .order-number text {
+  font-size: 14px;
+  color: #8b8b8b;
+}
+.box .order .price-box {
+  display: flex;
+  justify-content: space-between;
+  height: 60rpx;
+  line-height: 60rpx;
+  font-size: 16px;
+}
+.box .order .price-box .orderTime {
+  font-weight: 300;
+  font-size: 14px;
+}
+.box .order .price-box .price {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+.box .order .price-box .price button {
+  margin-left: 20rpx;
+  height: 50rpx;
+  line-height: 50rpx;
+  font-weight: 100;
+  width: 120rpx;
+  font-size: 15px;
+  padding: 0 4px;
+  color: #fff;
+  background-color: #07c160;
+}
+

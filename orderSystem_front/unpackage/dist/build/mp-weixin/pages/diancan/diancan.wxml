@@ -1,0 +1,1 @@
+<view class="container"><search bind:clickSearch="__e" vue-id="b54edb7c-1" data-event-opts="{{[['^clickSearch',[['toSearchGoods']]]]}}" bind:__l="__l"></search><good-list vue-id="b54edb7c-2" bind:__l="__l"></good-list><settlement vue-id="b54edb7c-3" text="去结算" data-event-opts="{{[['^trigger',[['toConfirmOrder']]]]}}" bind:trigger="__e" bind:__l="__l"></settlement></view>

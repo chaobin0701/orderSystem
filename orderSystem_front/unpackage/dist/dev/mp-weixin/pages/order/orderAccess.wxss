@@ -1,0 +1,47 @@
+@charset "UTF-8";
+/* 水平间距 */
+/* 水平间距 */
+.orderAccess {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.orderAccess .rate {
+  display: flex;
+  align-items: center;
+  margin: 30rpx 0;
+}
+.orderAccess .rate .text {
+  padding: 0 20rpx;
+}
+.orderAccess .input-box {
+  display: flex;
+  width: 95%;
+  border: 1px solid #eee;
+  height: 400rpx;
+  box-sizing: border-box;
+  justify-content: space-between;
+  padding: 30rpx;
+  font-size: 30rpx;
+}
+.orderAccess .input-box .text text {
+  height: 100%;
+}
+.orderAccess .input-box textarea {
+  box-sizing: border-box;
+  padding: 0 30rpx;
+  flex: 1;
+}
+.orderAccess .input-box .text-number {
+  font-size: 24rpx;
+  line-height: 400rpx;
+}
+.orderAccess button {
+  width: 95%;
+  margin: 40rpx 0;
+  color: #fff;
+  background-color: #07c160;
+  border: 1px solid #07c160;
+}
+
