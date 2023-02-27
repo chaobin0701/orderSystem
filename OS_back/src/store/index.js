@@ -6,6 +6,7 @@ import { queryStaff } from "@/api/staff";
 import { queryFoodTable } from "@/api/foodTable";
 import { queryGoodsCategory } from "@/api/goodsCategory";
 import { queryGoodsType } from "@/api/goodsType";
+import { queryGoods } from "@/api/goods";
 // 引入模块
 import user from "./modules/user";
 import getters from "./getters";
@@ -30,6 +31,11 @@ const actions = {
   async queryGoodsCategory({ state }) {
     const result = await queryGoodsCategory();
     state.goodsCategoryInfo = result.data;
+  },
+  // 获取商品信息
+  async queryGoods({ state }) {
+    const result = await queryGoods();
+    state.goodsInfo = result.data;
   }
 };
 const mutations = {};
@@ -39,7 +45,8 @@ const state = {
   foodtableInfo: [],
   categoryInfo: [],
   goodsTypeInfo: [],
-  goodsCategoryInfo: []
+  goodsCategoryInfo: [],
+  goodsInfo: []
 };
 //准备getters——加工state里的数据
 

@@ -1,7 +1,7 @@
 <template>
   <div class="goodsType">
     <MainHeader>
-      <el-button size="mini" slot="left" @click="addFoodTable"
+      <el-button size="mini" slot="left" @click="addGoodsType"
         >添加商品类型</el-button
       >
     </MainHeader>
@@ -114,7 +114,7 @@ export default {
       await this.queryGoodsType();
     },
     // 添加
-    addFoodTable() {
+    addGoodsType() {
       this.title = "添加商品类型";
       this.dialogState = "add";
       this.dialogFormVisible = true;

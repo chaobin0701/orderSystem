@@ -1,10 +1,7 @@
 <template>
-    <div>goods</div>
-  </template>
-  
-  <script>
-  export default {};
-  </script>
-  
-  <style scoped></style>
-  
+  <Router-view> </Router-view>
+</template>
+
+<script></script>
+
+<style scoped></style>
