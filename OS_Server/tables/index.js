@@ -94,7 +94,7 @@ const goodsType = {
     required: [true, "缺少商品类型名称"],
   },
   gt_count: {
-    //类型数量
+    //关联数量
     type: Number,
     default: 0,
   },

@@ -13,21 +13,22 @@
 
 <script>
 import navMenu from "./components/navMenu.vue";
-import headerUI from './components/header.vue'
+import headerUI from "./components/header.vue";
 export default {
   components: { navMenu, headerUI },
   data() {
     return {
-      activeIndex: '全部菜单' //传递给菜单页面的筛选key
-    }
+      activeIndex: "全部菜单" //传递给菜单页面的筛选key
+    };
   },
   // todo：请求 员工数据/餐桌数据 并保存到vuex中
   created() {
-    this.$store.dispatch("queryStaff")
-    this.$store.dispatch("queryFoodTable")
-    this.$store.dispatch("queryCategory")
-  },
-}
+    this.$store.dispatch("queryStaff");
+    this.$store.dispatch("queryFoodTable");
+    this.$store.dispatch("queryGoodsType");
+    this.$store.dispatch("queryGoodsCategory");
+  }
+};
 </script>
 <style scoped>
 .layout {
@@ -44,7 +45,7 @@ export default {
 }
 
 /* 路由外层 */
-.main>.wrapper {
+.main > .wrapper {
   flex: 1;
   box-sizing: border-box;
   overflow-x: scroll;

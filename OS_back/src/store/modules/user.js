@@ -12,14 +12,14 @@ export default {
     // 登录
     async login(context, data) {
       // 调用登录接口
-      const result = await login(data)
-      context.commit("setToken",result.token)
-      return result
+      const result = await login(data);
+      context.commit("setToken", result.data.token);
+      return result;
     },
     // 登出
-    async logout({commit}){
-      commit("removeToken") 
-      commit("removeUserInfo")
+    async logout({ commit }) {
+      commit("removeToken");
+      commit("removeUserInfo");
     }
   },
   mutations: {
@@ -32,8 +32,8 @@ export default {
       state.userInfo = {};
     },
     setToken(state, token) {
-      state.token = token, // 设置vuex中的token数据
-      setToken(token); //同步到缓存
+      (state.token = token), // 设置vuex中的token数据
+        setToken(token); //同步到缓存
     },
     removeToken(state) {
       state.token = null; //将vuex中的数据清空

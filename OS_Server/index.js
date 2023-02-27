@@ -29,7 +29,7 @@ app.use(
     })
     .unless({
       // path: [/^\/api/], // 指定路径不经过 Token 解析
-      path: "/api/user/login", // 指定路径不经过 Token 解析
+      path: "/api/customer/login", // 指定路径不经过 Token 解析
     })
 );
 

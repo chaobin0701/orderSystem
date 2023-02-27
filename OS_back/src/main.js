@@ -8,7 +8,7 @@ import MainHeader from "@/components/mainHeader.vue"; // 顶部组件(全局注�
 Vue.component("MainHeader", MainHeader);
 
 // import "@/permission"; // 路由守卫 控制
-
+import "tailwindcss/tailwind.css"
 import App from "./App";
 import router from "./router/index";
 import 'echarts'

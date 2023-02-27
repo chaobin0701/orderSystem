@@ -7,7 +7,6 @@
                     <i :class="route.icon"></i>
                     {{route.name}}
                 </el-menu-item>
-               
             </template>
         </el-menu>
     </div>
@@ -19,7 +18,6 @@ export default {
     data() {
         return {
             activeIndex: "/home", // 导航的当前标签
-            vertical: false, //控制二级菜单的开关
             routes: [],//二级子路由
         };
     },

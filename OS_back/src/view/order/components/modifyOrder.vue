@@ -19,7 +19,7 @@
       </el-form-item>
       <el-form-item label="用餐餐桌">
         <el-select v-model="form.diningFoodTableId" size='mini' @change="selectFoodtableHandler">
-          <el-option v-for="item in foodtableInfo" :key="item.foodtable_id" :label="item.foodtable_position"
+          <el-option v-for="item in foodtableInfo" :key="item.foodtable_id" :label="item.foodtable_describe"
             :value="item.foodtable_id">
           </el-option>
         </el-select>
@@ -87,7 +87,7 @@ export default {
       await this.$emit("queryOrder")
     },
     selectFoodtableHandler(foodtable_id) { //选择餐桌的回调
-      this.$emit("update:diningFoodTable", this.foodtableInfo.filter(item => item.foodtable_id === foodtable_id)[0].foodtable_position)
+      this.$emit("update:diningFoodTable", this.foodtableInfo.filter(item => item.foodtable_id === foodtable_id)[0].foodtable_describe)
     },
     selectStaffHandler(staff_id) { //选择服务员工的回调
       this.$emit("update:staff", this.staffInfo.filter(item => item.staff_id === staff_id)[0].staff_name)

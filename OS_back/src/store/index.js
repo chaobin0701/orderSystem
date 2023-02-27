@@ -4,45 +4,42 @@ Vue.use(Vuex); //应用Vuex插件
 // 引入api
 import { queryStaff } from "@/api/staff";
 import { queryFoodTable } from "@/api/foodTable";
-import { queryCategory } from "@/api/category";
+import { queryGoodsCategory } from "@/api/goodsCategory";
+import { queryGoodsType } from "@/api/goodsType";
 // 引入模块
 import user from "./modules/user";
 import getters from "./getters";
 //准备actions对象——响应组件中用户的动作
 const actions = {
-  // 1.获取员工信息
-  async queryStaff({ commit, state }, data) {
-    const { result } = await queryStaff();
-    commit("queryStaff", { data: result });
+  // 获取员工信息
+  async queryStaff({ state }) {
+    const result = await queryStaff();
+    state.staffInfo = result.data;
   },
-  //2.获取餐桌信息
-  async queryFoodTable({ commit, state }, data) {
-    const { result } = await queryFoodTable();
-    commit("queryFoodTable", { data: result });
+  // 获取餐桌信息
+  async queryFoodTable({ state }) {
+    const result = await queryFoodTable();
+    state.foodtableInfo = result.data;
   },
-  // 3.获取分类信息
-  async queryCategory({ commit, state }, data) {
-    const { result } = await queryCategory();
-    commit("queryCategory", { data: result });
+  // 获取商品类别信息
+  async queryGoodsType({ state }) {
+    const result = await queryGoodsType();
+    state.goodsTypeInfo = result.data;
+  },
+  // 获取商品类型信息
+  async queryGoodsCategory({ state }) {
+    const result = await queryGoodsCategory();
+    state.goodsCategoryInfo = result.data;
   }
 };
-//准备mutations对象——修改state中的数据
-const mutations = {
-  queryStaff(state, { data }) {
-    state.staffInfo = data;
-  },
-  queryFoodTable(state, { data }) {
-    state.foodtableInfo = data;
-  },
-  queryCategory(state, { data }) {
-    state.categoryInfo = data;
-  }
-};
+const mutations = {};
 //准备state对象——保存具体的数据
 const state = {
   staffInfo: [],
   foodtableInfo: [],
-  categoryInfo: []
+  categoryInfo: [],
+  goodsTypeInfo: [],
+  goodsCategoryInfo: []
 };
 //准备getters——加工state里的数据
 

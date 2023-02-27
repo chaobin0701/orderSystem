@@ -1,27 +1,19 @@
 // 餐桌管理
 import request from "@/utils/request";
-/**
- * 添加餐桌
- * */
-export function addFoodTable({foodtable_number,foodtable_position,foodtable_state}) {
-  return request("/foodtable", "post", {foodtable_number,foodtable_position,foodtable_state});
+// 添加餐桌
+export function addFoodTable(data) {
+  return request("/foodtable", "post", data);
 }
-/**
- * 查询餐桌
- * */
-export function queryFoodTable() {
-  return request("/foodtable", "get");
+// 查询餐桌
+export function queryFoodTable(_id) {
+  return request("/foodtable", "get", { _id });
 }
 
-/**
- * 删除餐桌
- * */
-export function delFoodTable(foodtable_id) {
-  return request("/foodtable", "delete", {foodtable_id});
+// 删除餐桌
+export function delFoodTable(_id) {
+  return request("/foodtable", "delete", { _id });
 }
-/**
- * 修改餐桌
- * */
-export function modifyFoodTable({foodtable_id,foodtable_number,foodtable_position,foodtable_state}) {
-  return request("/foodtable", "put", {foodtable_id,foodtable_number,foodtable_position,foodtable_state});
+//  修改餐桌
+export function modifyFoodTable(data) {
+  return request("/foodtable", "put", data);
 }

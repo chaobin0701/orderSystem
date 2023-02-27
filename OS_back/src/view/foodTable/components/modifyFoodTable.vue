@@ -1,8 +1,8 @@
 <template>
   <el-dialog :title="title" :visible="dialogFormVisible" @close="outSubmit">
     <el-form ref="form" :model="form" label-width="80px" :rules="rules" label-position="right">
-      <el-form-item label="餐桌位置" prop="foodtable_position">
-        <el-input v-model="form.foodtable_position" />
+      <el-form-item label="餐桌位置" prop="foodtable_describe">
+        <el-input v-model="form.foodtable_describe"   type="textarea" />
       </el-form-item>
       <el-form-item label="用餐人数" prop="foodtable_number
 ">
@@ -10,8 +10,8 @@
         " size="small" :min="2" :step="1" :max="15"></el-input-number>
       </el-form-item>
       <el-form-item label="餐桌状态">
-        <el-radio v-model="form.foodtable_state" size="mini" border label="有人">有人</el-radio>
-        <el-radio v-model="form.foodtable_state" size="mini" border label="空">空</el-radio>
+        <el-radio v-model="form.foodtable_state" size="mini" border :label="true" :key="true">就餐中</el-radio>
+        <el-radio v-model="form.foodtable_state" size="mini" border :label="false" :key="false">空桌</el-radio>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">确认修改</el-button>
@@ -30,7 +30,7 @@ export default {
         Cz_num: [
           { required: true, message: '请输入菜单编号', trigger: 'blur' }
         ],
-        foodtable_position: [
+        foodtable_describe: [
           { required: true, message: '请输入餐桌位置', trigger: 'blur' }
         ],
         foodtable_number
@@ -65,7 +65,7 @@ export default {
         await this.addFoodTable()
       }
       // 3.关闭弹窗
-      this.$emit('update:dialogFormVisible', false)
+     this.outSubmit()
     },
     outSubmit() {
       // 1.关闭弹窗
