@@ -1,6 +1,5 @@
 // 导入数据库操作模块
 const mongodb = require("../db/mongo");
-const mysql = require("../db/mysql");
 const moment = require("moment");
 const response = require("../utils/response");
 const utils = require(process.cwd() + "/utils");
@@ -131,11 +130,15 @@ class gui {
     }
     // 2.时间戳处理
     let endTime = new Date(moment().endOf("day").valueOf()); //获取当天23时59分59秒
-    let startTime = new Date(moment().startOf("day").subtract(15, "days").valueOf()); //当前时间往后30天的时间戳
+    let startTime = new Date(
+      moment().startOf("day").subtract(15, "days").valueOf()
+    ); //当前时间往后30天的时间戳
     const DB = await mongodb.getConnection("orders"); //获取连接状态
 
     try {
-      const result = await DB.aggregate(aggregateConfig.dailySales(startTime,endTime));
+      const result = await DB.aggregate(
+        aggregateConfig.dailySales(startTime, endTime)
+      );
       response.success(res, result);
     } catch (error) {
       response.success(res, "服务器错误", error);

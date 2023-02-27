@@ -87,7 +87,173 @@ const orders = {
   ],
 };
 
+const goodsType = {
+  gt_name: {
+    //类型名称
+    type: String,
+    required: [true, "缺少商品类型名称"],
+  },
+  gt_count: {
+    //类型数量
+    type: Number,
+    default: 0,
+  },
+  gt_attribute: {
+    //商品属性
+    type: Object,
+  },
+  gt_specifications: {
+    //商品规格
+    type: Object,
+  },
+};
+
+const goodsCategory = {
+  gc_name: {
+    // 类别名称
+    type: String,
+    required: [true, "取消商品类别名称"],
+  },
+  gc_count: {
+    // 关联数量
+    type: Number,
+    default: 0,
+  },
+  gc_state: {
+    // 类别状态
+    type: Boolean,
+    default: true,
+  },
+  gc_goods: {
+    // 类别商品
+    type: Array,
+    default: [],
+  },
+};
+
+const goods = {
+  goodsName: {
+    // 商品名
+    type: String,
+    required: [true, "缺少商品名称"],
+  },
+  goodsState: {
+    // 商品状态
+    type: Boolean,
+    default: true,
+  },
+  goodsPrice: {
+    // 商品价格
+    type: Number,
+    required: [true, "缺少商品价格"],
+  },
+  goodsStock: {
+    // 商品库存
+    type: Number,
+    default: 0,
+  },
+  goodsSalesVolume: {
+    // 商品销量
+    type: Number,
+    default: 0,
+  },
+  goodsDescribe: {
+    // 商品描述
+    type: String,
+  },
+  goodsImgs: {
+    // 商品图片
+    type: Array,
+    default: [],
+  },
+  goodsCategory: {
+    // 商品类别
+    type: String,
+    required: [true, "缺少商品类别"],
+  },
+  goodsType: {
+    // 商品类型
+    type: String,
+  },
+};
+
+const staff = {
+  staff_name: {
+    // 员工姓名
+    type: String,
+    require: [true, "缺少员工姓名"],
+  },
+  staff_sex: {
+    // 员工性别
+    type: String,
+    default: "男",
+  },
+  staff_age: {
+    //员工年龄
+    type: Number,
+  },
+  staff_salary: {
+    // 员工薪资
+    type: Number,
+  },
+  staff_state: {
+    // 员工状态
+    type: Boolean,
+    default: true,
+  },
+};
+
+const foodtable = {
+  foodtable_state: {
+    // 餐桌状态
+    type: Boolean,
+    default: true,
+  },
+  foodtable_number: {
+    // 餐桌乘坐人数
+    type: Number,
+    default: 5,
+  },
+  foodtable_describe: {
+    // 餐桌描述
+    type: String,
+  },
+};
+
+const customer = {
+  customer_name: {
+    // 顾客名
+    type: String,
+    required: [true, "缺少用户名"],
+  },
+  customer_birthday: {
+    // 顾客生日
+    type: String,
+  },
+  customer_sex: {
+    // 顾客性别
+    type: String,
+    default: "男",
+  },
+  customer_pwd: {
+    // 密码
+    type: String,
+    required: [true, "缺少pwd字段"],
+  },
+  customer_account: {
+    // 账号
+    type: String,
+    required: [true, "缺少account字段"],
+  },
+};
+
 // 导出schema
 module.exports = {
   orders,
+  goodsType,
+  goodsCategory,
+  goods,
+  staff,
+  foodtable,
+  customer,
 };

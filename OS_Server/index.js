@@ -8,17 +8,16 @@ dotenv.config(); // 对环境变量进行转换
 
 const config = require("./config"); //配置文件
 
-// // api路由模块
-const mySQlRouter = require("./router/mysql")
+// api路由模块
 const publicRoute = require("./router");
-const mongodbRoute = require("./router/mongodb")
+const mongodbRoute = require("./router/mongodb");
 
 app.use(cors()); //讲cors注册为全局中间件
 const expressJWT = require("express-jwt"); //将客户端发送过来的JWT字符串，解析还原成JSON 对象的包
 app.use(express.urlencoded({ extended: false })); // 解析 url-encoded格式的表单数据
 app.use(express.json()); // 解析json格式的表单数据
 
-// // 文件夹映射
+// 文件夹映射
 app.use(config.static.path, express.static("public"));
 /* JWT配置 */
 app.use(
@@ -49,9 +48,8 @@ app.use((err, req, res, next) => {
 });
 
 // // 配置路由
-app.use("/api", publicRoute)
-app.use("/api", mySQlRouter)
-app.use("/api", mongodbRoute)
+app.use("/api", publicRoute);
+app.use("/api", mongodbRoute);
 
 // 启动端口
 app.listen(3280, () => {

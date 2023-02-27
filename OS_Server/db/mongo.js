@@ -31,7 +31,10 @@ process.on("SIGINT", function () {
 });
 
 const mongoClient = {};
-
+/**
+ * @param 数据库配置
+ * @return mongodb对象
+ * */
 // 数据库连接
 const isConnet = (options) => {
   // 是否可以连接数据库
@@ -65,6 +68,10 @@ const isConnet = (options) => {
   return db; // 返回db对象
 };
 
+/**
+ * @param 数据库名称
+ * @return 数据库连接对象
+ * */
 const getConnection = (table_name) => {
   // 获取链接状态并构建数据表
   // 未传递参数
@@ -91,6 +98,11 @@ const getConnection = (table_name) => {
   return client;
 };
 
+/**
+ * @param 数据库名称
+ * @param 数据
+ * @return 数据的id
+ * */
 const save = async (table_name, fields) => {
   // 保存数据
   if (!fields || !table_name) {
@@ -115,12 +127,25 @@ const save = async (table_name, fields) => {
   return await mongooseEntity.save(); //保存数据
 };
 
+/**
+ * @param 数据库名称
+ * @param 唯一id
+ * @param 筛选参数
+ * @return 数据
+ * */
 const findOne = async (table_name, conditions, filterParams) => {
   // 查询详情
   let node_model = getConnection(table_name);
   return await node_model.findOne(conditions, filterParams, { lean: true });
 };
 
+/**
+ * @param 数据库名称
+ * @param 唯一id
+ * @param 配置
+ * @param 筛选数据
+ * @return 数据
+ * */
 const findWhere = async (table_name, conditions, options, filterParams) => {
   // 条件查询   filterParams为对象表示过滤0为过滤   filterParams{name:1} 则会显示name值
   let node_model = getConnection(table_name);
@@ -137,12 +162,24 @@ const findWhere = async (table_name, conditions, options, filterParams) => {
     list,
   };
 };
+
+/**
+ * @param 数据库名称
+ * @param 数据,删选条件
+ * @return
+ * */
 const count = async (table_name, conditions) => {
   let node_model = getConnection(table_name);
   let total = await node_model.find(conditions).count();
   return total;
 };
 
+/**
+ * @param 数据库名称
+ * @param 条件
+ * @param 未知
+ * @return 数据
+ * */
 const find = async (table_name, conditions, fields) => {
   // 查询多条数据
   let node_model = getConnection(table_name);
@@ -151,17 +188,34 @@ const find = async (table_name, conditions, fields) => {
   ); // 没有数据则返回空数组
 };
 
+/**
+ * @param 数据库名称
+ * @param 唯一id
+ * @return 数据
+ * */
 const findById = async (table_name, _id) => {
   // 根据id查询
   let node_model = getConnection(table_name);
   return await node_model.findById(_id);
 };
 
+/**
+ * @param 数据库名称
+ * @param 唯一id
+ * @return
+ * */
 const remove = async (table_name, conditions) => {
   // 删除数据
   let node_model = getConnection(table_name);
   return await node_model.remove(conditions);
 };
+
+/**
+ * @param 数据库名称
+ * @param 查询条件
+ * @param 修改数据
+ * @return 新数据
+ * */
 const update = async (table_name, conditions, update_fields) => {
   // 更新数据
   let node_model = getConnection(table_name);
@@ -177,7 +231,11 @@ const update = async (table_name, conditions, update_fields) => {
     }
   );
 };
-
+/**
+ * @param 数据库名称
+ * @param 唯一id
+ * @return
+ * */
 const updateData = async (table_name, conditions, update_fields) => {
   // 更新数据自己写操作符
   let node_model = getConnection(table_name);

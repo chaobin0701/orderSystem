@@ -2,7 +2,6 @@
 const mongodb = require("../db/mongo");
 const response = require("../utils/response");
 
-let linkTypes = "";
 class gui {
   // 新增订单
   saveOrder = async (req, res) => {
@@ -70,7 +69,6 @@ class gui {
   // 查询全部订单
   findAll = async (req, res) => {
     const { currentPage, pageCount } = req.query;
-    console.log(`output->req.query`,currentPage,pageCount)
     let recordCount = await mongodb.count("orders");
     let model = mongodb.getConnection("orders");
     let result = await model.find({}).limit(pageCount).skip(currentPage);
