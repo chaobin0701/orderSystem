@@ -1,19 +1,17 @@
-// order的信息的控制
-const mongodb = require("../../db/mongo");
 const response = require("../../utils/response");
-const GOODS_TABLENAME = "goods";
 const { goods } = require("../../tables");
+const GoodsService = require("../../service/goodsService");
 
-class gui {
+class GoodsController {
   // 添加商品
   saveGoods = async (req, res) => {
     // 数据处理
-    let where = {};
+    let obj = {};
     Object.keys(goods).forEach((key) => {
-      where[key] = req.body[key];
+      obj[key] = req.body[key];
     });
     // 提交数据
-    let result = await mongodb.save(GOODS_TABLENAME, where);
+    let result = await GoodsService.saveGoods(obj);
     if (result === false) {
       response.error(res, "服务器错误");
     } else {
@@ -24,9 +22,8 @@ class gui {
   // 删除商品
   removeGoods = async (req, res) => {
     let _id = req.body._id;
-    // todo 查询商品类型资料,当连接数量小于0时才可以删除
     if (_id) {
-      let result = await mongodb.remove(GOODS_TABLENAME, { _id });
+      let result = await GoodsService.removeGoods(_id);
       if (result === false) {
         response.error(res, "删除商品出错");
       } else {
@@ -40,13 +37,13 @@ class gui {
   // 修改商品
   modifyGoods = async (req, res) => {
     // 数据处理
-    let where = {};
+    let obj = {};
     Object.keys(goods).forEach((key) => {
-      where[key] = req.body[key];
+      obj[key] = req.body[key];
     });
     let _id = req.body._id;
     // 提交修改数据
-    let result = mongodb.update(GOODS_TABLENAME, { _id }, where);
+    let result = GoodsService.modifyGoods(_id, obj);
     if (result === false) {
       response.error(res, "数据库错误");
     } else {
@@ -55,19 +52,19 @@ class gui {
   };
 
   // 查询商品
-  findGoods = async (req, res) => {
+  async findGoods(req, res) {
     let result = null;
     if (req.query._id) {
-      result = await mongodb.findById(GOODS_TABLENAME, req.query._id);
+      result = await GoodsService.findGoodsById(req.query._id);
     } else {
-      result = await mongodb.find(GOODS_TABLENAME, {});
+      result = await GoodsService.findAllGoods();
     }
     if (result === false) {
       response.error(res, "数据库错误");
     } else {
       response.success(res, result);
     }
-  };
+  }
 }
 
-module.exports = new gui();
+module.exports = new GoodsController();

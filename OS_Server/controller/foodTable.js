@@ -1,18 +1,17 @@
-const mongodb = require("../db/mongo");
 const response = require("../utils/response");
-const FOODTABLE_TABLENAME = "foodtable";
 const { foodtable } = require("../tables");
+const foodtableService = require("../service/foodtableService");
 
 class gui {
-  // 添加商品类别
+  // 添加餐桌
   saveFoodtable = async (req, res) => {
     // 数据处理
-    const where = {};
+    const obj = {};
     Object.keys(foodtable).forEach((key) => {
-      where[key] = req.body[key];
+      obj[key] = req.body[key];
     });
     // 提交数据
-    let result = await mongodb.save(FOODTABLE_TABLENAME, where);
+    let result = await foodtableService.saveFoodtable(obj);
     if (result === false) {
       response.error(res, "服务器错误");
     } else {
@@ -20,11 +19,11 @@ class gui {
     }
   };
 
-  // 删除商品类别
+  // 删除餐桌
   removeFoodtable = async (req, res) => {
     let _id = req.body._id;
     if (_id) {
-      let result = await mongodb.remove(FOODTABLE_TABLENAME, { _id });
+      let result = await foodtableService.removeFoodtable(_id);
       if (result === false) {
         response.error(res, "删除餐桌出错");
       } else {
@@ -35,16 +34,16 @@ class gui {
     }
   };
 
-  // 修改商品类别
+  // 修改餐桌
   modifyFoodtable = async (req, res) => {
     // 数据处理
-    let where = {};
+    let obj = {};
     Object.keys(foodtable).forEach((key) => {
-      where[key] = req.body[key];
+      obj[key] = req.body[key];
     });
     let _id = req.body._id;
     // 提交修改数据
-    let result = mongodb.update(FOODTABLE_TABLENAME, { _id }, where);
+    let result = foodtableService.modifyFoodtable(_id, obj);
     if (result === false) {
       response.error(res, "数据库错误");
     } else {
@@ -52,13 +51,13 @@ class gui {
     }
   };
 
-  // 查询商品类别
+  // 查询餐桌
   findFoodtable = async (req, res) => {
     let result = null;
     if (req.query._id) {
-      result = await mongodb.findById(FOODTABLE_TABLENAME, req.query._id);
+      result = await foodtableService.findFoodtableById(req.query._id);
     } else {
-      result = await mongodb.find(FOODTABLE_TABLENAME, {});
+      result = await foodtableService.findAllFoodtable();
     }
     if (result === false) {
       response.error(res, "数据库错误");

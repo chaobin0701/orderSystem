@@ -9,8 +9,7 @@ dotenv.config(); // 对环境变量进行转换
 const config = require("./config"); //配置文件
 
 // api路由模块
-const publicRoute = require("./router");
-const mongodbRoute = require("./router/mongodb");
+const Route = require("./router");
 
 app.use(cors()); //讲cors注册为全局中间件
 const expressJWT = require("express-jwt"); //将客户端发送过来的JWT字符串，解析还原成JSON 对象的包
@@ -48,8 +47,7 @@ app.use((err, req, res, next) => {
 });
 
 // // 配置路由
-app.use("/api", publicRoute);
-app.use("/api", mongodbRoute);
+app.use("/api", Route);
 
 // 启动端口
 app.listen(3280, () => {

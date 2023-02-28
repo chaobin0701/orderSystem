@@ -177,10 +177,14 @@ const count = async (table_name, conditions) => {
 /**
  * @param 数据库名称
  * @param 条件
- * @param 未知
+ * @param 数据筛选
  * @return 数据
  * */
-const find = async (table_name, conditions, fields) => {
+const find = async (
+  table_name,
+  conditions,
+  fields = { createdAt: 0, updatedAt: 0, __v: 0 }
+) => {
   // 查询多条数据
   let node_model = getConnection(table_name);
   return (

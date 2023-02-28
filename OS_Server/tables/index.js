@@ -114,21 +114,16 @@ const goodsCategory = {
     type: String,
     required: [true, "取消商品类别名称"],
   },
-  gc_count: {
-    // 关联数量
-    type: Number,
-    default: 0,
-  },
   gc_state: {
     // 类别状态
     type: Boolean,
     default: true,
   },
-  gc_goods: {
-    // 类别商品
-    type: Array,
-    default: [],
-  },
+  // gc_goods: {
+  //   // 类别商品
+  //   type: Array,
+  //   default: [],
+  // },
 };
 
 const goods = {
@@ -166,14 +161,14 @@ const goods = {
     type: Array,
     default: [],
   },
-  goodsCategory: {
-    // 商品类别
-    type: Array,
-    required: [true, "缺少商品类别"],
-  },
+  // goodsCategory: {
+  //   // 商品类别
+  //   type: Array,
+  //   required: [true, "缺少商品类别"],
+  // },
   goodsType: {
     // 商品类型
-    type: Array,
+    type: Object,
   },
 };
 
@@ -247,6 +242,16 @@ const customer = {
   },
 };
 
+const goods_goodsCategory = {
+  goods_id: {
+    type: String,
+    required: [true, "缺少商品id"],
+  },
+  goodsCategory_id: {
+    type: String,
+    required: [true, "缺少类别id"],
+  },
+};
 // 导出schema
 module.exports = {
   orders,
@@ -256,4 +261,5 @@ module.exports = {
   staff,
   foodtable,
   customer,
+  goods_goodsCategory,
 };

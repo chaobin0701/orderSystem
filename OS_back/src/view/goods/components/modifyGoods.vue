@@ -21,15 +21,27 @@
           </el-switch>
         </el-form-item>
         <el-form-item label="类别">
-          <el-select v-model="form.value" placeholder="请选择">
+          <el-select
+            value=""
+            placeholder="请选择"
+            @change="selectGoodsCategory"
+          >
             <el-option
               v-for="item in goodsCategoryInfo"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              :key="item._id"
+              :label="item.gc_name"
+              :value="item"
             >
             </el-option>
           </el-select>
+          <el-tag
+            v-for="(gc, index) in form.goodsCategory"
+            :key="gc._id"
+            class="mr-3"
+            closable
+            @close="removeGC(index)"
+            >{{ gc.gc_name }}</el-tag
+          >
         </el-form-item>
       </el-form>
     </div>
@@ -37,10 +49,24 @@
       <h3>属性</h3>
       <div class="item">
         <el-form label-position="top" label-width="100px" :model="form">
-          <el-form-item v-for="(item,index) in goodsTypeInfo.gt_attribute" :key="index" :label="item.title">
-            <el-input v-model="form[item.title]"  v-if="item.type === 'text'"></el-input>
+          <el-form-item
+            v-for="(item, index) in goodsTypeInfo.gt_attribute"
+            :key="index"
+            :label="item.title"
+          >
+            <el-input
+              v-model="form.goodsType.gt_attribute[index].value"
+              v-if="item.type === 'text'"
+            ></el-input>
             <template v-else>
-              <el-radio v-for="(x,i) in item.value" :key="i" v-model="form[item.title]" :label="x" border>{{ x}}</el-radio>           
+              <el-radio
+                v-for="(x, i) in item.value"
+                :key="i"
+                v-model="form.goodsType.gt_attribute[index].value"
+                :label="x"
+                border
+                >{{ x }}</el-radio
+              >
             </template>
           </el-form-item>
         </el-form>
@@ -51,10 +77,24 @@
       <h3>规格</h3>
       <div class="item">
         <el-form label-position="top" label-width="100px" :model="form">
-          <el-form-item v-for="(item,index) in goodsTypeInfo.gt_specifications" :key="index" :label="item.title">
-            <el-input v-model="form[item.title]"  v-if="item.type === 'text'"></el-input>
+          <el-form-item
+            v-for="(item, index) in goodsTypeInfo.gt_specifications"
+            :key="index"
+            :label="item.title"
+          >
+            <el-input
+              v-model="form.goodsType.gt_specifications[index].value"
+              v-if="item.type === 'text'"
+            ></el-input>
             <template v-else>
-              <el-radio v-for="(x,i) in item.value" :key="i" v-model="form[item.title]" :label="x" border>{{ x}}</el-radio>           
+              <el-radio
+                v-for="(x, i) in item.value"
+                :key="i"
+                v-model="form.goodsType.gt_specifications[index].value"
+                :label="x"
+                border
+                >{{ x }}</el-radio
+              >
             </template>
           </el-form-item>
         </el-form>
@@ -69,20 +109,16 @@
         class="space-x-5"
       >
         <el-form-item label="价格" class=" inline-block">
-          <el-input-number
-            v-model="form.goodsPrice"
-            :min="1"
-            :max="10"
-          ></el-input-number>
+          <el-input-number v-model="form.goodsPrice"></el-input-number>
         </el-form-item>
         <el-form-item label="库存" class=" inline-block">
-          <el-input-number
-            v-model="form.goodsStock"
-            :min="1"
-            :max="10"
-          ></el-input-number>
+          <el-input-number v-model="form.goodsStock" :min="0"></el-input-number>
         </el-form-item>
       </el-form>
+    </div>
+    <div class="mb-5 mt-5 ">
+      <el-button>取消</el-button>
+      <el-button type="primary" @click="onSubmit">保存</el-button>
     </div>
   </div>
 </template>
@@ -93,7 +129,7 @@ import { queryGoodsType } from "@/api/goodsType.js";
 export default {
   data() {
     return {
-      rules: {},
+      rules: {}, //表单校验规则
       inputVisible: false,
       form: {
         goodsName: "",
@@ -104,71 +140,65 @@ export default {
         goodsDescribe: "",
         goodsImgs: "",
         goodsCategory: [],
-        goodsType: []
+        goodsType: {}
       },
-      goodsTypeInfo: {},
-      goodsCategoryInfo: []
+      goodsTypeInfo: {} //商品类别数据
     };
-  },
-  watch: {
-    async dialogFormVisible(newValue) {
-      if (newValue) {
-        // 展开
-        if (this.dialogState === "edit") {
-          await this.queryGoods(this.id);
-        } else {
-          // TOOD
-          this.form = {};
-        }
-      } else {
-        // 关闭
-      }
-    }
   },
   methods: {
     async onSubmit() {
       // 1.提交表单数据，进行数据更改
-      // 2.重新获取数据
-      if (this.dialogState === "edit") {
-        await this.modifyGoods();
-      } else {
-        await this.addGoods();
-      }
-      // 3.关闭弹窗
-      this.outSubmit();
-    },
-    outSubmit() {
-      // 1.关闭弹窗
-      this.$emit("update:dialogFormVisible", false);
-    },
-    async modifyGoods() {
-      //修改数据
-      await modifyGoods(this.form);
-      await this.$emit("queryGoods");
-    },
-    // 添加商品类别
-    async addGoods() {
-      await addGoods(this.form);
-      await this.$emit("queryGoods");
+      const result = await addGoods(this.form)
+      // 2.跳转页面
+
     },
     // 查询单个商品属性
     async queryGoods(id) {
       const result = await queryGoods(id);
       this.form = result.data;
     },
+    // 查询商品类别信息
     async queryGoodsType(id) {
       const result = await queryGoodsType(id);
-      console.log(`output-> result.data`, result.data);
+      // 处理form表单的goodsType
+      const gt_attribute = result.data.gt_attribute.map(item => {
+        return { titel: item.title, value: "" };
+      });
+      const gt_specifications = result.data.gt_specifications.map(item => {
+        return { titel: item.title, value: "" };
+      });
+      this.form.goodsType = { gt_attribute, gt_specifications };
       this.goodsTypeInfo = result.data;
+    },
+    // 选中类别
+    selectGoodsCategory(gc) {
+      this.form.goodsCategory.push(gc);
+    },
+    // 删除类别
+    removeGC(index) {
+      this.form.goodsCategory.splice(index, 1);
     }
   },
   async created() {
     let { goodsType, _id } = this.$route.params;
+
     if (goodsType) {
       await this.queryGoodsType(goodsType);
     }
     if (_id) {
       await this.queryGoods(_id);
+    }
+  },
+  computed: {
+    //商品类型数据
+    goodsCategoryInfo() {
+      // 排除以选择的类别
+      return this.$store.state.goodsCategoryInfo.filter(item => {
+        let index = this.form.goodsCategory.findIndex(gc => {
+          return gc._id === item._id;
+        });
+        return index < 0;
+      });
     }
   }
 };

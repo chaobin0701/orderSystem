@@ -1,13 +1,9 @@
-// order的信息的控制
-const mongodb = require("../db/mongo");
 const response = require("../utils/response");
-
-class gui {
+const orderService = require("../service/orderService");
+class OrderController {
   // 新增订单
   saveOrder = async (req, res) => {
-    // 1.todo权限检测
-
-    // 2.处理数据
+    // 处理数据
     let orderPrice = req.body.orderPrice; //订单价格
     let orderState = req.body.orderState; //订单状态
     let diningMethod = req.body.diningMethod; //就餐方式
@@ -19,7 +15,7 @@ class gui {
     let customerId = req.body.customerId; //顾客id
     let orderAppraise = req.body.orderAppraise; //订单评价
     let mealsInfo = req.body.mealsInfo; //点餐信息
-    let where = {
+    let obj = {
       orderPrice,
       orderState,
       diningMethod,
@@ -32,10 +28,8 @@ class gui {
       orderAppraise,
       mealsInfo,
     };
-    // todo 创建时间,修改时间,id 也可以在这个时候主动创建
-
     // 3.提交数据
-    let result = await mongodb.save("orders", where);
+    let result = await orderService.saveOrder(obj);
     if (result === false) {
       response.error(res, "服务器错误");
     } else {
@@ -46,8 +40,7 @@ class gui {
   // 添加订单的评论
   saveOrderAppraise = async (req, res) => {
     const { _id, score, appraise } = req.body;
-
-    let result = await mongodb.update("orders", { _id }, { score, appraise });
+    let result = await orderService.saveOrderAppraise(_id, score, appraise);
     if (result === false) {
       response.error(res, "服务器错误");
     } else {
@@ -58,7 +51,7 @@ class gui {
   // 查询某个用户的订单
   findOrderByUserId = async (req, res) => {
     const { customerId } = req.query;
-    let result = await mongodb.find("orders", { customerId });
+    let result = await orderService.findOrderByUserId(customerId);
     if (result === false) {
       response.error(res, "服务器错误");
     } else {
@@ -69,19 +62,17 @@ class gui {
   // 查询全部订单
   findAll = async (req, res) => {
     const { currentPage, pageCount } = req.query;
-    let recordCount = await mongodb.count("orders");
-    let model = mongodb.getConnection("orders");
-    let result = await model.find({}).limit(pageCount).skip(currentPage);
+    const result = await orderService.findAll(currentPage, pageCount);
     if (result === false) {
       response.error(res, "服务器错误");
     } else {
-      response.success(res, { result, recordCount });
+      response.success(res,result);
     }
   };
 
   // 查询订单条数
   findAllOrderCount = async (req, res) => {
-    let result = mongodb.count("orders", {});
+    let result = orderService.findAllOrderCount();
     if (result === false) {
       response.error(res, "服务器错误");
     } else {
@@ -92,7 +83,7 @@ class gui {
   // 根据订单id查询订单
   findOrderById = async (req, res) => {
     const { _id } = req.query;
-    let result = await mongodb.find("orders", { _id });
+    let result = await orderService.findOrderById(_id);
     if (result === false) {
       response.error(res, "服务器错误");
     } else {
@@ -103,7 +94,7 @@ class gui {
   // 修改订单信息
   modifyOrder = async (req, res) => {
     const { _id } = req.body;
-    let result = await mongodb.update("orders", { _id }, req.body);
+    let result = await orderService.modifyOrder(_id, req.body);
     if (result === false) {
       response.error(res, "服务器错误");
     } else {
@@ -114,7 +105,7 @@ class gui {
   // 修改订单状态
   modifyOrderState = async (req, res) => {
     const { _id, orderState } = req.body;
-    let result = mongodb.update("orders", { _id }, { orderState });
+    let result = orderService.modifyOrderState(_id, orderState);
     if (result === false) {
       response.error(res, "服务器错误");
     } else {
@@ -122,4 +113,4 @@ class gui {
     }
   };
 }
-module.exports = new gui();
+module.exports = new OrderController();
