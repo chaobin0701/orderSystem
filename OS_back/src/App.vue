@@ -17,7 +17,7 @@ export default {
 
 #app {
   margin: 0 auto;
-  height: 100%;
+  min-height: 100%;
   background-color: #f5f5f5;
 }
 

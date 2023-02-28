@@ -59,14 +59,6 @@
         </template>
       </el-table-column>
     </el-table>
-    <!-- 弹窗 -->
-    <ModifyGoods
-      :dialogFormVisible.sync="dialogFormVisible"
-      @queryGoods="queryGoods"
-      :title="title"
-      :dialogState="dialogState"
-      :id="id"
-    ></ModifyGoods>
   </div>
 </template>
 
@@ -76,10 +68,6 @@ import { delGoods } from "@/api/goods";
 export default {
   data() {
     return {
-      dialogFormVisible: false, //控制弹窗的显示和隐藏
-      title: "", //弹窗的标题
-      dialogState: "edit", //弹窗的状态
-      id: "", // 当前编辑的单位
       goodsType: ""
     };
   },

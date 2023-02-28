@@ -1,17 +1,90 @@
 <template>
-  <el-dialog
-    :title="title"
-    :visible="dialogFormVisible"
-    @close="outSubmit"
-    width="40%"
-  >
-    <el-form ref="form" :model="form" label-width="80px" :rules="rules">
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">确认修改</el-button>
-        <el-button @click="outSubmit">取消</el-button>
-      </el-form-item>
-    </el-form>
-  </el-dialog>
+  <div class="modifyGoods">
+    <h3>基本信息</h3>
+    <div class="item">
+      <el-form label-position="top" label-width="100px" :model="form">
+        <el-form-item label="标题">
+          <el-input v-model="form.goodsName"></el-input>
+        </el-form-item>
+        <el-form-item label="图片">
+          <el-input v-model="form.goodsImgs"></el-input>
+        </el-form-item>
+        <el-form-item label="描述">
+          <el-input v-model="form.goodsDescribe" type="textarea"></el-input>
+        </el-form-item>
+        <el-form-item label="上架">
+          <el-switch
+            v-model="form.goodsState"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+          >
+          </el-switch>
+        </el-form-item>
+        <el-form-item label="类别">
+          <el-select v-model="form.value" placeholder="请选择">
+            <el-option
+              v-for="item in goodsCategoryInfo"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+    </div>
+    <template v-if="goodsTypeInfo.gt_attribute">
+      <h3>属性</h3>
+      <div class="item">
+        <el-form label-position="top" label-width="100px" :model="form">
+          <el-form-item v-for="(item,index) in goodsTypeInfo.gt_attribute" :key="index" :label="item.title">
+            <el-input v-model="form[item.title]"  v-if="item.type === 'text'"></el-input>
+            <template v-else>
+              <el-radio v-for="(x,i) in item.value" :key="i" v-model="form[item.title]" :label="x" border>{{ x}}</el-radio>           
+            </template>
+          </el-form-item>
+        </el-form>
+      </div>
+    </template>
+
+    <template v-if="goodsTypeInfo.gt_specifications">
+      <h3>规格</h3>
+      <div class="item">
+        <el-form label-position="top" label-width="100px" :model="form">
+          <el-form-item v-for="(item,index) in goodsTypeInfo.gt_specifications" :key="index" :label="item.title">
+            <el-input v-model="form[item.title]"  v-if="item.type === 'text'"></el-input>
+            <template v-else>
+              <el-radio v-for="(x,i) in item.value" :key="i" v-model="form[item.title]" :label="x" border>{{ x}}</el-radio>           
+            </template>
+          </el-form-item>
+        </el-form>
+      </div>
+    </template>
+    <h3>售卖信息</h3>
+    <div class="item">
+      <el-form
+        label-position="top"
+        label-width="100px"
+        :model="form"
+        class="space-x-5"
+      >
+        <el-form-item label="价格" class=" inline-block">
+          <el-input-number
+            v-model="form.goodsPrice"
+            :min="1"
+            :max="10"
+          ></el-input-number>
+        </el-form-item>
+        <el-form-item label="库存" class=" inline-block">
+          <el-input-number
+            v-model="form.goodsStock"
+            :min="1"
+            :max="10"
+          ></el-input-number>
+        </el-form-item>
+      </el-form>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -22,25 +95,20 @@ export default {
     return {
       rules: {},
       inputVisible: false,
-      form: {},
-      goodsTypeInfo: {}
+      form: {
+        goodsName: "",
+        goodsState: true,
+        goodsPrice: 0,
+        goodsStock: 10,
+        goodsSalesVolume: 0,
+        goodsDescribe: "",
+        goodsImgs: "",
+        goodsCategory: [],
+        goodsType: []
+      },
+      goodsTypeInfo: {},
+      goodsCategoryInfo: []
     };
-  },
-
-  props: {
-    title: {
-      default: "默认标题",
-      type: String
-    },
-    dialogState: {
-      Type: String
-    },
-    dialogFormVisible: {
-      type: Boolean
-    },
-    id: {
-      type: String
-    }
   },
   watch: {
     async dialogFormVisible(newValue) {
@@ -90,6 +158,7 @@ export default {
     },
     async queryGoodsType(id) {
       const result = await queryGoodsType(id);
+      console.log(`output-> result.data`, result.data);
       this.goodsTypeInfo = result.data;
     }
   },
@@ -105,4 +174,11 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.modifyGoods h3 {
+  @apply mb-3 mt-3 font-bold text-base;
+}
+.modifyGoods .item {
+  @apply bg-white pt-5 pb-5 pr-10 pl-10 rounded-2xl;
+}
+</style>

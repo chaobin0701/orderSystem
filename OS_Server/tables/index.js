@@ -168,12 +168,12 @@ const goods = {
   },
   goodsCategory: {
     // 商品类别
-    type: String,
+    type: Array,
     required: [true, "缺少商品类别"],
   },
   goodsType: {
     // 商品类型
-    type: String,
+    type: Array,
   },
 };
 
