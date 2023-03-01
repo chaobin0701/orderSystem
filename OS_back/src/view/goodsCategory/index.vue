@@ -10,7 +10,7 @@
       <el-table-column label="名称" prop="gc_name"></el-table-column>
       <el-table-column label="商品数量">
         <template slot-scope="{ row }">
-          <el-tag>{{ row.gc_goods.length }}</el-tag>
+          <el-tag>{{ row.goods.length }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="状态">

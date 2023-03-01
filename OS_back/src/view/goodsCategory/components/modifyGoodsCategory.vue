@@ -17,7 +17,7 @@
       </el-form-item>
       <el-form-item label="关联商品">
         <div>
-          <el-tag v-for="item in form.gc_goods" :key="item._id">
+          <el-tag v-for="item in form.goods" :key="item._id">
             {{ item.goodsName }}
           </el-tag>
         </div>
@@ -69,7 +69,7 @@ export default {
       form: {
         gc_name: "",
         gc_state: true,
-        gc_goods: []
+        goods: []
       },
       goods: ""
     };
@@ -99,7 +99,7 @@ export default {
           this.form = {
             gc_name: "",
             gc_state: true,
-            gc_goods: []
+            goods: []
           };
         }
       } else {
