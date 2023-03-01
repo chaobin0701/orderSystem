@@ -217,7 +217,7 @@ const findById = async (
   _id,
   fields = {
     createdAt: 0,
-    updateAt: 0,
+    updatedAt: 0,
     __v: 0,
   }
 ) => {

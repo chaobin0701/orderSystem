@@ -1,6 +1,7 @@
 const mongodb = require("../db/mongo");
 const TABLENAME = "goods";
 const G_GC_Service = require("./goods_goodsCategory"); //关联表service
+
 class GoodsService {
   // 添加商品
   saveGoods = async (obj, goodsCategory) => {

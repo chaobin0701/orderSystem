@@ -1,7 +1,5 @@
 const mongodb = require("../db/mongo");
 const TABLENAME = "goods_goodsCategory";
-const GoodsService = require("./goodsService");
-const GoodsCategoryService = require("./goodsCategoryService");
 class G_GC_Service {
   /**
    * @des 添加关联
@@ -21,7 +19,7 @@ class G_GC_Service {
       const id = await mongodb.save(TABLENAME, obj);
       return id;
     } else {
-      console.log(`output->关联信息已存在`)
+      console.log(`output->关联信息已存在`);
       return "关联信息已存在";
     }
   }
@@ -68,7 +66,8 @@ class G_GC_Service {
       });
       // 利用关联id查找 商品类型的资料
       for (let x = 0; x < list.length; x++) {
-        let gc_info = await GoodsCategoryService.findGoodsCategoryById(
+        let gc_info = await mongodb.findById(
+          "goodsCategory",
           list[x].goodsCategory_id,
           {
             gc_name: 1,
@@ -76,6 +75,30 @@ class G_GC_Service {
           }
         );
         list[x].gc_name = gc_info?.gc_name;
+      }
+      result.push(list);
+    }
+    return result; //返回相应的goodsCategory数据
+  }
+
+  /**
+   * @des 根据类别id 查询关联信息
+   * @param conditions 传递数组
+   * */
+  async findRelevanceByGoodsCategoryId(conditions) {
+    let result = [];
+    for (let i = 0; i < conditions.length; i++) {
+      // 查找关联
+      let { list } = await this.findRelevanceOne({
+        goodsCategory_id: conditions[i]._id,
+      });
+      // 利用关联id查找 商品的资料
+      for (let x = 0; x < list.length; x++) {
+        let goods_info = await mongodb.findById("goods", list[x].goods_id, {
+          goodsName: 1,
+          _id: 0,
+        });
+        list[x].goodsName = goods_info?.goodsName;
       }
       result.push(list);
     }
@@ -146,5 +169,4 @@ class G_GC_Service {
     }
   }
 }
-
 module.exports = new G_GC_Service();

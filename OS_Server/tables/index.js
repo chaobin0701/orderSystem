@@ -166,6 +166,10 @@ const goods = {
   //   type: Array,
   //   required: [true, "缺少商品类别"],
   // },
+  goodsType_Id: {
+    type: String,
+    default: [],
+  },
   goodsType: {
     // 商品类型
     type: Object,

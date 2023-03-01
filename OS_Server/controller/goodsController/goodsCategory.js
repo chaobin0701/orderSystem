@@ -11,7 +11,10 @@ class GoodsCategoryController {
       obj[key] = req.body[key];
     });
     // 提交数据
-    let result = await GoodsCategoryService.saveGoodsCategory(obj);
+    let result = await GoodsCategoryService.saveGoodsCategory(
+      obj,
+      req.body.goods
+    );
     if (result === false) {
       response.error(res, "服务器错误");
     } else {
@@ -44,7 +47,11 @@ class GoodsCategoryController {
     });
     let _id = req.body._id;
     // 提交修改数据
-    let result = GoodsCategoryService.modifyGoodsCategory(_id, obj);
+    let result = GoodsCategoryService.modifyGoodsCategory(
+      _id,
+      obj,
+      req.body.goods
+    );
     if (result === false) {
       response.error(res, "数据库错误");
     } else {
