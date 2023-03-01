@@ -11,7 +11,7 @@ class GoodsController {
       obj[key] = req.body[key];
     });
     // 提交数据
-    let result = await GoodsService.saveGoods(obj);
+    let result = await GoodsService.saveGoods(obj, req.body.goodsCategory);
     if (result === false) {
       response.error(res, "服务器错误");
     } else {
@@ -43,7 +43,7 @@ class GoodsController {
     });
     let _id = req.body._id;
     // 提交修改数据
-    let result = GoodsService.modifyGoods(_id, obj);
+    let result = GoodsService.modifyGoods(_id, obj, req.body.goodsCategory);
     if (result === false) {
       response.error(res, "数据库错误");
     } else {

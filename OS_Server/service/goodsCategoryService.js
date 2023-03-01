@@ -23,13 +23,13 @@ class GoodsCategoryService {
   };
 
   // 查询全部商品类别
-  findAllGoodsCategory = async () => {
-    let result = await mongodb.find(TABLENAME, {});
+  findAllGoodsCategory = async (conditions = {}, fields = {}) => {
+    let result = await mongodb.find(TABLENAME, conditions, fields);
     return result;
   };
   // 根据id查询商品类别
-  findGoodsCategoryById = async (_id) => {
-    result = await mongodb.findById(TABLENAME, _id);
+  findGoodsCategoryById = async (_id, fields = {}) => {
+    let result = await mongodb.findById(TABLENAME, _id, fields);
     return result;
   };
 }

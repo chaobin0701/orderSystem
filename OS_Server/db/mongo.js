@@ -98,17 +98,7 @@ const getConnection = (table_name) => {
   return client;
 };
 
-/**
- * @param 数据库名称
- * @param 数据
- * @return 数据的id
- * */
-const save = async (table_name, fields) => {
-  // 保存数据
-  if (!fields || !table_name) {
-    logger.error("保存失败，表内容与表名称不能为空");
-    return false;
-  }
+const fieldsCheck = (table_name, fields) => {
   let err_num = 0;
   let errArr = []; // 记录一下传递错误的字段，好排查错误
   for (let i in fields) {
@@ -120,7 +110,26 @@ const save = async (table_name, fields) => {
 
   if (err_num > 0) {
     logger.error("保存失败，所传参数不正确,错误的参数有" + errArr.join("  "));
+    return true;
+  } else {
     return false;
+  }
+};
+
+/**
+ * @param 数据库名称
+ * @param 数据
+ * @return 数据的id
+ * */
+const save = async (table_name, fields) => {
+  // 保存数据
+  if (!fields || !table_name) {
+    logger.error("保存失败，表内容与表名称不能为空");
+    return false;
+  }
+  const error = fieldsCheck(table_name, fields);
+  if (error) {
+    return;
   }
   let node_model = getConnection(table_name); //获取连接状态
   let mongooseEntity = node_model(fields); //传入数据
@@ -146,7 +155,12 @@ const findOne = async (table_name, conditions, filterParams) => {
  * @param 筛选数据
  * @return 数据
  * */
-const findWhere = async (table_name, conditions, options, filterParams) => {
+const findWhere = async (
+  table_name,
+  conditions,
+  options = {},
+  filterParams = {}
+) => {
   // 条件查询   filterParams为对象表示过滤0为过滤   filterParams{name:1} 则会显示name值
   let node_model = getConnection(table_name);
   let list = node_model.find(conditions);
@@ -195,12 +209,21 @@ const find = async (
 /**
  * @param 数据库名称
  * @param 唯一id
+ * @param 数据过滤
  * @return 数据
  * */
-const findById = async (table_name, _id) => {
+const findById = async (
+  table_name,
+  _id,
+  fields = {
+    createdAt: 0,
+    updateAt: 0,
+    __v: 0,
+  }
+) => {
   // 根据id查询
   let node_model = getConnection(table_name);
-  return await node_model.findById(_id);
+  return await node_model.findById(_id, fields);
 };
 
 /**
@@ -211,7 +234,7 @@ const findById = async (table_name, _id) => {
 const remove = async (table_name, conditions) => {
   // 删除数据
   let node_model = getConnection(table_name);
-  return await node_model.remove(conditions);
+  return await node_model.deleteMany(conditions);
 };
 
 /**

@@ -24,7 +24,7 @@ class GoodsCategoryController {
     let _id = req.body._id;
     // todo 查询商品类型资料,当连接数量小于0时才可以删除
     if (_id) {
-      let result = await GoodsCategoryService.removeGoodsCategory( _id );
+      let result = await GoodsCategoryService.removeGoodsCategory(_id);
       if (result === false) {
         response.error(res, "删除商品类别出错");
       } else {
@@ -44,7 +44,7 @@ class GoodsCategoryController {
     });
     let _id = req.body._id;
     // 提交修改数据
-    let result = GoodsCategoryService( _id , obj);
+    let result = GoodsCategoryService.modifyGoodsCategory(_id, obj);
     if (result === false) {
       response.error(res, "数据库错误");
     } else {
@@ -56,9 +56,9 @@ class GoodsCategoryController {
   findGoodsCategory = async (req, res) => {
     let result = null;
     if (req.query._id) {
-      result = await mongodb.findById( req.query._id);
+      result = await GoodsCategoryService.findGoodsCategoryById(req.query._id);
     } else {
-      result = await mongodb.find({});
+      result = await GoodsCategoryService.findAllGoodsCategory();
     }
     if (result === false) {
       response.error(res, "数据库错误");
