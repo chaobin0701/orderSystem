@@ -10,7 +10,6 @@ class GoodsTypeController {
     Object.keys(goodsType).forEach((key) => {
       obj[key] = req.body[key];
     });
-    obj.gt_count = 0; //初始的关联数量为0
     // 提交数据
     let result = await GoodsTypeService.saveGoodsType(obj);
     if (result === false) {

@@ -27,6 +27,7 @@ export default {
     this.$store.dispatch("queryFoodTable");
     this.$store.dispatch("queryGoodsType");
     this.$store.dispatch("queryGoodsCategory");
+    this.$store.dispatch("queryGoods");
   }
 };
 </script>

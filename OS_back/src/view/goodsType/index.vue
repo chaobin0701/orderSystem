@@ -14,29 +14,26 @@
       ></el-table-column>
       <el-table-column label="属性">
         <template slot-scope="{ row }">
-          {{
-            row.gt_attribute.reduce((prev, next) => {
-              prev += next.title + " , ";
-              return prev;
-            }, "")
-          }}
+          <el-tag class="mr-2" v-for="x in row.gt_attribute" :key="x.title">{{
+            x.title
+          }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="规格">
         <template slot-scope="{ row }">
-          {{
-            row.gt_specifications.reduce((prev, next) => {
-              prev += next.title + " , ";
-              return prev;
-            }, "")
-          }}
+          <el-tag
+            class="mr-2"
+            v-for="x in row.gt_specifications"
+            :key="x.title"
+            >{{ x.title }}</el-tag
+          >
         </template>
       </el-table-column>
-      <el-table-column
+      <!-- <el-table-column
         label="商品数量"
         prop="gt_count"
         width="150"
-      ></el-table-column>
+      ></el-table-column> -->
       <el-table-column label="操作">
         <template slot-scope="scope"
           ><el-button size="mini" type="primary" @click="handleEdit(scope.row)"

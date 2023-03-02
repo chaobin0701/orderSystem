@@ -63,6 +63,7 @@ export default {
       this.dialogState = "edit";
       this.dialogFormVisible = true;
       this.id = row._id;
+      console.log(`output->row`,row)
     },
     // 删除
     async handleDelete(row) {

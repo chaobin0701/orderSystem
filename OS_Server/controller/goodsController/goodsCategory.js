@@ -46,6 +46,7 @@ class GoodsCategoryController {
       obj[key] = req.body[key];
     });
     let _id = req.body._id;
+
     // 提交修改数据
     let result = GoodsCategoryService.modifyGoodsCategory(
       _id,

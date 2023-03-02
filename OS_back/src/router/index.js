@@ -42,11 +42,11 @@ let router = new Router({
               component: () => import("@/view/goods/showInfo.vue")
             },
             {
-              path: "add/:goodsType",
+              path: "add/:goodsType_id",
               component: () => import("@/view/goods/components/modifyGoods.vue")
             },
             {
-              path: "add/:goodsType/:_id",
+              path: "add/:goodsType_id/:goods_id",
               component: () => import("@/view/goods/components/modifyGoods.vue")
             }
           ]

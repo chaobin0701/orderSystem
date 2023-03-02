@@ -17,6 +17,7 @@ class G_GC_Service {
     // 判断是否已经存在关联,如果存在,返回关联 不重复添加
     if (await this.isRelevance(goods_id, goodsCategory_id)) {
       const id = await mongodb.save(TABLENAME, obj);
+      console.log(`output->关联信息已添加`)
       return id;
     } else {
       console.log(`output->关联信息已存在`);

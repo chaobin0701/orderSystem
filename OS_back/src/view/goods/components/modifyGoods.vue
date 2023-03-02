@@ -7,7 +7,7 @@
           <el-input v-model="form.goodsName"></el-input>
         </el-form-item>
         <el-form-item label="图片">
-          <el-input v-model="form.goodsImgs"></el-input>
+          <!-- <el-input v-model="form.goodsImgs"></el-input> -->
         </el-form-item>
         <el-form-item label="描述">
           <el-input v-model="form.goodsDescribe" type="textarea"></el-input>
@@ -100,6 +100,7 @@
         </el-form>
       </div>
     </template>
+
     <h3>售卖信息</h3>
     <div class="item">
       <el-form
@@ -116,8 +117,13 @@
         </el-form-item>
       </el-form>
     </div>
+
     <div class="mb-5 mt-5 ">
-      <el-button>取消</el-button>
+      <Router-link to="/goods">
+        <el-button>
+          取消
+        </el-button>
+      </Router-link>
       <el-button type="primary" @click="onSubmit">保存</el-button>
     </div>
   </div>
@@ -140,17 +146,25 @@ export default {
         goodsDescribe: "",
         goodsImgs: "",
         goodsCategory: [],
-        goodsType: {}
+        goodsType: {},
+        goodsType_id: this.$route.params.goodsType_id
       },
-      goodsTypeInfo: {} //商品类别数据
+      goodsTypeInfo: {}, //商品类别数据
+      goodsType_id: "",
+      goods_id: ""
     };
   },
   methods: {
+    // 提交表单数据
     async onSubmit() {
-      // 1.提交表单数据，进行数据更改
-      const result = await addGoods(this.form)
-      // 2.跳转页面
-
+      let result = null;
+      if (this.goodsType_id && this.goods_id) {
+        result = await modifyGoods(this.form);
+      } else {
+        result = await addGoods(this.form);
+      }
+      await this.$store.dispatch("queryGoods");
+      this.$router.push("/goods");
     },
     // 查询单个商品属性
     async queryGoods(id) {
@@ -172,7 +186,11 @@ export default {
     },
     // 选中类别
     selectGoodsCategory(gc) {
-      this.form.goodsCategory.push(gc);
+      this.form.goodsCategory.push({
+        gc_name: gc.gc_name,
+        goodsCategory_id: gc._id,
+        goods_id: this.goods_id
+      });
     },
     // 删除类别
     removeGC(index) {
@@ -180,13 +198,15 @@ export default {
     }
   },
   async created() {
-    let { goodsType, _id } = this.$route.params;
+    let { goodsType_id, goods_id } = this.$route.params;
+    this.goods_id = goods_id;
+    this.goodsType_id = goodsType_id;
 
-    if (goodsType) {
-      await this.queryGoodsType(goodsType);
+    if (goodsType_id) {
+      await this.queryGoodsType(goodsType_id);
     }
-    if (_id) {
-      await this.queryGoods(_id);
+    if (goods_id) {
+      await this.queryGoods(goods_id);
     }
   },
   computed: {
@@ -195,7 +215,7 @@ export default {
       // 排除以选择的类别
       return this.$store.state.goodsCategoryInfo.filter(item => {
         let index = this.form.goodsCategory.findIndex(gc => {
-          return gc._id === item._id;
+          return gc.goodsCategory_id === item._id;
         });
         return index < 0;
       });

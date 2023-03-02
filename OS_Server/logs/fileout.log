@@ -13,3 +13,5 @@
 [2023-03-01T08:51:21.494] [ERROR] default - No table structure
 [2023-03-01T09:18:54.284] [ERROR] default - No table structure
 [2023-03-01T10:52:55.220] [ERROR] default - 保存失败，所传参数不正确,错误的参数有0--undefined  1--undefined
+[2023-03-02T10:43:45.247] [ERROR] default - 保存失败，所传参数不正确,错误的参数有gt_count--undefined
+[2023-03-02T10:46:15.813] [ERROR] default - 保存失败，所传参数不正确,错误的参数有gt_count--undefined

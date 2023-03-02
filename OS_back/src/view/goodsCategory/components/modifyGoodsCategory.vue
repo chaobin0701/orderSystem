@@ -17,17 +17,26 @@
       </el-form-item>
       <el-form-item label="关联商品">
         <div>
-          <el-tag v-for="item in form.goods" :key="item._id">
+          <el-tag
+            v-for="item in form.goods"
+            :key="item._id"
+            closable
+            @close="delRelevance"
+          >
             {{ item.goodsName }}
           </el-tag>
         </div>
         <div>
-          <el-select placeholder="请选择" v-model="goods">
+          <el-select
+            placeholder="请选择"
+            v-model="goods"
+            @change="addRelevance"
+          >
             <el-option
               v-for="item in goodsInfo"
               :key="item._id"
               :label="item.goodsName"
-              :value="item._id"
+              :value="item"
             >
             </el-option>
           </el-select>
@@ -134,11 +143,30 @@ export default {
     async queryGoodsCategory(id) {
       const result = await queryGoodsCategory(id);
       this.form = result.data;
+    },
+    // 删除关联
+    delRelevance(index) {
+      this.form.goods.splice(index, 1);
+    },
+    // 添加关联
+    addRelevance(goods) {
+      this.form.goods.push({
+        goodsName: goods.goodsName,
+        goods_id: goods._id,
+        goodsCategory_id: this.form._id
+      });
     }
   },
   computed: {
+    //可选择的商品数据
     goodsInfo() {
-      return this.$store.state.goodsInfo;
+      // 排除以选择的商品
+      return this.$store.state.goodsInfo.filter(item => {
+        let index = this.form.goods.findIndex(goods => {
+          return goods.goods_id === item._id;
+        });
+        return index < 0;
+      });
     }
   }
 };

@@ -24,7 +24,7 @@
     <!-- 表格 -->
     <el-table :data="goodsInfo" style="width: 100%" border>
       <el-table-column label="标题" prop="goodsName"></el-table-column>
-      <el-table-column label="类型" prop="goodsName"></el-table-column>
+      <el-table-column label="类型" prop="goodsType_id"></el-table-column>
       <!-- <el-table-column label="规格" prop="goodsType"></el-table-column> -->
       <el-table-column label="SKU" prop="_id"></el-table-column>
       <el-table-column
@@ -80,7 +80,7 @@ export default {
       this.dialogState = "edit";
       this.dialogFormVisible = true;
       this.id = row._id;
-      this.$router.push(`/goods/add/${row.goodsType}/${row._id}`);
+      this.$router.push(`/goods/add/${row.goodsType_id}/${row._id}`);
     },
     // 删除
     async handleDelete(row) {

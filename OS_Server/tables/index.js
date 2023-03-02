@@ -93,11 +93,6 @@ const goodsType = {
     type: String,
     required: [true, "缺少商品类型名称"],
   },
-  gt_count: {
-    //关联数量
-    type: Number,
-    default: 0,
-  },
   gt_attribute: {
     //商品属性
     type: Object,
@@ -119,11 +114,6 @@ const goodsCategory = {
     type: Boolean,
     default: true,
   },
-  // gc_goods: {
-  //   // 类别商品
-  //   type: Array,
-  //   default: [],
-  // },
 };
 
 const goods = {
@@ -166,9 +156,9 @@ const goods = {
   //   type: Array,
   //   required: [true, "缺少商品类别"],
   // },
-  goodsType_Id: {
+  goodsType_id: {
     type: String,
-    default: [],
+    required: [true, "缺少商品类别id"],
   },
   goodsType: {
     // 商品类型
