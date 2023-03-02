@@ -1,17 +1,14 @@
-// 上传文件模块
-const multiparty = require("multiparty");
-// 文件操作模块
-const fs = require("fs");
-
+const multiparty = require("multiparty"); // 上传文件模块
+const fs = require("fs"); // 文件操作模块
 const utils = require(process.cwd() + "/utils");
+
 // 图片上传 中间件
 exports.img = (req, res) => {
   /* 生成multiparty对象，并配置上传目标路径 */
   let form = new multiparty.Form();
-  // 设置编码
-  form.encoding = "utf-8";
-  // 设置文件存储路径，以当前编辑的文件为相对路径
-  form.uploadDir = "./public/mealsImages";
+  form.encoding = "utf-8"; // 设置编码
+  form.uploadDir = "./public/goodsImages"; // 设置文件存储路径，以当前编辑的文件为相对路径
+
   // parse，表单解析器
   // fields :普通的表单数据
   // files:上传的文件的信息
@@ -30,7 +27,9 @@ exports.img = (req, res) => {
         msg: "File Success",
         file_name: upfile.originalFilename,
         file_size: (upfile.size / 1048576).toFixed(2) + "M",
-        imgSrc:`http://${utils.getIPAdress()}:3280/static/mealsImages/${upfile.originalFilename}`
+        imgSrc: `http://${utils.getIPAdress()}:3280/static/goodsImages/${
+          upfile.originalFilename
+        }`,
       });
     } catch {
       //  异常情况下的消息

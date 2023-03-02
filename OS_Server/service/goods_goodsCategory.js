@@ -17,7 +17,7 @@ class G_GC_Service {
     // 判断是否已经存在关联,如果存在,返回关联 不重复添加
     if (await this.isRelevance(goods_id, goodsCategory_id)) {
       const id = await mongodb.save(TABLENAME, obj);
-      console.log(`output->关联信息已添加`)
+      console.log(`output->关联信息已添加`);
       return id;
     } else {
       console.log(`output->关联信息已存在`);
@@ -58,28 +58,23 @@ class G_GC_Service {
    * @des 根据商品id 查询关联信息
    * @param conditions 传递数组
    * */
-  async findRelevanceByGoodsId(conditions) {
+  async findRelevanceByGoodsId(goods_id) {
+    // 查找对应关联
+    const data = await this.findRelevanceOne({ goods_id });
+    // 根据data中的category_id 查询对应的类别数据
     let result = [];
-    for (let i = 0; i < conditions.length; i++) {
-      // 查找关联
-      let { list } = await this.findRelevanceOne({
-        goods_id: conditions[i]._id,
-      });
-      // 利用关联id查找 商品类型的资料
-      for (let x = 0; x < list.length; x++) {
-        let gc_info = await mongodb.findById(
-          "goodsCategory",
-          list[x].goodsCategory_id,
-          {
-            gc_name: 1,
-            _id: 0,
-          }
-        );
-        list[x].gc_name = gc_info?.gc_name;
-      }
-      result.push(list);
+    for (let i = 0; i < data.length; i++) {
+      let gc_info = await mongodb.findById(
+        "goodsCategory",
+        data[i].goodsCategory_id,
+        {
+          gc_name: 1,
+          _id: 0,
+        }
+      );
+      result,push(gc_info)
     }
-    return result; //返回相应的goodsCategory数据
+    return result;
   }
 
   /**
@@ -87,23 +82,34 @@ class G_GC_Service {
    * @param conditions 传递数组
    * */
   async findRelevanceByGoodsCategoryId(conditions) {
-    let result = [];
-    for (let i = 0; i < conditions.length; i++) {
-      // 查找关联
-      let { list } = await this.findRelevanceOne({
-        goodsCategory_id: conditions[i]._id,
-      });
-      // 利用关联id查找 商品的资料
-      for (let x = 0; x < list.length; x++) {
-        let goods_info = await mongodb.findById("goods", list[x].goods_id, {
-          goodsName: 1,
-          _id: 0,
+    if (conditions instanceof Array) {
+      let result = [];
+      for (let i = 0; i < conditions.length; i++) {
+        // 查找关联
+        let { list } = await this.findRelevanceOne({
+          goodsCategory_id: conditions[i]._id,
         });
-        list[x].goodsName = goods_info?.goodsName;
+        // 利用关联id查找 商品的资料
+        for (let x = 0; x < list.length; x++) {
+          let goods_info = await mongodb.findById("goods", list[x].goods_id, {
+            goodsName: 1,
+            _id: 0,
+          });
+          list[x].goodsName = goods_info?.goodsName;
+        }
+        result.push(list);
       }
-      result.push(list);
+      return result; //返回相应的goodsCategory数据
+    } else {
+      // 查找关联
+      await this.findRelevanceOne({
+        goodsCategory_id: conditions,
+      });
+      let goods_info = await mongodb.findById("goods", list[x].goods_id, {
+        goodsName: 1,
+        _id: 0,
+      });
     }
-    return result; //返回相应的goodsCategory数据
   }
 
   /**

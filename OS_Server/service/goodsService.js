@@ -32,18 +32,26 @@ class GoodsService {
   // 查询全部商品
   async findAllGoods() {
     let result = await mongodb.find(TABLENAME, {});
-    let list = await G_GC_Service.findRelevanceByGoodsId(result);
-    result.forEach((item, index) => {
-      item.goodsCategory = list[index];
-    });
+    // 查询商品对应的关联信息和类别信息
+    for (let i = 0; i < result.length; i++) {
+      // 查询关联信息
+      result[i].goodsCategory = await G_GC_Service.findRelevanceByGoodsId(
+        result[i]._id
+      );
+      // 查询类别信息
+      let gt_Info = await mongodb.findById("goodsType", result[i].goodsType_id);
+      result[i].gt_name = gt_Info.gt_name;
+    }
+
     return result;
   }
   // 根据id查询商品
   async findGoodsById(_id) {
     let result = await mongodb.findById(TABLENAME, _id);
     if (result) {
-      let list = await G_GC_Service.findRelevanceByGoodsId([result]);
-      result._doc.goodsCategory = list[0]; //特殊的赋值
+      result._doc.goodsCategory = await G_GC_Service.findRelevanceByGoodsId(
+        result._id
+      );
     }
     return result;
   }

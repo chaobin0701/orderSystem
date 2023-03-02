@@ -8,6 +8,7 @@
         </el-form-item>
         <el-form-item label="图片">
           <!-- <el-input v-model="form.goodsImgs"></el-input> -->
+          <imgUpload></imgUpload>
         </el-form-item>
         <el-form-item label="描述">
           <el-input v-model="form.goodsDescribe" type="textarea"></el-input>
@@ -109,20 +110,18 @@
         :model="form"
         class="space-x-5"
       >
-        <el-form-item label="价格" class=" inline-block">
+        <el-form-item label="价格" class="inline-block">
           <el-input-number v-model="form.goodsPrice"></el-input-number>
         </el-form-item>
-        <el-form-item label="库存" class=" inline-block">
+        <el-form-item label="库存" class="inline-block">
           <el-input-number v-model="form.goodsStock" :min="0"></el-input-number>
         </el-form-item>
       </el-form>
     </div>
 
-    <div class="mb-5 mt-5 ">
+    <div class="mb-5 mt-5">
       <Router-link to="/goods">
-        <el-button>
-          取消
-        </el-button>
+        <el-button> 取消 </el-button>
       </Router-link>
       <el-button type="primary" @click="onSubmit">保存</el-button>
     </div>
@@ -132,7 +131,9 @@
 <script>
 import { queryGoods, modifyGoods, addGoods } from "@/api/goods.js";
 import { queryGoodsType } from "@/api/goodsType.js";
+import imgUpload from "@/components/imgUpload.vue";
 export default {
+  components: { imgUpload },
   data() {
     return {
       rules: {}, //表单校验规则
@@ -147,11 +148,11 @@ export default {
         goodsImgs: "",
         goodsCategory: [],
         goodsType: {},
-        goodsType_id: this.$route.params.goodsType_id
+        goodsType_id: this.$route.params.goodsType_id,
       },
       goodsTypeInfo: {}, //商品类别数据
       goodsType_id: "",
-      goods_id: ""
+      goods_id: "",
     };
   },
   methods: {
@@ -175,11 +176,11 @@ export default {
     async queryGoodsType(id) {
       const result = await queryGoodsType(id);
       // 处理form表单的goodsType
-      const gt_attribute = result.data.gt_attribute.map(item => {
-        return { titel: item.title, value: "" };
+      const gt_attribute = result.data.gt_attribute.map((item) => {
+        return { title: item.title, value: "" };
       });
-      const gt_specifications = result.data.gt_specifications.map(item => {
-        return { titel: item.title, value: "" };
+      const gt_specifications = result.data.gt_specifications.map((item) => {
+        return { title: item.title, value: "" };
       });
       this.form.goodsType = { gt_attribute, gt_specifications };
       this.goodsTypeInfo = result.data;
@@ -189,13 +190,13 @@ export default {
       this.form.goodsCategory.push({
         gc_name: gc.gc_name,
         goodsCategory_id: gc._id,
-        goods_id: this.goods_id
+        goods_id: this.goods_id,
       });
     },
     // 删除类别
     removeGC(index) {
       this.form.goodsCategory.splice(index, 1);
-    }
+    },
   },
   async created() {
     let { goodsType_id, goods_id } = this.$route.params;
@@ -213,14 +214,14 @@ export default {
     //商品类型数据
     goodsCategoryInfo() {
       // 排除以选择的类别
-      return this.$store.state.goodsCategoryInfo.filter(item => {
-        let index = this.form.goodsCategory.findIndex(gc => {
+      return this.$store.state.goodsCategoryInfo.filter((item) => {
+        let index = this.form.goodsCategory.findIndex((gc) => {
           return gc.goodsCategory_id === item._id;
         });
-        return index < 0;
+        return index;
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -24,8 +24,18 @@
     <!-- 表格 -->
     <el-table :data="goodsInfo" style="width: 100%" border>
       <el-table-column label="标题" prop="goodsName"></el-table-column>
-      <el-table-column label="类型" prop="goodsType_id"></el-table-column>
-      <!-- <el-table-column label="规格" prop="goodsType"></el-table-column> -->
+      <el-table-column label="类型" prop="gt_name"></el-table-column>
+      <el-table-column label="规格" prop="goodsType">
+        <template slot-scope="{ row }">
+          <el-tag
+            class="mr-2"
+            v-for="(item, index) in row.goodsType.gt_specifications"
+            :key="index"
+          >
+            {{ item.value }}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="SKU" prop="_id"></el-table-column>
       <el-table-column
         label="价格"
@@ -44,8 +54,8 @@
       ></el-table-column>
       <el-table-column label="状态" width="100">
         <template slot-scope="{ row }">
-          <span v-if="row.goodsState" class=" text-green-600">上架</span>
-          <span v-else class=" text-red-600">下架</span>
+          <span v-if="row.goodsState" class="text-green-600">上架</span>
+          <span v-else class="text-red-600">下架</span>
         </template>
       </el-table-column>
       <el-table-column label="操作">
@@ -68,7 +78,7 @@ import { delGoods } from "@/api/goods";
 export default {
   data() {
     return {
-      goodsType: ""
+      goodsType: "",
     };
   },
   components: { ModifyGoods },
@@ -89,17 +99,17 @@ export default {
         await this.$confirm(`确定要删除${row.goodsName}商品吗`, {
           cancelButtonText: "取消",
           confirmButtonText: "确定",
-          type: "warning"
+          type: "warning",
         });
         await this.delGoods(row._id);
         this.$message({
           type: "success",
-          message: "删除成功!"
+          message: "删除成功!",
         });
       } catch (error) {
         this.$message({
           type: "info",
-          message: "已取消删除"
+          message: "已取消删除",
         });
       }
     },
@@ -117,7 +127,7 @@ export default {
       this.title = "添加商品";
       this.dialogState = "add";
       this.dialogFormVisible = true;
-    }
+    },
   },
   computed: {
     goodsInfo() {
@@ -125,12 +135,12 @@ export default {
     },
     goodsTypeInfo() {
       return this.$store.state.goodsTypeInfo;
-    }
+    },
   },
   created() {
     this.$store.dispatch("queryGoods");
     this.$store.dispatch("queryGoodsType");
-  }
+  },
 };
 </script>
 
