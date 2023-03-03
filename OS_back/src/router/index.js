@@ -16,23 +16,27 @@ let router = new Router({
         {
           path: "/",
           name: "首页",
+          title: "首页",
           component: () => import("@/view/home/index.vue"),
           icon: "el-icon-s-home"
         },
         {
           path: "/order",
           name: "订单管理",
+          title: "订单管理",
           component: () => import("@/view/order/index.vue"),
           icon: "el-icon-s-order"
         },
         {
           path: "/goodsType",
           name: "商品类别",
+          title: "商品类别",
           icon: "el-icon-s-grid",
           component: () => import("@/view/goodsType/index.vue")
         },
         {
           path: "/goods",
+          title: "商品管理",
           icon: "el-icon-s-goods",
           component: () => import("@/view/goods/index.vue"),
           children: [
@@ -54,24 +58,28 @@ let router = new Router({
         {
           path: "/goodsCategory",
           name: "商品类型",
+          title: "商品类型",
           icon: "el-icon-menu",
           component: () => import("@/view/goodsCategory/index.vue")
         },
 
         {
           path: "/foodTable",
+          title: "餐桌管理",
           name: "餐桌管理",
           component: () => import("@/view/foodTable/index.vue"),
           icon: "el-icon-dish"
         },
         {
           path: "/staff",
+          title: "员工管理",
           name: "员工管理",
           component: () => import("@/view/staff/index.vue"),
           icon: "el-icon-s-custom"
         },
         {
           path: "/orderDetails",
+          title: "订单详情",
           name: "订单详情",
           component: () => import("@/view/orderDetail/index.vue"),
           hidden: true

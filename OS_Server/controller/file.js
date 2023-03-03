@@ -7,7 +7,7 @@ exports.img = (req, res) => {
   /* 生成multiparty对象，并配置上传目标路径 */
   let form = new multiparty.Form();
   form.encoding = "utf-8"; // 设置编码
-  form.uploadDir = "./public/goodsImages"; // 设置文件存储路径，以当前编辑的文件为相对路径
+  form.uploadDir = "./public/goods"; // 设置文件存储路径，以当前编辑的文件为相对路径
 
   // parse，表单解析器
   // fields :普通的表单数据
@@ -25,9 +25,9 @@ exports.img = (req, res) => {
       res.send({
         code: 200,
         msg: "File Success",
-        file_name: upfile.originalFilename,
+        name: upfile.originalFilename,
         file_size: (upfile.size / 1048576).toFixed(2) + "M",
-        imgSrc: `http://${utils.getIPAdress()}:3280/static/goodsImages/${
+        url: `http://${utils.getIPAdress()}:3280/static/goods/${
           upfile.originalFilename
         }`,
       });

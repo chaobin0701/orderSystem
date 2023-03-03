@@ -7,8 +7,20 @@
           <el-input v-model="form.goodsName"></el-input>
         </el-form-item>
         <el-form-item label="图片">
-          <!-- <el-input v-model="form.goodsImgs"></el-input> -->
-          <imgUpload></imgUpload>
+          <el-upload
+            action="http://127.0.0.1:3280/api/file/upload"
+            multiple
+            :limit="3"
+            :on-success="handleSuccess"
+            :on-remove="handleRemove"
+            :file-list="form.goodsImgs"
+            list-type="picture"
+          >
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">
+              只能上传jpg/png文件，且不超过500kb
+            </div>
+          </el-upload>
         </el-form-item>
         <el-form-item label="描述">
           <el-input v-model="form.goodsDescribe" type="textarea"></el-input>
@@ -131,9 +143,7 @@
 <script>
 import { queryGoods, modifyGoods, addGoods } from "@/api/goods.js";
 import { queryGoodsType } from "@/api/goodsType.js";
-import imgUpload from "@/components/imgUpload.vue";
 export default {
-  components: { imgUpload },
   data() {
     return {
       rules: {}, //表单校验规则
@@ -145,7 +155,7 @@ export default {
         goodsStock: 10,
         goodsSalesVolume: 0,
         goodsDescribe: "",
-        goodsImgs: "",
+        goodsImgs: [],
         goodsCategory: [],
         goodsType: {},
         goodsType_id: this.$route.params.goodsType_id,
@@ -196,6 +206,12 @@ export default {
     // 删除类别
     removeGC(index) {
       this.form.goodsCategory.splice(index, 1);
+    },
+    handleSuccess(file) {
+      this.form.goodsImgs.push({ name: file.file_name, url: file.url });
+    },
+    handleRemove(file, fileList) {
+      this.form.goodsImgs = fileList;
     },
   },
   async created() {

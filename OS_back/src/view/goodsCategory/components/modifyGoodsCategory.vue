@@ -18,6 +18,7 @@
       <el-form-item label="关联商品">
         <div>
           <el-tag
+            class="mr-2"
             v-for="item in form.goods"
             :key="item._id"
             closable
@@ -63,40 +64,40 @@
 import {
   queryGoodsCategory,
   modifyGoodsCategory,
-  addGoodsCategory
+  addGoodsCategory,
 } from "@/api/goodsCategory.js";
 export default {
   data() {
     return {
       rules: {
         gc_name: [
-          { required: true, message: "请输入类型名称", trigger: "blur" }
-        ]
+          { required: true, message: "请输入类型名称", trigger: "blur" },
+        ],
       },
       inputVisible: false,
       // form表单
       form: {
         gc_name: "",
         gc_state: true,
-        goods: []
+        goods: [],
       },
-      goods: ""
+      goods: "",
     };
   },
   props: {
     title: {
       default: "默认标题",
-      type: String
+      type: String,
     },
     dialogState: {
-      Type: String
+      Type: String,
     },
     dialogFormVisible: {
-      type: Boolean
+      type: Boolean,
     },
     id: {
-      type: String
-    }
+      type: String,
+    },
   },
   watch: {
     async dialogFormVisible(newValue) {
@@ -108,13 +109,13 @@ export default {
           this.form = {
             gc_name: "",
             gc_state: true,
-            goods: []
+            goods: [],
           };
         }
       } else {
         // 关闭
       }
-    }
+    },
   },
   methods: {
     async onSubmit() {
@@ -129,6 +130,7 @@ export default {
     outSubmit() {
       // 1.关闭弹窗
       this.$emit("update:dialogFormVisible", false);
+      this.form.goods = [];
     },
     async modifyGoodsCategory() {
       //修改数据
@@ -153,22 +155,22 @@ export default {
       this.form.goods.push({
         goodsName: goods.goodsName,
         goods_id: goods._id,
-        goodsCategory_id: this.form._id
+        goodsCategory_id: this.form._id,
       });
-    }
+    },
   },
   computed: {
     //可选择的商品数据
     goodsInfo() {
       // 排除以选择的商品
-      return this.$store.state.goodsInfo.filter(item => {
-        let index = this.form.goods.findIndex(goods => {
+      return this.$store.state.goodsInfo.filter((item) => {
+        let index = this.form.goods.findIndex((goods) => {
           return goods.goods_id === item._id;
         });
         return index < 0;
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -60,9 +60,10 @@ class G_GC_Service {
    * */
   async findRelevanceByGoodsId(goods_id) {
     // 查找对应关联
-    const data = await this.findRelevanceOne({ goods_id });
+    const { list: data } = await this.findRelevanceOne({ goods_id });
     // 根据data中的category_id 查询对应的类别数据
     let result = [];
+
     for (let i = 0; i < data.length; i++) {
       let gc_info = await mongodb.findById(
         "goodsCategory",
@@ -72,8 +73,9 @@ class G_GC_Service {
           _id: 0,
         }
       );
-      result,push(gc_info)
+      result.push(gc_info);
     }
+
     return result;
   }
 
