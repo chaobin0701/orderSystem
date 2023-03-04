@@ -5,8 +5,18 @@
         >添加商品类型</el-button
       >
     </MainHeader>
+
     <!-- 表格 -->
-    <el-table :data="goodsTypeInfo" style="width: 100%" border>
+    <el-table
+      :data="
+        goodsTypeInfo.slice(
+          currentIndex * pageSize,
+          currentIndex * pageSize + pageSize
+        )
+      "
+      style="width: 100%"
+      border
+    >
       <el-table-column
         label="名称"
         prop="gt_name"
@@ -29,11 +39,6 @@
           >
         </template>
       </el-table-column>
-      <!-- <el-table-column
-        label="商品数量"
-        prop="gt_count"
-        width="150"
-      ></el-table-column> -->
       <el-table-column label="操作">
         <template slot-scope="scope"
           ><el-button size="mini" type="primary" @click="handleEdit(scope.row)"
@@ -45,6 +50,14 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      background
+      layout="prev, pager, next"
+      :total="total"
+      :page-size="pageSize"
+      @current-change="currentChange"
+    >
+    </el-pagination>
 
     <!-- 弹窗 -->
     <ModifyGoodsType
@@ -66,7 +79,9 @@ export default {
       dialogFormVisible: false, //控制弹窗的显示和隐藏
       title: "", //弹窗的标题
       dialogState: "edit", //弹窗的状态
-      id: "" // 当前编辑的单位
+      id: "", // 当前编辑的单位
+      currentIndex: 0, //当前页数
+      pageSize: 15, //一页的个数
     };
   },
   components: { ModifyGoodsType },
@@ -86,18 +101,18 @@ export default {
         await this.$confirm(`确定要删除${row.gt_name}类型吗`, {
           cancelButtonText: "取消",
           confirmButtonText: "确定",
-          type: "warning"
+          type: "warning",
         });
 
         await this.delFoodTable(row._id);
         this.$message({
           type: "success",
-          message: "删除成功!"
+          message: "删除成功!",
         });
       } catch (error) {
         this.$message({
           type: "info",
-          message: "已取消删除"
+          message: "已取消删除",
         });
       }
     },
@@ -115,13 +130,19 @@ export default {
       this.title = "添加商品类型";
       this.dialogState = "add";
       this.dialogFormVisible = true;
-    }
+    },
+    currentChange(index) {
+      this.currentIndex = index - 1;
+    },
   },
   computed: {
     goodsTypeInfo() {
       return this.$store.state.goodsTypeInfo;
-    }
-  }
+    },
+    total() {
+      return this.$store.state.goodsTypeInfo.length;
+    },
+  },
 };
 </script>
 

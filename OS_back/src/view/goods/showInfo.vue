@@ -22,7 +22,16 @@
       </el-select>
     </MainHeader>
     <!-- 表格 -->
-    <el-table :data="goodsInfo" style="width: 100%" border>
+    <el-table
+      :data="
+        goodsInfo.slice(
+          currentIndex * pageSize,
+          currentIndex * pageSize + pageSize
+        )
+      "
+      style="width: 100%"
+      border
+    >
       <el-table-column label="标题" prop="goodsName"></el-table-column>
       <el-table-column label="类型" prop="gt_name"></el-table-column>
       <el-table-column label="规格" prop="goodsType">
@@ -69,6 +78,15 @@
         </template>
       </el-table-column>
     </el-table>
+    <!-- 分页 -->
+    <el-pagination
+      background
+      layout="prev, pager, next"
+      :total="total"
+      :page-size="pageSize"
+      @current-change="currentChange"
+    >
+    </el-pagination>
   </div>
 </template>
 
@@ -79,6 +97,8 @@ export default {
   data() {
     return {
       goodsType: "",
+      pageSize: 10,
+      currentIndex: 0,
     };
   },
   components: { ModifyGoods },
@@ -128,6 +148,9 @@ export default {
       this.dialogState = "add";
       this.dialogFormVisible = true;
     },
+    currentChange(index) {
+      this.currentIndex = index - 1;
+    },
   },
   computed: {
     goodsInfo() {
@@ -135,6 +158,9 @@ export default {
     },
     goodsTypeInfo() {
       return this.$store.state.goodsTypeInfo;
+    },
+    total() {
+      return this.$store.state.goodsInfo.length;
     },
   },
   created() {
