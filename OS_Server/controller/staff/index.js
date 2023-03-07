@@ -1,6 +1,6 @@
-const response = require("../utils/response");
-const { staff } = require("../tables");
-const staffService = require("../service/staffService");
+const response = require("../../utils/response");
+const { staff } = require("../../tables");
+const staffService = require("../../service/staffService");
 
 class StaffController {
   // 添加员工

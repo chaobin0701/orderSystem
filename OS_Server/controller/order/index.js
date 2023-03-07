@@ -1,5 +1,5 @@
-const response = require("../utils/response");
-const orderService = require("../service/orderService");
+const response = require("../../utils/response");
+const orderService = require("../../service/orderService");
 class OrderController {
   // 新增订单
   saveOrder = async (req, res) => {
@@ -66,7 +66,7 @@ class OrderController {
     if (result === false) {
       response.error(res, "服务器错误");
     } else {
-      response.success(res,result);
+      response.success(res, result);
     }
   };
 

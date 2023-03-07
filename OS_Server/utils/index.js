@@ -1,15 +1,5 @@
 const os = require("os");
 const moment = require("moment");
-// 中间件 => 根据 "_" 对res.body中的属性进行划分并简化变量
-exports.deconstructParams = (req, res, next) => {
-  const keys = Object.keys(req.body).filter((key) => {
-    return key.indexOf("_") >= 1;
-  });
-  keys.forEach((item) => {
-    req.body[item.slice(item.indexOf("_") + 1)] = req.body[item];
-  });
-  next();
-};
 
 //获取本机ip
 exports.getIPAdress = function () {
@@ -47,7 +37,7 @@ exports.momentHandle = function (model) {
       break;
   }
   return {
-    startTime:new Date(startTime),
-    endTime:new Date(endTime)
+    startTime: new Date(startTime),
+    endTime: new Date(endTime),
   };
 };

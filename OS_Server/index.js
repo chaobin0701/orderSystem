@@ -33,9 +33,6 @@ app.use(
     })
 );
 
-// 处理body中的参数
-app.use("/", utils.deconstructParams);
-
 // 失败级中间件
 app.use((err, req, res, next) => {
   // token解析失败导致的错误

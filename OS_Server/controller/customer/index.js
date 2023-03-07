@@ -1,6 +1,6 @@
-const response = require("../utils/response");
-const { customer } = require("../tables");
-const customerService = require("../service/customerService");
+const response = require("../../utils/response");
+const { customer } = require("../../tables");
+const customerService = require("../../service/customerService");
 
 class CustomerController {
   // 添加新用户

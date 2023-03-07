@@ -1,6 +1,6 @@
-const response = require("../utils/response");
-const { foodtable } = require("../tables");
-const foodtableService = require("../service/foodtableService");
+const response = require("../../utils/response");
+const { foodtable } = require("../../tables");
+const foodtableService = require("../../service/foodtableService");
 
 class gui {
   // 添加餐桌

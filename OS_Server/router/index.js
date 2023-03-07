@@ -3,14 +3,14 @@ const router = express.Router();
 
 // 处理函数
 const file_Handler = require("../controller/file");
-const order_Handler1 = require("../controller/orderController");
+const order_Handler1 = require("../controller/order");
 // const dataAnalysis_Handler = require("../controller/dataAnalysis");
 const goodstype_handler = require("../controller/goodsController/goodsType");
 const goodsCategory_handler = require("../controller/goodsController/goodsCategory");
 const goods_handler = require("../controller/goodsController/goods");
 const staff_handler = require("../controller/staff");
 const foodtable_handler = require("../controller/foodtable");
-const customer_handler = require("../controller/customerController");
+const customer_handler = require("../controller/customer");
 
 
 

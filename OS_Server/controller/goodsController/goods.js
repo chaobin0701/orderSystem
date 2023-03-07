@@ -5,7 +5,6 @@ const GoodsService = require("../../service/goodsService");
 class GoodsController {
   // 添加商品
   saveGoods = async (req, res) => {
-    console.log('1')
     // 数据处理
     let obj = {};
     Object.keys(goods).forEach((key) => {

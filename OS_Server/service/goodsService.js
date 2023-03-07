@@ -31,18 +31,28 @@ class GoodsService {
 
   // 查询全部商品
   async findAllGoods() {
-    let result = await mongodb.find(TABLENAME, {});
-    // 查询商品对应的关联信息和类别信息
-    for (let i = 0; i < result.length; i++) {
-      // 查询关联信息
-      result[i].goodsCategory = await G_GC_Service.findRelevanceByGoodsId(
-        result[i]._id
-      );
-      // 查询类别信息
-      let gt_Info = await mongodb.findById("goodsType", result[i].goodsType_id);
-      result[i].gt_name = gt_Info.gt_name;
-    }
-
+    // TODO
+    const DB = mongodb.getConnection("goods"); //获取连接状态
+    let result = await DB.aggregate([
+      {
+        // 查询对应的关联信息
+        $lookup: {
+          from: "goods_goodsCategory",
+          localField: "_id",
+          foreignField: "goods_id",
+          as: "goodsCategory",
+        },
+      },
+      // 查询对应的类别信息
+      {
+        $lookup: {
+          from: "goodsType",
+          localField: "goodsType_id",
+          foreignField: "_id",
+          as: "gt_Info",
+        },
+      },
+    ]);
     return result;
   }
   // 根据id查询商品
