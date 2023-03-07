@@ -1,6 +1,5 @@
 const mongodb = require("../db/mongo");
 const mongoose = require("mongoose");
-
 const TABLENAME = "goodsCategory";
 const G_GC_Service = require("./goods_goodsCategory"); //关联表service
 
@@ -32,26 +31,55 @@ class GoodsCategoryService {
   };
 
   // 查询全部商品类别
-  findAllGoodsCategory = async (conditions = {}, fields) => {
+  findAllGoodsCategory = async () => {
     const DB = mongodb.getConnection("goodsCategory"); //获取连接状态
-    let result = await DB.aggregate()
-    
-    
-
-    // let result = await mongodb.find(TABLENAME, conditions, fields);
-    // let list = await G_GC_Service.findRelevanceByGoodsCategoryId(result);
-    // result.forEach((item, index) => {
-    //   item.goods = list[index];
-    // });
+    let result = await DB.aggregate([
+      {
+        $lookup: {
+          from: "goods_goodsCategory",
+          localField: "_id",
+          foreignField: "goodsCategory_id",
+          as: "goodsCategory",
+        },
+      },
+      {
+        $lookup: {
+          from: "goods",
+          localField: "goodsCategory.goods_id",
+          foreignField: "_id",
+          as: "goods",
+        },
+      },
+    ]);
     return result;
   };
+
   // 根据id查询商品类别
-  findGoodsCategoryById = async (_id, fields) => {
-    let result = await mongodb.findById(TABLENAME, _id, fields);
-    if (result) {
-      let list = await G_GC_Service.findRelevanceByGoodsCategoryId([result]);
-      result._doc.goods = list[0]; //特殊的赋值
-    }
+  findGoodsCategoryById = async (_id) => {
+    const DB = mongodb.getConnection("goodsCategory"); //获取连接状态
+    let result = await DB.aggregate([
+      {
+        $match: {
+          _id: mongoose.Types.ObjectId(_id),
+        },
+      },
+      {
+        $lookup: {
+          from: "goods_goodsCategory",
+          localField: "_id",
+          foreignField: "goodsCategory_id",
+          as: "goodsCategory",
+        },
+      },
+      {
+        $lookup: {
+          from: "goods",
+          localField: "goodsCategory.goods_id",
+          foreignField: "_id",
+          as: "goods",
+        },
+      },
+    ]);
     return result;
   };
 }
