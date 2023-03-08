@@ -6,10 +6,12 @@ module.exports = {
   },
   gt_attribute: {
     //商品属性
-    type: Object,
+    type: Array,
+    default: [],
   },
   gt_specifications: {
     //商品规格
-    type: Object,
+    type: Array,
+    default: [],
   },
 };
