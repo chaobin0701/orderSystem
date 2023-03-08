@@ -1,3 +1,6 @@
+var mongoose = require("mongoose");
+var Schema = mongoose.Schema;
+
 module.exports = {
   orderPrice: {
     //订单价格
@@ -21,11 +24,11 @@ module.exports = {
   },
   staffId: {
     //服务员工id
-    type: Number,
+    type: Schema.Types.ObjectId,
     required: [true, "staff_id(服务员工id)"],
   },
   diningFoodTable: String, //就餐餐桌
-  diningFoodTableId: Number, //就餐餐桌Id
+  diningFoodTableId: Schema.Types.ObjectId, //就餐餐桌Id
   customerName: {
     //顾客名称
     type: String,
@@ -33,7 +36,7 @@ module.exports = {
   },
   customerId: {
     //顾客id
-    type: Number,
+    type: Schema.Types.ObjectId,
     required: true,
   },
   orderAppraise: {
@@ -41,47 +44,40 @@ module.exports = {
     score: Number, //分数
     appraise: String, //评价
   },
-  mealsInfo: [
+  goodsInfo: [
     {
-      meals_id: {
-        //菜品id
-        type: String,
-        required: [true, "缺少meals_id(餐品id)"],
+      goods_id: {
+        // 商品id
+        type: Schema.Types.ObjectId,
+        required: [true, "缺少商品类别id"],
       },
-      meals_name: {
-        //菜品名称
-        type: String,
-        required: [true, "缺少meals_name(菜品名称)"],
-      },
-      meals_category: {
-        //菜品类别
-        type: String,
-        required: [true, "缺少meals_category(菜品类别)"],
-      },
-      meals_categoryId: {
-        //菜品类别ID
+      goodsCount: {
+        // 商品数量
         type: Number,
-        required: [true, "缺少meals_categoryId(菜品ID)"],
+        required: [true, "缺少商品数量"],
       },
-      meals_price: {
-        //菜品价格
-        type: Number,
-        required: [true, "缺少meals_price(菜品价格)"],
-      },
-      meals_describe: {
-        //菜品详情
+      goodsName: {
+        // 商品名
         type: String,
-        required: [true, "缺少meals_describe(餐品详情)"],
+        required: [true, "缺少商品名称"],
       },
-      meals_count: {
-        //菜品数量
+      goodsPrice: {
+        // 商品价格
         type: Number,
-        required: [true, "缺少meals_count(餐品数量)"],
+        required: [true, "缺少商品价格"],
       },
-      meals_image: {
-        //菜品图片
+      goodsImgs: {
+        // 商品图片
+        type: Array,
+        default: [],
+      },
+      goodsType: {
+        // 商品类型 | 规格
+        type: Object,
+      },
+      goodsCategory: {
+        // 商品类别
         type: String,
-        required: false,
       },
     },
   ],

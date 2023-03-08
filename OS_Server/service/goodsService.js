@@ -49,17 +49,28 @@ class GoodsService {
           from: "goodsType",
           localField: "goodsType_id",
           foreignField: "_id",
-          as: "gt_Info",
+          as: "gt_info",
+        },
+      },
+      {
+        $project: {
+          createdAt: 0,
+          updatedAt: 0,
+          __v: 0,
         },
       },
     ]);
+    result.forEach((item) => {
+      item.gt_name = item.gt_info[0].gt_name;
+      delete item.gt_info;
+    });
     return result;
   }
 
   // 根据id查询商品
   async findGoodsById(_id) {
     const DB = mongodb.getConnection("goods"); //获取连接状态
-    let result = DB.aggregate([
+    let result = await DB.aggregate([
       {
         $match: {
           _id: mongoose.Types.ObjectId(_id),
@@ -78,11 +89,21 @@ class GoodsService {
           from: "goodsType",
           localField: "goodsType_id",
           foreignField: "_id",
-          as: "gt_Info",
+          as: "gt_info",
+        },
+      },
+      {
+        $project: {
+          createdAt: 0,
+          updatedAt: 0,
+          __v: 0,
         },
       },
     ]);
-
+    result.forEach((item) => {
+      item.gt_name = item.gt_info[0].gt_name;
+      delete item.gt_info;
+    });
     return result;
   }
 }

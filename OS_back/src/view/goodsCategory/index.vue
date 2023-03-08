@@ -10,7 +10,7 @@
       <el-table-column label="名称" prop="gc_name"></el-table-column>
       <el-table-column label="商品数量">
         <template slot-scope="{ row }">
-          <el-tag>{{ row.goods.length }}</el-tag>
+          <el-tag>{{ row.goods_goodsCategory.length }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="状态">
@@ -34,10 +34,9 @@
     <!-- 弹窗 -->
     <ModifyGoodsCategory
       :dialogFormVisible.sync="dialogFormVisible"
-      @queryGoodsCategory="queryGoodsCategory"
       :title="title"
       :dialogState="dialogState"
-      :id="id"
+      :form="form"
     ></ModifyGoodsCategory>
   </div>
 </template>
@@ -51,7 +50,11 @@ export default {
       dialogFormVisible: false, //控制弹窗的显示和隐藏
       title: "", //弹窗的标题
       dialogState: "edit", //弹窗的状态
-      id: "" // 当前编辑的单位
+      form: {
+        gc_name: "",
+        gc_state: true,
+        goods_goodsCategory: []
+      }
     };
   },
   components: { ModifyGoodsCategory },
@@ -62,8 +65,7 @@ export default {
       this.title = row.gc_name;
       this.dialogState = "edit";
       this.dialogFormVisible = true;
-      this.id = row._id;
-      console.log(`output->row`,row)
+      this.form = row;
     },
     // 删除
     async handleDelete(row) {
@@ -87,21 +89,22 @@ export default {
         });
       }
     },
-    // 获取信息
-    async queryGoodsCategory() {
-      this.$store.dispatch("queryGoodsCategory");
-    },
     // 删除
     async delGoodsCategory(_id) {
       await delGoodsCategory(_id);
-      await this.queryGoodsCategory();
+      this.$store.dispatch("queryGoodsCategory");
     },
     // 添加
     addGoodsCategory() {
+      this.form = {
+        gc_name: "",
+        gc_state: true,
+        goods_goodsCategory: []
+      };
       this.title = "添加商品类别";
       this.dialogState = "add";
       this.dialogFormVisible = true;
-    }
+    },
   },
   computed: {
     goodsCategoryInfo() {

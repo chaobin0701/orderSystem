@@ -1,17 +1,16 @@
-// 其他模块
 const express = require("express");
-const app = express(); //创建服务器的实例对象
+const app = express();
+
 const cors = require("cors"); // cors跨域
-const utils = require("./utils");
+app.use(cors()); //讲cors注册为全局中间件
+
 const dotenv = require("dotenv"); // 对环境变量进行转换
 dotenv.config(); // 对环境变量进行转换
 
 const config = require("./config"); //配置文件
+const Route = require("./router"); // api路由模块
 
-// api路由模块
-const Route = require("./router");
 
-app.use(cors()); //讲cors注册为全局中间件
 const expressJWT = require("express-jwt"); //将客户端发送过来的JWT字符串，解析还原成JSON 对象的包
 app.use(express.urlencoded({ extended: false })); // 解析 url-encoded格式的表单数据
 app.use(express.json()); // 解析json格式的表单数据
@@ -44,7 +43,7 @@ app.use((err, req, res, next) => {
   res.send({ status: 500, message: "未知错误", err });
 });
 
-// // 配置路由
+// 配置路由
 app.use("/api", Route);
 
 // 启动端口

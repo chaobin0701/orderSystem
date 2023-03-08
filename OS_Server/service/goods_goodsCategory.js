@@ -51,7 +51,6 @@ class G_GC_Service {
     return result;
   }
 
-
   /**
    * @des 判断是否存在关联关系
    * @param goods_id
@@ -105,11 +104,11 @@ class G_GC_Service {
     // 3.进行添加和删除操作
     for (let i = 0; i < delRrlevance.length; i++) {
       if (delRrlevance[i]) {
-        this.removeRelevance({ _id: delRrlevance[i]._id });
+        await this.removeRelevance({ _id: delRrlevance[i]._id });
       }
     }
     for (let i = 0; i < newRrlevance.length; i++) {
-      this.saveRelevance(
+      await this.saveRelevance(
         newRrlevance[i].goods_id,
         newRrlevance[i].goodsCategory_id
       );

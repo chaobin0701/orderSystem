@@ -19,12 +19,12 @@
         <div>
           <el-tag
             class="mr-2"
-            v-for="item in form.goods"
+            v-for="item in form.goods_goodsCategory"
             :key="item._id"
             closable
             @close="delRelevance"
           >
-            {{ item.goodsName }}
+            {{ computedGC(item.goods_id) }}
           </el-tag>
         </div>
         <div>
@@ -64,113 +64,80 @@
 import {
   queryGoodsCategory,
   modifyGoodsCategory,
-  addGoodsCategory,
+  addGoodsCategory
 } from "@/api/goodsCategory.js";
 export default {
   data() {
     return {
       rules: {
         gc_name: [
-          { required: true, message: "请输入类型名称", trigger: "blur" },
-        ],
+          { required: true, message: "请输入类型名称", trigger: "blur" }
+        ]
       },
       inputVisible: false,
-      // form表单
-      form: {
-        gc_name: "",
-        gc_state: true,
-        goods: [],
-      },
-      goods: "",
+      goods: ""
     };
   },
   props: {
     title: {
       default: "默认标题",
-      type: String,
+      type: String
     },
     dialogState: {
-      Type: String,
+      Type: String
     },
     dialogFormVisible: {
-      type: Boolean,
+      type: Boolean
     },
-    id: {
-      type: String,
-    },
-  },
-  watch: {
-    async dialogFormVisible(newValue) {
-      if (newValue) {
-        // 展开
-        if (this.dialogState === "edit") {
-          await this.queryGoodsCategory(this.id);
-        } else {
-          this.form = {
-            gc_name: "",
-            gc_state: true,
-            goods: [],
-          };
-        }
-      } else {
-        // 关闭
-      }
-    },
+    form: {
+      type: Object
+    }
   },
   methods: {
     async onSubmit() {
       if (this.dialogState === "edit") {
-        await this.modifyGoodsCategory();
+        await modifyGoodsCategory(this.form);
       } else {
-        await this.addGoodsCategory();
+        await addGoodsCategory(this.form);
       }
+      await this.$store.dispatch("queryGoodsCategory");
       // 3.关闭弹窗
       this.outSubmit();
     },
     outSubmit() {
       // 1.关闭弹窗
       this.$emit("update:dialogFormVisible", false);
-      this.form.goods = [];
-    },
-    async modifyGoodsCategory() {
-      //修改数据
-      await modifyGoodsCategory(this.form);
-      await this.$emit("queryGoodsCategory");
-    },
-    async addGoodsCategory() {
-      await addGoodsCategory(this.form);
-      await this.$emit("queryGoodsCategory");
-    },
-    // 查询单个商品属性
-    async queryGoodsCategory(id) {
-      const result = await queryGoodsCategory(id);
-      this.form = result.data;
     },
     // 删除关联
     delRelevance(index) {
-      this.form.goods.splice(index, 1);
+      this.form.goods_goodsCategory.splice(index, 1);
     },
     // 添加关联
     addRelevance(goods) {
-      this.form.goods.push({
-        goodsName: goods.goodsName,
+      this.form.goods_goodsCategory.push({
         goods_id: goods._id,
-        goodsCategory_id: this.form._id,
+        goodsCategory_id: this.form._id
       });
     },
+    computedGC(id) {
+      let goods = this.$store.state.goodsInfo.find(item => {
+        return item._id === id;
+      });
+      return goods.goodsName;
+    }
   },
   computed: {
     //可选择的商品数据
     goodsInfo() {
       // 排除以选择的商品
-      return this.$store.state.goodsInfo.filter((item) => {
-        let index = this.form.goods.findIndex((goods) => {
+      return this.$store.state.goodsInfo.filter(item => {
+        let index = this.form.goods_goodsCategory.findIndex(goods => {
           return goods.goods_id === item._id;
         });
         return index < 0;
       });
-    },
-  },
+    }
+  }
 };
 </script>
 

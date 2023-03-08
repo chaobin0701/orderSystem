@@ -5,28 +5,31 @@ const G_GC_Service = require("./goods_goodsCategory"); //关联表service
 
 class GoodsCategoryService {
   // 添加商品类别
-  saveGoodsCategory = async (obj, goods = []) => {
+  saveGoodsCategory = async (obj, goods_goodsCategory = []) => {
     let result = await mongodb.save(TABLENAME, obj);
     //创建商品类别与商品的关联
-    goods.forEach((item) => {
-      G_GC_Service.saveRelevance(item.goods_id, result._id);
-    });
+    for (let index = 0; index < goods_goodsCategory.length; index++) {
+      await G_GC_Service.saveRelevance(
+        goods_goodsCategory[index].goods_id,
+        goods_goodsCategory[index]._id
+      );
+    }
     return result;
   };
 
   // 删除商品类别
   removeGoodsCategory = async (_id) => {
     let result = await mongodb.remove(TABLENAME, { _id });
-    G_GC_Service.removeRelevance({ goodsCategory_id: _id }); // 根据id删除关联
+    await G_GC_Service.removeRelevance({ goodsCategory_id: _id }); // 根据id删除关联
     return result;
   };
 
   // 修改商品类别
-  modifyGoodsCategory = async (_id, obj, goods = []) => {
+  modifyGoodsCategory = async (_id, obj, goods_goodsCategory = []) => {
     // 提交修改数据
-    let result = mongodb.update(TABLENAME, { _id }, obj);
+    let result = await mongodb.update(TABLENAME, { _id }, obj);
     // 修改商品类别的关联
-    G_GC_Service.modifyRrlevance(_id, goods);
+    await G_GC_Service.modifyRrlevance(_id, goods_goodsCategory);
     return result;
   };
 
@@ -39,15 +42,28 @@ class GoodsCategoryService {
           from: "goods_goodsCategory",
           localField: "_id",
           foreignField: "goodsCategory_id",
-          as: "goodsCategory",
+          as: "goods_goodsCategory",
         },
       },
       {
         $lookup: {
           from: "goods",
-          localField: "goodsCategory.goods_id",
+          localField: "goods_goodsCategory.goods_id",
           foreignField: "_id",
-          as: "goods",
+          as: "goodsInfo",
+        },
+      },
+      {
+        $project: {
+          __v: 0,
+          createdAt: 0,
+          updatedAt: 0,
+          "goods_goodsCategory.__v": 0,
+          "goods_goodsCategory.createdAt": 0,
+          "goods_goodsCategory.updatedAt": 0,
+          "goodsInfo.__v": 0,
+          "goodsInfo.createdAt": 0,
+          "goodsInfo.updatedAt": 0,
         },
       },
     ]);
@@ -68,15 +84,28 @@ class GoodsCategoryService {
           from: "goods_goodsCategory",
           localField: "_id",
           foreignField: "goodsCategory_id",
-          as: "goodsCategory",
+          as: "goods_goodsCategory",
         },
       },
       {
         $lookup: {
           from: "goods",
-          localField: "goodsCategory.goods_id",
+          localField: "goods_goodsCategory.goods_id",
           foreignField: "_id",
-          as: "goods",
+          as: "goodsInfo",
+        },
+      },
+      {
+        $project: {
+          __v: 0,
+          createdAt: 0,
+          updatedAt: 0,
+          "goods_goodsCategory.__v": 0,
+          "goods_goodsCategory.createdAt": 0,
+          "goods_goodsCategory.updatedAt": 0,
+          "goodsInfo.__v": 0,
+          "goodsInfo.createdAt": 0,
+          "goodsInfo.updatedAt": 0,
         },
       },
     ]);
