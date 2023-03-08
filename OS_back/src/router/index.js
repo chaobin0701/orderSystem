@@ -21,6 +21,13 @@ let router = new Router({
           icon: "el-icon-s-home"
         },
         {
+          path: "/ordering",
+          name: "在线点餐",
+          title: "在线点餐",
+          component: () => import("@/view/ordering/index.vue"),
+          icon: "el-icon-message-solid"
+        },
+        {
           path: "/order",
           name: "订单管理",
           title: "订单管理",

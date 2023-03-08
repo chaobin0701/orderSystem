@@ -7,8 +7,10 @@ import { queryFoodTable } from "@/api/foodTable";
 import { queryGoodsCategory } from "@/api/goodsCategory";
 import { queryGoodsType } from "@/api/goodsType";
 import { queryGoods } from "@/api/goods";
+
 // 引入模块
 import user from "./modules/user";
+import goodsCart from "./modules/goodsCart";
 import getters from "./getters";
 //准备actions对象——响应组件中用户的动作
 const actions = {
@@ -57,6 +59,7 @@ export default new Vuex.Store({
   state,
   getters,
   modules: {
-    user
+    user,
+    goodsCart
   }
 });

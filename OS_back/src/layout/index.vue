@@ -22,12 +22,12 @@ export default {
     };
   },
   // todo：请求 员工数据/餐桌数据 并保存到vuex中
-  created() {
-    this.$store.dispatch("queryStaff");
-    this.$store.dispatch("queryFoodTable");
-    this.$store.dispatch("queryGoodsType");
-    this.$store.dispatch("queryGoodsCategory");
-    this.$store.dispatch("queryGoods");
+  async created() {
+    await this.$store.dispatch("queryStaff");
+    await this.$store.dispatch("queryFoodTable");
+    await this.$store.dispatch("queryGoodsType");
+    await this.$store.dispatch("queryGoodsCategory");
+    await this.$store.dispatch("queryGoods");
   }
 };
 </script>
@@ -35,7 +35,7 @@ export default {
 .layout {
   position: relative;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   min-height: 100%;
 }
 

@@ -46,7 +46,7 @@ module.exports = {
   },
   goodsInfo: [
     {
-      goods_id: {
+      _id: {
         // 商品id
         type: Schema.Types.ObjectId,
         required: [true, "缺少商品类别id"],
@@ -71,14 +71,15 @@ module.exports = {
         type: Array,
         default: [],
       },
-      goodsType: {
-        // 商品类型 | 规格
-        type: Object,
-      },
-      goodsCategory: {
-        // 商品类别
+      gt_name: {
+        // 商品类型
         type: String,
       },
+      gt_name: {
+        // 商品属性
+        type: String,
+        require: [true, "缺少商品类型名称"],
+      }
     },
   ],
 };
