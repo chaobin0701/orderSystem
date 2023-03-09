@@ -27,8 +27,7 @@ module.exports = {
     type: Schema.Types.ObjectId,
     required: [true, "staff_id(服务员工id)"],
   },
-  diningFoodTable: String, //就餐餐桌
-  diningFoodTableId: Schema.Types.ObjectId, //就餐餐桌Id
+  diningFoodTable: Schema.Types.ObjectId, //就餐餐桌Id
   customerName: {
     //顾客名称
     type: String,

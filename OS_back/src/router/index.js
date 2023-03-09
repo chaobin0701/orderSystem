@@ -22,10 +22,23 @@ let router = new Router({
         },
         {
           path: "/ordering",
-          name: "在线点餐",
           title: "在线点餐",
-          component: () => import("@/view/ordering/index.vue"),
-          icon: "el-icon-message-solid"
+          component: () => import("@/view/ordering/layout.vue"),
+          icon: "el-icon-message-solid",
+          children: [
+            {
+              path: "/",
+              name: "在线点餐",
+              title: "在线点餐",
+              component: () => import("@/view/ordering/index.vue")
+            },
+            {
+              path: "pay",
+              name: "订单支付",
+              title: "订单支付",
+              component: () => import("@/view/ordering/pay/index.vue")
+            }
+          ]
         },
         {
           path: "/order",

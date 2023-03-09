@@ -1,17 +1,6 @@
 // 购物车模块
 export default {
   state: {
-    /**
-     * _id
-     * goodsName
-     * goodsCategory
-     * goodsPrice
-     * goodsCount
-     * goodsImgs
-     * goodsType
-     * gt_name
-     * */
-
     goodsCart: [] //购物信息
   },
   actions: {

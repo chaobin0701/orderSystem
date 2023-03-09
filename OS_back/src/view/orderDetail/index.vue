@@ -105,30 +105,5 @@ export default {
 </script>
 
 <style>
-.el-descriptions__header {
-    align-items: center;
-    box-sizing: border-box;
-    padding: 0 15px;
-    margin: 0;
-    height: 50px;
-    border-right: 1px solid #EBEEF5;
-    border-left: 1px solid #EBEEF5;
 
-}
-
-.pagination-box {
-    display: flex;
-    justify-content: center;
-    margin: 10px 0;
-}
-
-.el-descriptions {
-    border-radius: 20px;
-    box-sizing: border-box;
-    padding: 20px;
-    box-shadow: 3px 3px 10px rgb(220 220 220 / 20%);
-    transition: all .5s;
-    background: #fff;
-    margin: 15px 0;
-}
 </style>

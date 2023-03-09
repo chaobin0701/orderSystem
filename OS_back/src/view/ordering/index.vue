@@ -4,33 +4,38 @@
       <!-- 购物车 / 结算 -->
       <div class="w-1/4 box-border bg-white rounded-sm relative">
         <div
-          class="flex flex-col justify-between items-center border-b-2 h-28 absolute left-0 top-0 w-full z-10"
+          class="flex flex-col justify-between items-center border-b-2 h-28 bg-white absolute left-0 top-0 w-full z-10"
         >
           <div class="flex justify-between w-full">
             <span
-              class="w-1/4 text-center box-border bg-gray-300 duration-300 pt-2 pb-2 cursor-pointer"
-              :class="diningMethod == '1' ? 'bg-blue-200 w-3/4' : ''"
+              class="w-1/4 text-center box-border bg-blue-200 duration-300 pt-2 pb-2 cursor-pointer"
+              :class="diningMethod == '1' ? 'bg-blue-400 w-3/4' : ''"
               @click="diningMethod = '1'"
               >堂食</span
             >
             <span
-              class="w-1/4 text-center box-border bg-gray-300 duration-300 pt-2 pb-2 cursor-pointer"
-              :class="diningMethod == '2' ? 'bg-blue-200 w-3/4' : ''"
+              class="w-1/4 text-center box-border bg-blue-200 duration-300 pt-2 pb-2 cursor-pointer"
+              :class="diningMethod == '2' ? 'bg-blue-400 w-3/4' : ''"
               @click="diningMethod = '2'"
               >打包</span
             >
           </div>
-          <div
-            class="flex justify-between items-center w-full p-5"
-            
-          >
+          <div class="flex justify-between items-center w-full p-5">
             <template v-if="diningMethod == '1'">
-              <span class="text-xl font-bold">用餐人数:</span>
-              <el-input-number
-                v-model="number"
-                :min="1"
-                size="mini"
-              ></el-input-number>
+              <span class="text-xl font-bold">用餐餐桌:</span>
+              <el-select
+                v-model="diningFoodTable"
+                placeholder="请选择就餐餐桌"
+                ref="foodtables"
+              >
+                <el-option
+                  v-for="ft in foodtableInfo"
+                  :key="ft._id"
+                  :label="ft.foodtable_describe"
+                  :value="ft._id"
+                >
+                </el-option>
+              </el-select>
             </template>
             <span v-else class="text-xl font-bold">当前为打包</span>
           </div>
@@ -43,19 +48,27 @@
             :key="c_goods._id"
             class="flex justify-between mt-3 mb-3 pb-3 border-b items-end"
           >
-            <div>
-              <p class="goodsName text-l font-bold">{{ c_goods.goodsName }}</p>
-              <!-- TODO -->
-              <p class="goodsdes text-sm">
-                {{
-                  c_goods.goodsType.gt_specifications.reduce((p, n) => {
-                    return p + n.value;
-                  }, "")
-                }}
-              </p>
-              <p class="goodsPrice text-sm text-red-500">
-                ${{ c_goods.goodsPrice }}元
-              </p>
+            <div class="flex h-14 items-end">
+              <img
+                class="h-12 w-12 rounded-md mr-2"
+                :src="require('../../public/images/defaultFood.png')"
+              />
+              <div>
+                <p class="goodsName text-l font-bold">
+                  {{ c_goods.goodsName }}
+                </p>
+                <!-- TODO -->
+                <p class="goodsdes text-sm">
+                  {{
+                    c_goods.goodsType.gt_specifications.reduce((p, n) => {
+                      return p + n.value;
+                    }, "")
+                  }}
+                </p>
+                <p class="goodsPrice text-sm text-red-500">
+                  ${{ c_goods.goodsPrice }}元
+                </p>
+              </div>
             </div>
 
             <div class="flex">
@@ -85,13 +98,15 @@
 
         <!-- 结算 -->
         <div
-          class="absolute bottom-0 left-0 border-t-2 h-20 w-full p-4 flex items-center z-10"
+          class="absolute bottom-0 left-0 border-t-2 h-20 w-full p-4 flex items-center z-10 bg-white"
         >
           <p class="w-1/2">
             结算金额:
             <span class="text-xl font-bold">{{ totalAmount }}</span> 元
           </p>
-          <el-button type="primary" class="flex-1">结算</el-button>
+          <el-button type="primary" class="flex-1" @click="playHandle"
+            >结算</el-button
+          >
         </div>
       </div>
       <!-- 点餐区域 -->
@@ -99,7 +114,7 @@
         <div
           class="w-full flex items-center justify-between absolute top-0 z-10 bg-white left-0 h-24 pl-5 pr-5 shadow-sm"
         >
-          <div class="w-3/4 border-r-2">
+          <div class="w-3/4 border-r-2 ">
             <el-tag
               @click="changeGC('全部商品')"
               class="cursor-pointer mr-2 mb-2"
@@ -115,7 +130,7 @@
               >{{ gc }}</el-tag
             >
           </div>
-          <div class="flex">
+          <div class="flex w-1/4 pr-3 pl-3">
             <el-input
               v-model="searchText"
               size="mini"
@@ -136,7 +151,7 @@
           >
             <img
               :src="
-                (goods.goodsImgs[0] && goods.goodsImgs[0].url) ||
+                // (goods.goodsImgs[0] && goods.goodsImgs[0].url) ||
                 require('../../public/images/defaultFood.png')
               "
               alt=""
@@ -160,21 +175,22 @@ export default {
       currentGoodsCategory: "全部商品", //当前的商品分类
       searchText: "", //搜索的关键词
       isSearch: false, //表示当前是否处于搜索状态
-      diningMethod: "1", // 用餐方式
+      diningMethod: "1", // 用餐方式 1：堂食 2.打包
+      diningFoodTable: ""
     };
   },
   computed: {
     goodsInfo() {
       //全部商品
       if (this.isSearch) {
-        return this.$store.state.goodsInfo.filter((goods) => {
+        return this.$store.state.goodsInfo.filter(goods => {
           return goods.goodsName.includes(this.searchText);
         });
       }
       if (this.currentGoodsCategory === "全部商品") {
         return this.$store.state.goodsInfo;
       } else {
-        let gc_obj = this.$store.state.goodsCategoryInfo.find((item) => {
+        let gc_obj = this.$store.state.goodsCategoryInfo.find(item => {
           return item.gc_name === this.currentGoodsCategory;
         });
         return gc_obj && gc_obj.goodsInfo;
@@ -182,25 +198,30 @@ export default {
     },
     goodsCategoryInfo() {
       // 全部分类
-      let res = this.$store.state.goodsCategoryInfo.map((item) => {
+      let res = this.$store.state.goodsCategoryInfo.map(item => {
         return item.gc_name;
       });
       return res;
     },
     goodsCart() {
+      // 购物车的商品
       return this.$store.getters.goodsCart;
     },
     totalAmount() {
       // 商品总金额
       return this.$store.getters.totalAmount;
     },
+    foodtableInfo() {
+      // 所有餐桌
+      return this.$store.state.foodtableInfo;
+    }
   },
   watch: {
     searchText(newText) {
       if (newText === "") {
         this.isSearch = false;
       }
-    },
+    }
   },
   methods: {
     changeGC(key) {
@@ -224,20 +245,54 @@ export default {
         // 改变商品的数量;
         this.$store.dispatch("changeGoodsCount", {
           goodsId: goods._id,
-          num,
+          num
         });
       } else {
-        // TODO 提醒
+        this.$message({
+          message: "商品的数量不能小于1",
+          type: "warning"
+        });
       }
     },
     removeGoodsCart(goods) {
       // 删除商品
       this.$store.dispatch("removeGoods", goods._id);
+      this.$message({
+        message: `删除${goods.goodsName}`,
+        type: "success"
+      });
     },
+    playHandle() {
+      // 结算商品
+      if (!this.goodsCart.length > 0) {
+        this.$message({
+          message: "请点餐后再结算",
+          type: "warning"
+        });
+        return;
+      } else {
+        if (this.diningMethod == 1) {
+          // 检查餐桌是否选择
+          if (!this.diningFoodTable) {
+            this.$message({
+              message: "请选择餐桌",
+              type: "warning"
+            });
+            this.$refs.foodtables.focus();
+            return;
+          }
+          this.$router.push(
+            `ordering/pay?diningMethod=堂食&diningFoodTable=${this.diningFoodTable}`
+          );
+        } else {
+          this.$router.push("ordering/pay?diningMethod=打包");
+        }
+      }
+    }
   },
   created() {
     this.goodsCategoryInfo;
-  },
+  }
 };
 </script>
 
