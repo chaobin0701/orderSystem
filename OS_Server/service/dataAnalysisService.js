@@ -269,6 +269,7 @@ const aggregateConfig = {
       },
     ];
   },
+  
   // 查询商品销售数据
   dailySales: (startTime, endTime) => {
     return [

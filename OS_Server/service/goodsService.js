@@ -40,7 +40,7 @@ class GoodsService {
           from: "goods_goodsCategory",
           localField: "_id",
           foreignField: "goods_id",
-          as: "goodsCategory",
+          as: "goods_goodsCategory",
         },
       },
       // 查询对应的类别信息
@@ -60,10 +60,17 @@ class GoodsService {
         },
       },
     ]);
-    result.forEach((item) => {
+    for (let i = 0; i < result.length; i++) {
+      const item = result[i];
       item.gt_name = item.gt_info[0].gt_name;
+      item.goodsCategory = await mongodb.findById(
+        "goodsCategory",
+        item.goods_goodsCategory[0].goodsCategory_id
+      );
       delete item.gt_info;
-    });
+      delete item.goods_goodsCategory;
+    }
+
     return result;
   }
 
