@@ -3,30 +3,19 @@ const orderService = require("../../service/orderService");
 class OrderController {
   // 新增订单
   saveOrder = async (req, res) => {
-    // 处理数据
     let orderPrice = req.body.orderPrice; //订单价格
-    let orderState = req.body.orderState; //订单状态
     let diningMethod = req.body.diningMethod; //就餐方式
-    let staff = req.body.staff; //服务员工
-    let staffId = req.body.staffId; //服务员工id
-    let diningFoodTable = req.body.diningFoodTable; //就餐餐桌
-    let diningFoodTableId = req.body.diningFoodTableId; //就餐餐桌id
+    let diningFoodTable = req.body.diningFoodTable; //就餐餐桌id
     let customerName = req.body.customerName; //顾客名字
-    let customerId = req.body.customerId; //顾客id
-    let orderAppraise = req.body.orderAppraise; //订单评价
-    let mealsInfo = req.body.mealsInfo; //点餐信息
+    let customerId = req.body.customerId === "admin" ? "adminadminad" : req.body.customerId; //顾客id
+    let goodsInfo = req.body.goodsInfo; //点餐信息
     let obj = {
       orderPrice,
-      orderState,
       diningMethod,
-      staff,
-      staffId,
       diningFoodTable,
-      diningFoodTableId,
       customerName,
       customerId,
-      orderAppraise,
-      mealsInfo,
+      goodsInfo,
     };
     // 3.提交数据
     let result = await orderService.saveOrder(obj);

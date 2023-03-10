@@ -10,38 +10,27 @@ module.exports = {
   orderState: {
     //订单状态
     type: String,
-    required: [true, "缺少orderState(订单状态)"],
+    default: 1,
   },
   diningMethod: {
     //就餐方式
     type: String,
     default: "堂食",
   },
-  staff: {
-    //服务员工
-    type: String,
-    required: [true, "staff(服务员工)"],
-  },
-  staffId: {
-    //服务员工id
-    type: Schema.Types.ObjectId,
-    required: [true, "staff_id(服务员工id)"],
-  },
   diningFoodTable: Schema.Types.ObjectId, //就餐餐桌Id
   customerName: {
     //顾客名称
     type: String,
-    required: true,
   },
   customerId: {
     //顾客id
     type: Schema.Types.ObjectId,
-    required: true,
   },
   orderAppraise: {
     //订单评价
     score: Number, //分数
     appraise: String, //评价
+    default: {},
   },
   goodsInfo: [
     {
@@ -78,7 +67,7 @@ module.exports = {
         // 商品属性
         type: String,
         require: [true, "缺少商品类型名称"],
-      }
+      },
     },
   ],
 };

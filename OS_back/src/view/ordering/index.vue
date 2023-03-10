@@ -51,13 +51,13 @@
             <div class="flex h-14 items-end">
               <img
                 class="h-12 w-12 rounded-md mr-2"
-                :src="require('../../public/images/defaultFood.png')"
+                v-lazyload="c_goods.goodsImgs[0] && c_goods.goodsImgs[0].url && require('../../public/images/defaultFood.png')"
+
               />
               <div>
                 <p class="goodsName text-l font-bold">
                   {{ c_goods.goodsName }}
                 </p>
-                <!-- TODO -->
                 <p class="goodsdes text-sm">
                   {{
                     c_goods.goodsType.gt_specifications.reduce((p, n) => {
@@ -150,13 +150,10 @@
             :key="i"
           >
             <img
-              :src="
-                // (goods.goodsImgs[0] && goods.goodsImgs[0].url) ||
-                require('../../public/images/defaultFood.png')
-              "
-              alt=""
-              class="pb-2 cursor-pointer"
+              v-lazyload="goods.goodsImgs[0] && goods.goodsImgs[0].url && require('../../public/images/defaultFood.png')"
+              class="pb-2 cursor-pointer min-w-full min-h-full"
             />
+
             <p class="pb-2">{{ goods.goodsName }}</p>
             <p class="text-red-500">${{ goods.goodsPrice }}</p>
           </div>
@@ -288,6 +285,9 @@ export default {
           this.$router.push("ordering/pay?diningMethod=打包");
         }
       }
+    },
+    imgLoadError(e) {
+      console.log(e);
     }
   },
   created() {

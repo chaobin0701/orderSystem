@@ -37,7 +37,7 @@ class OrderService {
 
   // 根据订单id查询订单
   findOrderById = async (_id) => {
-    let result = await mongodb.find(TABLENAME, { _id });
+    let result = await mongodb.findById(TABLENAME, _id);
     return result;
   };
 
