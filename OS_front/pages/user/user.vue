@@ -131,10 +131,6 @@
       ...mapMutations({
          SaveUserId:'userInfo/SaveUserId'
       }),
-      // 获得用户信息_微信小程序
-      getWXUserInfo() {
-        console.log('getWXUserInfo');
-      },
       toLogin(){
         uni.navigateTo({
           url:'login'

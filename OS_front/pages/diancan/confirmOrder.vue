@@ -22,45 +22,46 @@
          @click="EatMode = '外带'"
         >外带</view>
       </view>
+	  <!-- 备注 -->
+	  <view class="remarks">
+	    <text>备注：</text>
+	    <input type="text" placeholder="请输入备注">
+	  </view>
       <!-- 餐桌号 -->
-      <view class="foodTable-number">
+      <view class="foodTable-number" v-if="EatMode == '店内'">
         <text class="number">餐桌号：{{selectedFoodTable}}</text>
           <picker @change="changeFoodTable" :range="foodTableNumber">
             请选择>
           </picker>
         </text>
       </view>
-      <!-- 备注 -->
-      <view class="remarks">
-        <text>备注：</text>
-        <input type="text" placeholder="请输入备注">
-      </view>
+
     </view>
     <!-- 订单展示 -->
-    <view class="order" v-if="shoppingCartGoods.lengt != 0">
+    <view class="order" v-if="CartGoods.lengt != 0">
       <text class="shopName">超能鹿战队</text>
       <view class="orderList">
-        <view class="orderItem" v-for="good in shoppingCartGoods" :key="good.M_id">
+        <view class="orderItem" v-for="good in CartGoods" :key="good._id">
           <!-- 图片 -->
-          <image :src="good.M_imgSrc"></image>
+          <image :src="good.goodsImgs[0].url"></image>
           <!-- 描述信息 -->
           <view class="orderItemDes">
             <!-- 菜名 和 数量 -->
             <view class="des_1">
-              <text class="goodName">{{good.M_name}}</text>
-              <text class="quantity">数量：{{good.M_number}}</text>
+              <text class="goodName">{{good.goodsName}}</text>
+              <text class="quantity">数量：{{good.goodsCount}}</text>
             </view>
             <!-- 价格 -->
             <text class="price">
               <text class="">￥</text>
-              {{good.M_price}}
+              {{good.goodsPrice}}
             </text>
           </view>
         </view>
       </view>
     </view>
     <view class="no-data" v-else>
-      {{shoppingCartGoods.length}}
+      {{CartGoods.length}}
       请去点餐吧
     </view>
     <!-- 底部支付 -->
@@ -79,13 +80,11 @@
 
 <script>
   import {mapGetters,mapState} from 'vuex'
-  import { v4 as uuidv4 } from 'uuid';
   import settlement from '@/components/settlement.vue'
   export default {
     data() {
       return {
         EatMode:'店内', // 就餐方式
-        O_id:uuidv4().slice(0,21) , //随机生成的订单id
       };
     },
     components:{settlement},
@@ -94,94 +93,65 @@
         totalPrice:'getTotalPrice', // 订单的价格
         selectedGood:'getSelectedGood', // 已经添加到订单的餐
         foodTableNumber:'getFoodTableNumber', // 获取餐桌编号
-        shoppingCartGoods:'getSelectedGood' ,// 获已加入购物侧的数据
+        CartGoods:'getSelectedGood' ,// 获已加入购物侧的数据
         shoppingCartNumber:'shoppingCartNumber' //购物车内点餐的数量
         }),
       ...mapState({
         selectedFoodTable:'selectedFoodTable', // 已选择的餐桌
-        selectedFoodTable_id:'selectedFoodTable_id'
+        selectedFoodTable_id:'selectedFoodTable_id',
       }),
       person(){
         return {age:18,name:'张三'}
       }
     },
-    created(){
-      this.getFoodTableMsg()
+    async created(){
+      await this.getFoodTableMsg()
     },
     methods:{
       changeFoodTable(e){
-        // console.log('用户选择了',this.foodTableNumber[e.detail.value]);
         let i = this.foodTableNumber[e.detail.value]
         // 将 i(编号) 传递给vuex
         this.$store.dispatch('changeSelectedFoodTable',i)
       },
       // 获取餐桌数据
-      getFoodTableMsg(){
-        return new Promise((resolve,reject)=>{
-          // 判断是否有持久化数据
-          if(uni.getStorageSync('foodTable')){ //用本地持久化数据
-            this.$store.commit('GetFoodTableMsg', uni.getStorageSync('foodTable'))
-            resolve() 
-            return 
-          }
-          return uni.$http.get('/getDataTable?tableName=foodtable')
-          .then(res=>{
-            this.$store.dispatch('getFoodTableMsg',res.data.tableArr)
-            resolve()
-          },err=>{
-            console.log('获取菜单数据失败',err);
-            reject('获取菜单数据失败')
-          })
-        })
+      async getFoodTableMsg(){
+		let {data} = await uni.$http.get('/foodtable')
+		let foodTable = data.data
+		this.$store.dispatch('getFoodTableMsg',foodTable)
       },
       // 插入订单的方法
-      insertOrder(){
-        /*  1.插入订单 */ 
-        return  uni.$http.post('/insertDatabase',{
-         tableName:"饭店点餐系统.order",
-         columns:"(O_id,T_id,Cz_id,W_id,S_price,S_priceafter,time,O_state)",
-         values:`('${this.O_id}','${uni.getStorageSync('userId')}','${this.selectedFoodTable_id}','y2',${this.totalPrice},${this.totalPrice},'${Date.now()}','待付款')`
-       })
-       
-      },
-      // 插入点餐单的函数
-      insertMenusOrder(msg){
-        /* 2. 插入点餐单 */ 
-        msg.forEach(item => {
-          let {M_id,M_name,M_number} = item
-          uni.$http.post('/insertDatabase',{
-            tableName:"饭店点餐系统.menus_order",
-            columns:"(O_id,M_id,M_name,M_number)",
-            values:`('${this.O_id}','${M_id}','${M_name}',${M_number})`
-          })
-        })
+      async addOrder(){
+		  /**
+		   * orderPrice:订单价格
+		   * diningMethod:用餐方式
+		   * diningFoodTable:用餐餐桌
+		   * customerName:用户姓名
+		   * customerId:用户id
+		   * goodsInfo:购物车信息
+		   * */
+		uni.$http.post("order",
+			     orderPrice:this.totalPrice,
+			     diningMethod:this.EatMode,
+			     diningFoodTable:this.selectedFoodTable_id,
+			     customerName:"张三",
+			     customerId:"abcdabcdabcd",
+			     goodsInfo:this.CartGoods,
+			    
+		   })       
       },
       // 修改订单状态的方法
-      alterOrderState(){
-        /* 3.修改状态 */ 
-       return uni.$http.post(`/alert_orderState?O_id=${this.O_id}&O_state=待收货`)
+      async alterOrderState(data){
+       return uni.$http.post('/order/modify',data)
       },
       // 去支付按钮回调
-      topay(){
-       // 判断： 1.餐桌号是否选择 
-        if(!!this.selectedFoodTable_id){
-          this.insertOrder()
-          .then(()=>{
-            console.log('1.订单插入成功');
-            // console.log('已经加购的菜单',this.shoppingCartGoods);
-            this.insertMenusOrder(this.shoppingCartGoods)
-          },err=>{
-            console.log('1.订单插入失败',err);
-          })
-          .then(()=>{
-            // console.log('2.插入点餐单成功 - 点餐成功');
-            this.$store.commit('ResetGoodCart') // 清空购物车
-           this.$refs.payReceiving.open()// 显示弹窗 是否支付
-          },err=>{
-            console.log('2.插入点餐单失败',err);
-          })
+      async topay(){
+		await this.addOrder()
+		return 
+        if(this.EatMode ===  "外带" || !!this.selectedFoodTable_id){
+			await this.addOrder()
+			await this.$store.commit('ResetGoodCart') // 清空购物车
+			await this.$refs.payReceiving.open()// 显示弹窗 是否支付
         }else{
-          // console.log('餐桌未选择');
           this.$refs.message.open() // 未选择餐桌提示
         }
       },

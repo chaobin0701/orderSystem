@@ -5,8 +5,8 @@
       :style="{'height':windowHeight}">
       <view class="classify">
         <view class="classify-item" :class="index===currentNum?'active':''" :id="'to'+index"
-          v-for="(goodsName,index) in Object.keys(goodsMsg)" :key="index" @click="setId(index)">
-          <text>{{goodsName}}</text>
+          v-for="(category,index) in Object.keys(goodsMsg)" :key="index" @click="setId(index)">
+          <text>{{category}}</text>
         </view>
       </view>
     </scroll-view>
@@ -14,23 +14,23 @@
     <view class="goodsBox">
       <scroll-view :scroll-into-view="clickId" @scroll="scroll" :scroll-with-animation="true" :scroll-y="true"
         :style="{'height':windowHeight}">
-        <view class="goodsList" v-for="(goodsName,index) in Object.keys(goodsMsg)" :key="index">
-          <view class="title" :id="'po'+index">{{goodsName}} </view>
+        <view class="goodsList" v-for="(category,index) in Object.keys(goodsMsg)" :key="index">
+          <view class="title" :id="'po'+index">{{category}} </view>
           <!-- 右侧 - 商品 -->
-          <view class="box" v-for="(good,index) in goodsMsg[goodsName]" :key="index">
+          <view class="box" v-for="(good,index) in goodsMsg[category]" :key="index">
             <view class="good-image">
-              <image :src="good.M_imgSrc"></image>
+              <image :src="good.goodsImgs[0].url"></image>
             </view>
             <view class="goods-describe">
-              <text class="goodName">{{good.M_name}}</text>
-              <text class="goodPrice">￥{{good.M_price}}元/份</text>
+              <text class="goodName">{{good.goodsName}}</text>
+              <text class="goodPrice">￥{{good.goodsPrice}}元/份</text>
               <!-- 添加按钮 -->
-              <button class="mini-btn" v-if="good.M_number == 0" @click="changeGoodNumber(good.M_id,'add')">+</button>
+              <button class="mini-btn" v-if="good.goodsCount == 0" @click="changeGoodNumber(good._id,'add')">+</button>
               <!-- 布进器按钮 -->
               <view class="bjq-btn-box" v-else>
-                <button class="mini-btn" @click="changeGoodNumber(good.M_id,'reduce')">-</button>
-                <text class="good-number">{{good.M_number}}</text>
-                <button class="mini-btn" @click="changeGoodNumber(good.M_id,'add')">+</button>
+                <button class="mini-btn" @click="changeGoodNumber(good._id,'reduce')">-</button>
+                <text class="good-number">{{good.goodsCount}}</text>
+                <button class="mini-btn" @click="changeGoodNumber(good._id,'add')">+</button>
               </view>
             </view>
           </view>
@@ -64,23 +64,16 @@
         this.$store.dispatch('changeGoodNumber', {id,change})
       },
       // 获取菜单数据
-      getGoodsMsg(){
-        return new Promise((resolve,reject)=>{
-          // 判断是否有持久化数据
-          if(uni.getStorageSync('goodsMsg')){ //用本地持久化数据
-            this.$store.commit('GetGoodsMsg', uni.getStorageSync('goodsMsg'))
-            resolve() 
-            return
-          }
-          return uni.$http.get('/getDataTable?tableName=menus')
-          .then(res=>{
-            this.$store.dispatch('getGoodsMsg',res.data.tableArr)
-            resolve()
-          },err=>{
-            console.log('获取菜单数据失败',err);
-            reject('获取菜单数据失败')
-          })
-        })
+      async getGoodsMsg(){
+		// 获取商品数据
+		let {data:goods} = await  uni.$http.get('/goods')
+		// 获取分类数据
+		let {data:category} = await uni.$http.get("/goodscategory")
+		this.$store.dispatch('getGoodsMsg',{
+			goodsInfo:goods.data,
+			categoryInfo:category.data
+		})
+		
       },
       // 点击左侧菜单,调动右侧菜单
       setId(index) {

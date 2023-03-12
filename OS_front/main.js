@@ -7,13 +7,13 @@ Vue.config.productionTip = false
 Vue.prototype.$store = store
 uni.$http = $http
 // 配置请求根路径
-$http.baseUrl = 'https://superbin.top:3290/api/front'
+$http.baseUrl = 'http://127.0.0.1:3280/api'
 // 请求开 之前做一些事情 
-$http.beforeRequest = function(options) {
-  uni.showLoading({
-    title: '数据加载中...',
-  })
-}
+// $http.beforeRequest = function(options) {
+//   uni.showLoading({
+//     title: '数据加载中...',
+//   })
+// }
 // 请求完成之后做一些事情
 $http.afterRequest = function() {
   uni.hideLoading()
