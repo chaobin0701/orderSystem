@@ -67,7 +67,7 @@
         <template slot-scope="{ row }">
           <el-image
             style="width: 85px; height: 85px"
-            :src="row.goodsImgs[0]"
+            :src="row.goodsImgs[0].url"
           ></el-image>
         </template>
       </el-table-column>

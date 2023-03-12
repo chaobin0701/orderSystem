@@ -51,8 +51,7 @@
             <div class="flex h-14 items-end">
               <img
                 class="h-12 w-12 rounded-md mr-2"
-                v-lazyload="c_goods.goodsImgs[0] && c_goods.goodsImgs[0].url && require('../../public/images/defaultFood.png')"
-
+                v-lazyload="c_goods.goodsImgs[0] && c_goods.goodsImgs[0].url"
               />
               <div>
                 <p class="goodsName text-l font-bold">
@@ -114,7 +113,7 @@
         <div
           class="w-full flex items-center justify-between absolute top-0 z-10 bg-white left-0 h-24 pl-5 pr-5 shadow-sm"
         >
-          <div class="w-3/4 border-r-2 ">
+          <div class="w-3/4 border-r-2">
             <el-tag
               @click="changeGC('全部商品')"
               class="cursor-pointer mr-2 mb-2"
@@ -150,8 +149,8 @@
             :key="i"
           >
             <img
-              v-lazyload="goods.goodsImgs[0] && goods.goodsImgs[0].url && require('../../public/images/defaultFood.png')"
-              class="pb-2 cursor-pointer min-w-full min-h-full"
+              v-lazyload="goods.goodsImgs[0] && goods.goodsImgs[0].url"
+              class="w-40 h-40"
             />
 
             <p class="pb-2">{{ goods.goodsName }}</p>
@@ -173,29 +172,29 @@ export default {
       searchText: "", //搜索的关键词
       isSearch: false, //表示当前是否处于搜索状态
       diningMethod: "1", // 用餐方式 1：堂食 2.打包
-      diningFoodTable: ""
+      diningFoodTable: "",
     };
   },
   computed: {
     goodsInfo() {
       //全部商品
       if (this.isSearch) {
-        return this.$store.state.goodsInfo.filter(goods => {
+        return this.$store.state.goodsInfo.filter((goods) => {
           return goods.goodsName.includes(this.searchText);
         });
       }
       if (this.currentGoodsCategory === "全部商品") {
         return this.$store.state.goodsInfo;
       } else {
-        let gc_obj = this.$store.state.goodsCategoryInfo.find(item => {
-          return item.gc_name === this.currentGoodsCategory;
+        let goodsInfo = this.$store.state.goodsInfo.filter((goods) => {
+          return goods.goodsCategory.gc_name === this.currentGoodsCategory;
         });
-        return gc_obj && gc_obj.goodsInfo;
+        return goodsInfo;
       }
     },
     goodsCategoryInfo() {
       // 全部分类
-      let res = this.$store.state.goodsCategoryInfo.map(item => {
+      let res = this.$store.state.goodsCategoryInfo.map((item) => {
         return item.gc_name;
       });
       return res;
@@ -211,14 +210,14 @@ export default {
     foodtableInfo() {
       // 所有餐桌
       return this.$store.state.foodtableInfo;
-    }
+    },
   },
   watch: {
     searchText(newText) {
       if (newText === "") {
         this.isSearch = false;
       }
-    }
+    },
   },
   methods: {
     changeGC(key) {
@@ -242,12 +241,12 @@ export default {
         // 改变商品的数量;
         this.$store.dispatch("changeGoodsCount", {
           goodsId: goods._id,
-          num
+          num,
         });
       } else {
         this.$message({
           message: "商品的数量不能小于1",
-          type: "warning"
+          type: "warning",
         });
       }
     },
@@ -256,7 +255,7 @@ export default {
       this.$store.dispatch("removeGoods", goods._id);
       this.$message({
         message: `删除${goods.goodsName}`,
-        type: "success"
+        type: "success",
       });
     },
     playHandle() {
@@ -264,7 +263,7 @@ export default {
       if (!this.goodsCart.length > 0) {
         this.$message({
           message: "请点餐后再结算",
-          type: "warning"
+          type: "warning",
         });
         return;
       } else {
@@ -273,7 +272,7 @@ export default {
           if (!this.diningFoodTable) {
             this.$message({
               message: "请选择餐桌",
-              type: "warning"
+              type: "warning",
             });
             this.$refs.foodtables.focus();
             return;
@@ -288,11 +287,11 @@ export default {
     },
     imgLoadError(e) {
       console.log(e);
-    }
+    },
   },
   created() {
     this.goodsCategoryInfo;
-  }
+  },
 };
 </script>
 

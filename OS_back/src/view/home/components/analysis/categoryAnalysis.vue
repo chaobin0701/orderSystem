@@ -57,17 +57,17 @@ export default {
         let { data: result } = await salesVolume({ model });
         // 处理数据
         let salesVolumesInfo = result.map((item) => {
-          return { value: item.totalCount, name: item.meals_category };
+          return { value: item.totalCount || 0, name: item.gc_name };
         });
         // 处理数据
         let salesAmountInfo = result.map((item) => {
           return {
-            value: Number(item.total.toFixed(2)),
-            name: item.meals_category,
+            value: Number(item.total ? item.total.toFixed(2) : 0),
+            name: item.gc_name,
           };
         });
         this.isLoading = false;
-        // 传递给echarts实例
+        // // 传递给echarts实例
         this.myEcharts(salesVolumesInfo, salesAmountInfo);
       } catch (error) {
         console.log("发生错误", error);

@@ -23,6 +23,10 @@ export default {
     removeGoods({ state, commit }, _id) {
       let index = state.goodsCart.findIndex(item => item._id === _id);
       state.goodsCart.splice(index, 1);
+    },
+    // 清空购物车
+    removeAll({ state }) {
+      state.goodsCart = [];
     }
   },
   mutations: {},

@@ -167,6 +167,11 @@ export default {
             state: "已完成",
             color: "#67C23A"
           };
+        default:
+          return {
+            state: "未知",
+            color: "#F56C6C"
+          }
       }
     }
   },

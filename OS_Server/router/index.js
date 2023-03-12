@@ -4,7 +4,7 @@ const router = express.Router();
 // 处理函数
 const file_Handler = require("../controller/file");
 const order_Handler1 = require("../controller/order");
-// const dataAnalysis_Handler = require("../controller/dataAnalysis");
+const dataAnalysis_Handler = require("../controller/dataAnalysis");
 const goodstype_handler = require("../controller/goodsController/goodsType");
 const goodsCategory_handler = require("../controller/goodsController/goodsCategory");
 const goods_handler = require("../controller/goodsController/goods");
@@ -61,9 +61,9 @@ router.post("/customer/login", customer_handler.login); // 用户登录
 router.put("/customer/info", customer_handler.modifyCustomerInfo); // 修改用户信息
 
 /* 数据分析 */
-// router.get("/dataAnalysis/category", dataAnalysis_Handler.categorySales); // 1.分类别销量分析
-// router.get("/dataAnalysis/meals", dataAnalysis_Handler.mealsSales); // 2.分商品销量分析
-// router.get("/dataAnalysis/dailySales", dataAnalysis_Handler.dailySales); // 3.订单状态分析
+router.get("/dataAnalysis/category", dataAnalysis_Handler.categorySales); // 1.分类别销量分析
+router.get("/dataAnalysis/meals", dataAnalysis_Handler.mealsSales); // 2.分商品销量分析
+router.get("/dataAnalysis/dailySales", dataAnalysis_Handler.dailySales); // 3.订单状态分析
 // 4.销售额分析
 
 // 上传图片接口

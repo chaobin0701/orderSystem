@@ -3,15 +3,15 @@
         <div class="homeBox">
             <!-- 商品分类数据分析 -->
             <div class="item">
-                <!-- <categoryAnalysis /> -->
+                <categoryAnalysis />
             </div>
             <!-- 商品数据分析 -->
             <div class="item">
-                <!-- <MealsAnalysis></MealsAnalysis> -->
+                <MealsAnalysis></MealsAnalysis>
             </div>
             <!-- 近15天数据分析 -->
             <div class="item">
-                <!-- <salesAnalysis /> -->
+                <salesAnalysis />
             </div>
         </div>
     </div>

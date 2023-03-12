@@ -60,14 +60,13 @@ module.exports = {
         default: [],
       },
       gt_name: {
-        // 商品类型
-        type: String,
-      },
-      gt_name: {
         // 商品属性
         type: String,
         require: [true, "缺少商品类型名称"],
       },
+      goodsCategory:{
+        type:Object
+      }
     },
   ],
 };

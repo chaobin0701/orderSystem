@@ -1,25 +1,49 @@
 <template>
   <div>
     <MainHeader>
-      <el-select
-        v-model="goodsType"
-        placeholder="添加商品"
-        slot="left"
-        size="mini"
-      >
-        <Router-link
-          v-for="(item, index) in goodsTypeInfo"
-          :key="index"
-          :to="`goods/add/${item._id}`"
+      <template #right>
+        <el-select
+          v-model="goodsType"
+          placeholder="添加商品"
+          slot="left"
+          size="mini"
+        >
+          <Router-link
+            v-for="(item, index) in goodsTypeInfo"
+            :key="index"
+            :to="`goods/add/${item._id}`"
+          >
+            <el-option
+              :label="item.gt_name"
+              :value="item._id"
+              @click="addGoods(item._id)"
+            >
+            </el-option>
+          </Router-link>
+        </el-select>
+      </template>
+      <template #left>
+        <el-select
+          v-model="currentGoodsCategory"
+          placeholder="选择类型"
+          size="mini"
         >
           <el-option
-            :label="item.gt_name"
-            :value="item._id"
-            @click="addGoods(item._id)"
+            label="全部商品"
+            value="全部商品"
+            @click="currentGoodsCategory = '全部商品'"
+          ></el-option>
+
+          <el-option
+            v-for="gc in goodsCategoryInfo"
+            :key="gc"
+            :label="gc"
+            :value="gc"
+            @click="currentGoodsCategory = gc"
           >
           </el-option>
-        </Router-link>
-      </el-select>
+        </el-select>
+      </template>
     </MainHeader>
     <!-- 表格 -->
     <el-table
@@ -33,7 +57,10 @@
       border
     >
       <el-table-column label="标题" prop="goodsName"></el-table-column>
-      <el-table-column label="类型" prop="gt_name"></el-table-column>
+      <el-table-column
+        label="类型"
+        prop="goodsCategory.gc_name"
+      ></el-table-column>
       <el-table-column label="规格" prop="goodsType">
         <template slot-scope="{ row }">
           <el-tag
@@ -99,6 +126,7 @@ export default {
       goodsType: "",
       pageSize: 10,
       currentIndex: 0,
+      currentGoodsCategory: "全部商品",
     };
   },
   components: { ModifyGoods },
@@ -154,13 +182,27 @@ export default {
   },
   computed: {
     goodsInfo() {
-      return this.$store.state.goodsInfo;
+      if (this.currentGoodsCategory === "全部商品") {
+        return this.$store.state.goodsInfo;
+      } else {
+        let goodsInfo = this.$store.state.goodsInfo.filter((goods) => {
+          return goods.goodsCategory.gc_name === this.currentGoodsCategory;
+        });
+        return goodsInfo;
+      }
     },
     goodsTypeInfo() {
       return this.$store.state.goodsTypeInfo;
     },
     total() {
-      return this.$store.state.goodsInfo.length;
+      return this.goodsInfo.length;
+    },
+    goodsCategoryInfo() {
+      // 全部分类
+      let res = this.$store.state.goodsCategoryInfo.map((item) => {
+        return item.gc_name;
+      });
+      return res;
     },
   },
   created() {

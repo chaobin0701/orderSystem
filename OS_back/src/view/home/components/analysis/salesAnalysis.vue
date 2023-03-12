@@ -169,6 +169,7 @@ export default {
         },
         [[], [], []]
       );
+      console.log(data)
       this.myEcharts(data[0], data[1], data[2]);
     } catch (error) {
       console.log(error);

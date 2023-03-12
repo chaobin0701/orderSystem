@@ -1,9 +1,9 @@
 <template>
   <div class="main-header">
-    <slot name="right">
+    <slot name="left">
 
     </slot>
-    <slot name="left">
+    <slot name="right">
       
     </slot>
   </div>
