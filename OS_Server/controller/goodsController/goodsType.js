@@ -5,64 +5,70 @@ const GoodsTypeService = require("../../service/goodsTypeService");
 class GoodsTypeController {
   // 新增商品类型
   saveGoodsType = async (req, res) => {
-    // 数据处理
-    let obj = {};
-    Object.keys(goodsType).forEach((key) => {
-      obj[key] = req.body[key];
-    });
-    // 提交数据
-    let result = await GoodsTypeService.saveGoodsType(obj);
-    if (result === false) {
-      response.error(res, "服务器错误");
-    } else {
-      response.success(res, result);
+    try {
+      let obj = {};
+      Object.keys(goodsType).forEach((key) => {
+        obj[key] = req.body[key];
+      });
+      // 提交数据
+      let result = await GoodsTypeService.saveGoodsType(obj);
+      if (result === false) {
+        response.error(res, "服务器错误");
+      } else {
+        response.success(res, result);
+      }
+    } catch (error) {
+      response.error(res, "服务器错误(新增商品类型)");
     }
   };
 
   // 删除商品类型
   removeGoodsType = async (req, res) => {
-    let _id = req.body._id;
-    if (_id) {
-      let result = await GoodsTypeService.removeGoodsType(_id);
-      if (result === false) {
-        response.error(res, "删除商品类型出错");
+    try {
+      let _id = req.body._id;
+      if (_id) {
+        let result = await GoodsTypeService.removeGoodsType(_id);
+        if (result === false) {
+          response.error(res, "删除商品类型出错");
+        } else {
+          response.success(res);
+        }
       } else {
-        response.success(res);
+        response.error(res, "缺少商品类型id");
       }
-    } else {
-      response.error(res, "缺少商品类型id");
+    } catch (error) {
+      response.error(res, "服务器错误(删除商品类型)");
     }
   };
 
   // 修改商品类型
   modifyGoodsType = async (req, res) => {
-    // 数据处理
-    let obj = {};
-    Object.keys(goodsType).forEach((key) => {
-      obj[key] = req.body[key];
-    });
-    let _id = req.body._id;
-    // 提交修改数据
-    let result = GoodsTypeService.modifyGoodsType(_id, obj);
-    if (result === false) {
-      response.error(res, "数据库错误");
-    } else {
-      response.success(res, result);
+    try {
+      let obj = {};
+      Object.keys(goodsType).forEach((key) => {
+        obj[key] = req.body[key];
+      });
+      let _id = req.body._id;
+      
+      let result = GoodsTypeService.modifyGoodsType(_id, obj);
+     response.success(res, result);
+    } catch (error) {
+      response.error(res, "服务器错误(修改商品类型)");
     }
   };
 
   // 查询商品类型
   findAllGoodsCategory = async (req, res) => {
-    let result = null;
-    if (req.query._id) {
-      result = await GoodsTypeService.findGoodsCategoryById(req.query._id);
-    } else {
-      result = await GoodsTypeService.findAllGoodsCategory();
-    }
-    if (result === false) {
-      response.error(res, "数据库错误");
-    } else {
-      response.success(res, result);
+    try {
+      let result = null;
+      if (req.query._id) {
+        result = await GoodsTypeService.findGoodsCategoryById(req.query._id);
+      } else {
+        result = await GoodsTypeService.findAllGoodsCategory();
+      }
+     response.success(res, result);
+    } catch (error) {
+      response.error(res, "服务器错误(修改商品类型)");
     }
   };
 }

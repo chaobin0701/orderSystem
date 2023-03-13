@@ -306,7 +306,7 @@ const aggregateConfig = {
           createdAt: -1,
         },
       },
-      // 数据处理
+      
       {
         $project: {
           day: {

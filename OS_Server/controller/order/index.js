@@ -41,67 +41,90 @@ class OrderController {
   // 添加订单的评论
   saveOrderAppraise = async (req, res) => {
     const { _id, score, appraise } = req.body;
-    let result = await orderService.saveOrderAppraise(_id, score, appraise);
-    if (result === false) {
-      response.error(res, "服务器错误");
-    } else {
-      response.success(res, result);
+    try {
+      let result = await orderService.saveOrderAppraise(_id, score, appraise);
+      if (result === false) {
+        response.error(res, "服务器错误");
+      } else {
+        response.success(res, result);
+      }
+    } catch (error) {
+      response.error(res, "服务器错误(添加订单的评论)");
     }
   };
 
   // 查询某个用户的订单
   findOrderByUserId = async (req, res) => {
-    let customerId = req.auth._id;
-    let result = await orderService.findOrderByUserId(customerId);
-    if (result === false) {
-      response.error(res, "服务器错误");
-    } else {
-      response.success(res, result);
+    try {
+      let customerId = req.auth._id;
+      let result = await orderService.findOrderByUserId(customerId);
+      if (result === false) {
+        response.error(res, "服务器错误");
+      } else {
+        response.success(res, result);
+      }
+    } catch (error) {
+      response.error(res, "服务器错误(查询某个用户的订单)");
     }
   };
 
   // 查询全部订单
   findAll = async (req, res) => {
-    const { currentPage, pageCount } = req.query;
-    const result = await orderService.findAll(currentPage, pageCount);
-    if (result === false) {
-      response.error(res, "服务器错误");
-    } else {
-      response.success(res, result);
+    try {
+      const { currentPage, pageCount } = req.query;
+      const result = await orderService.findAll(currentPage, pageCount);
+      if (result === false) {
+        response.error(res, "服务器错误");
+      } else {
+        response.success(res, result);
+      }
+    } catch (error) {
+      response.error(res, "服务器错误(查询全部订单)");
     }
   };
 
   // 查询订单条数
   findAllOrderCount = async (req, res) => {
-    let result = orderService.findAllOrderCount();
-    if (result === false) {
-      response.error(res, "服务器错误");
-    } else {
-      response.success(res, result);
+    try {
+      let result = orderService.findAllOrderCount();
+      if (result === false) {
+        response.error(res, "服务器错误");
+      } else {
+        response.success(res, result);
+      }
+    } catch (error) {
+      response.error(res, "服务器错误(查询订单条数)");
     }
   };
 
   // 根据订单id查询订单
   findOrderById = async (req, res) => {
-    const { _id } = req.query;
-    let result = await orderService.findOrderById(_id);
-    if (result === false) {
-      response.error(res, "服务器错误");
-    } else {
-      response.success(res, result);
+    try {
+      const { _id } = req.query;
+      let result = await orderService.findOrderById(_id);
+      if (result === false) {
+        response.error(res, "服务器错误");
+      } else {
+        response.success(res, result);
+      }
+    } catch (error) {
+      response.error(res, "服务器错误(根据订单id查询订单)");
     }
   };
 
   // 修改订单信息
   modifyOrder = async (req, res) => {
-    const { _id } = req.body;
-    let result = await orderService.modifyOrder(_id, req.body);
-    if (result === false) {
-      response.error(res, "服务器错误");
-    } else {
-      response.success(res, result);
+    try {
+      const { _id } = req.body;
+      let result = await orderService.modifyOrder(_id, req.body);
+      if (result === false) {
+        response.error(res, "服务器错误");
+      } else {
+        response.success(res, result);
+      }
+    } catch (error) {
+      response.error(res, "服务器错误(修改订单信息)");
     }
   };
-
 }
 module.exports = new OrderController();

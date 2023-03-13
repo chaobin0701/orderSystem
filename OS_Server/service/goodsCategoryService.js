@@ -26,7 +26,7 @@ class GoodsCategoryService {
 
   // 修改商品类别
   modifyGoodsCategory = async (_id, obj, goods_goodsCategory = []) => {
-    // 提交修改数据
+    
     let result = await mongodb.update(TABLENAME, { _id }, obj);
     // 修改商品类别的关联
     await G_GC_Service.modifyRrlevance(_id, goods_goodsCategory);
