@@ -45,6 +45,7 @@ class CustomerService {
         {
           _id: result.info._id,
           customer_name: result.info.customer_name,
+          role: "customer", //用户
         },
         config.jwt.jwt_secret,
         { expiresIn: config.jwt.jwt_expire }
@@ -72,7 +73,12 @@ class CustomerService {
 
   // 获取单个用户信息
   async findCustomerInfoById(_id) {
-    let result = await mongodb.findById(TABLENAME, _id);
+    let result = await mongodb.findById(TABLENAME, _id, {
+      customer_pwd: 0,
+      createdAt: 0,
+      updatedAt: 0,
+      __v: 0,
+    });
     return result;
   }
 }

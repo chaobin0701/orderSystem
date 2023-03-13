@@ -1,28 +1,40 @@
 const response = require("../../utils/response");
 const orderService = require("../../service/orderService");
+const e = require("cors");
 class OrderController {
   // 新增订单
   saveOrder = async (req, res) => {
+    let customerName = "admin";
+    let customerId = "admin";
+    if (req.auth.role === "customer") {
+      customerName = req.auth.customer_name;
+      customerId = req.auth._id;
+    }
     let orderPrice = req.body.orderPrice; //订单价格
     let diningMethod = req.body.diningMethod; //就餐方式
     let diningFoodTable = req.body.diningFoodTable; //就餐餐桌id
-    let customerName = req.body.customerName; //顾客名字
-    let customerId = req.body.customerId === "admin" ? "adminadminad" : req.body.customerId; //顾客id
     let goodsInfo = req.body.goodsInfo; //点餐信息
     let obj = {
       orderPrice,
       diningMethod,
-      diningFoodTable,
       customerName,
       customerId,
       goodsInfo,
     };
+    if (diningMethod === "堂食") {
+      obj.diningFoodTable = diningFoodTable;
+    }
     // 3.提交数据
-    let result = await orderService.saveOrder(obj);
-    if (result === false) {
-      response.error(res, "服务器错误");
-    } else {
-      response.success(res, result);
+    try {
+      let result = await orderService.saveOrder(obj);
+      if (result === false) {
+        response.error(res, "服务器错误");
+      } else {
+        response.success(res, result);
+      }
+    } catch (error) {
+      res.send(error);
+      return;
     }
   };
 
@@ -39,7 +51,7 @@ class OrderController {
 
   // 查询某个用户的订单
   findOrderByUserId = async (req, res) => {
-    const { customerId } = req.query;
+    let customerId = req.auth._id;
     let result = await orderService.findOrderByUserId(customerId);
     if (result === false) {
       response.error(res, "服务器错误");
@@ -91,15 +103,5 @@ class OrderController {
     }
   };
 
-  // 修改订单状态
-  modifyOrderState = async (req, res) => {
-    const { _id, orderState } = req.body;
-    let result = orderService.modifyOrderState(_id, orderState);
-    if (result === false) {
-      response.error(res, "服务器错误");
-    } else {
-      response.success(res, result);
-    }
-  };
 }
 module.exports = new OrderController();

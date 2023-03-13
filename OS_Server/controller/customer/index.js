@@ -20,7 +20,8 @@ class CustomerController {
   };
   // 修改用户信息
   modifyCustomerInfo = async (req, res) => {
-    let { customer_name, customer_birthday, customer_sex, _id } = req.body;
+    let _id = req.auth._id;
+    let { customer_name, customer_birthday, customer_sex } = req.body;
     let obj = { customer_name, customer_birthday, customer_sex, _id };
     // 提交修改数据
     let result = customerService.modifyCustomerInfo(_id, obj);
@@ -32,8 +33,10 @@ class CustomerController {
   };
   // 修改用户密码
   modifyCustomer = async (req, res) => {
-    let { customer_pwd, _id } = req.body;
+    let _id = req.auth._id;
+    let { customer_pwd } = req.body;
     let obj = { customer_pwd, _id };
+    console.log(`output->obj`, obj);
     // 提交修改数据
     let result = customerService.modifyCustomer(_id, obj);
     if (result === false) {
@@ -57,12 +60,15 @@ class CustomerController {
   };
   // 获取用户信息
   findCustomerInfo = async (req, res) => {
+    let _id = req.auth._id;
+    let role = req.auth.role;
     let result = null;
-    if (req.query._id) {
-      result = await customerService.findCustomerInfoById(req.query._id);
-    } else {
+    if (role === "admin") {
       result = await customerService.findAllCustomerInfo();
+    } else if (_id) {
+      result = await customerService.findCustomerInfoById(_id);
     }
+
     if (result === false) {
       response.error(res, "数据库错误");
     } else {

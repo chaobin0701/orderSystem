@@ -2,11 +2,11 @@
   <!-- 排序所有订单 -->
   <view class="filterOrder">
     <view class="filterOrder-box">
-      <view :class="active == '全部'? 'active':''" @click="active = '全部'">全部</view>
-      <view :class="active == '待付款'? 'active':''" @click="active = '待付款'">待付款</view>
-      <view :class="active == '待收货'? 'active':''" @click="active = '待收货'">待收货</view>
-      <view :class="active == '待评价'? 'active':''" @click="active = '待评价'">待评价</view>
-      <view :class="active == '已完成'? 'active':''" @click="active = '已完成'">已完成</view>
+      <view :class="active == '0'? 'active':''" @click="btnHandle('0')">全部</view>
+      <view :class="active == '1'? 'active':''" @click="btnHandle('1')">待付款</view>
+      <view :class="active == '2'? 'active':''" @click="btnHandle('2')">待收货</view>
+      <view :class="active == '3'? 'active':''" @click="btnHandle('3')">待评价</view>
+      <view :class="active == '4'? 'active':''" @click="btnHandle('4')">已完成</view>
     </view>
   </view>
 </template>
@@ -16,14 +16,15 @@
     name:"filterOrder",
     data() {
       return {
-        active:"全部"
+        active:"0"
       };
     },
-    watch:{
-      active(newActive){
-        this.$emit('changeOrderFliter',newActive)
-      }
-    }
+	methods:{
+		btnHandle(key){
+			this.active = key
+			this.$emit('changeOrderFliter',key)
+		}
+	},
   }
 </script>
 

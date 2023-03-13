@@ -43,17 +43,17 @@
 			}),
 			// 登录按钮
 			async loginHandel(obj) {
-				let result = await uni.$http.post("/customer/login", {
+				let result = await uni.$http.post("/customer/login",{
 					customer_account: obj.userNumber,
 					customer_pwd: obj.password
-				})
+				} )
 				if (result.data.msg === "登录失败") {
 					this.open('error', '登录失败,请检查用户密码是否正确')
 				} else {
 					this.open('success', '登陆成功,跳转至用户中心')
 					this.saveUserInfo({
-						userInfo: result.data.data.info,
-						token: result.data.data.token
+						userInfo: result.data.info,
+						token: result.data.token
 					})
 					setTimeout(() => {
 						uni.switchTab({

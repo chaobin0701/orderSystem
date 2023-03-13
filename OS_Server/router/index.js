@@ -12,8 +12,6 @@ const staff_handler = require("../controller/staff");
 const foodtable_handler = require("../controller/foodtable");
 const customer_handler = require("../controller/customer");
 
-
-
 /* 订单 */
 router.post("/order/", order_Handler1.saveOrder); // 添加新的订单接口
 router.post("/order/appraise", order_Handler1.saveOrderAppraise); // 添加订单评价
@@ -21,7 +19,6 @@ router.get("/order/", order_Handler1.findAll); // 查询全部订单
 router.get("/order/user", order_Handler1.findOrderByUserId); // 根据用户id查询订单
 router.get("/order/detail", order_Handler1.findOrderById); // 根据订单id查询订单
 router.put("/order/modify", order_Handler1.modifyOrder); // 修改订单状态
-router.put("/order/modify", order_Handler1.modifyOrderState); // 修改订单状态
 
 /* 商品类型 */
 router.get("/goodstype", goodstype_handler.findAllGoodsCategory);
@@ -42,6 +39,17 @@ router.put("/goods", goods_handler.modifyGoods);
 router.delete("/goods", goods_handler.removeGoods);
 
 /* 员工 */
+router.all("/staff", (req, res, next) => {
+  //   if (req.auth.role === "customer") {
+  //     res.send({
+  //       error: "当前角色为:customer,无访问权限",
+  //     });
+  //     return;
+  //   } else {
+  //     next();
+  //   }
+  next();
+});
 router.get("/staff", staff_handler.findStaff);
 router.post("/staff", staff_handler.saveStaff);
 router.put("/staff", staff_handler.modifyStaff);
@@ -67,6 +75,6 @@ router.get("/dataAnalysis/dailySales", dataAnalysis_Handler.dailySales); // 3.�
 // 4.销售额分析
 
 // 上传图片接口
-router.post('/file/upload',file_Handler.img)
+router.post("/file/upload", file_Handler.img);
 
 module.exports = router;

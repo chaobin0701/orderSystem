@@ -115,16 +115,5 @@ class GoodsService {
   }
 }
 
-// let gs = new GoodsService();
-
-// gs.findAllGoods().then((res) => {
-//   res.forEach((item) => {
-//     item.goodsImgs[0].url =
-//       item.goodsImgs[0].url.slice(0, 16) +
-//       ":3280/" +
-//       item.goodsImgs[0].url.slice(16);
-//     gs.modifyGoods(item._id, item);
-//   });
-// });
 
 module.exports = new GoodsService();
