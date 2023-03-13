@@ -38,7 +38,7 @@
 				<!-- 图片区域 -->
 				<view class="img" @click="toOrderDetail(order._id)">
 					<view class="img-box">
-						<view class="img-content" v-for="goods in order.goodsInfo" :key="goods._id">
+						<view class="img-content" v-for="goods in order.goodsInfo.slice(0,3)" :key="goods._id">
 							<img :src="goods.goodsImgs[0].url">
 						</view>
 					</view>

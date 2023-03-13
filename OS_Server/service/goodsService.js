@@ -26,7 +26,7 @@ class GoodsService {
     // 修改商品基本信息
     let result = mongodb.update(TABLENAME, { _id }, obj);
     // 修改商品的关联
-    // G_GC_Service.modifyRrlevance(_id, goodsCategory);
+    G_GC_Service.modifyRrlevance(_id, goodsCategory);
     return result;
   };
 
@@ -114,6 +114,5 @@ class GoodsService {
     return result;
   }
 }
-
 
 module.exports = new GoodsService();

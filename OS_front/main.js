@@ -27,7 +27,7 @@ $http.afterRequest = function(response) {
 	// token失效
 	response = response.data
 	if (response.statud === 401) {
-		this.$store.dispatch("userInfo/saveUserId")
+		this.$store.dispatch("userInfo/logout")
 		this.open('error', "token失效了,请重新登陆")
 	}
 	return response

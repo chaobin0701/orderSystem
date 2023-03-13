@@ -1,7 +1,12 @@
 <script>
 	export default {
 		methods: {
-		
+			// 获取餐桌数据
+			async getFoodTableMsg() {
+				let {data:foodTable} = await uni.$http.get('/foodtable')
+				this.$store.dispatch('getFoodTableMsg', foodTable.data)
+				return  foodTable.data
+			},
 		},
 		onLaunch:async  function(options) {
 			// 1.设置用户信息
@@ -11,12 +16,16 @@
 					token:uni.getStorageSync("token")
 				})
 			}
-		},
-		onShow: function() {
-
-		},
-		onHide: function() {
-
+			const foodTableInfo = await this.getFoodTableMsg()
+			let _id = options.query.foodtable_id
+				
+		
+			if(_id){
+				let info = foodTableInfo.find(item => {
+					return item._id === _id
+				})
+				this.$store.dispatch('changeSelectedFoodTable', info)
+			}
 		}
 	}
 </script>

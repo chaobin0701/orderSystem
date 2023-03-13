@@ -6,28 +6,16 @@ Vue.use(Vuex)
 
 const actions = {
 	// 获取菜单的数据
-	getGoodsMsg({
-		commit,
-		state
-	}, {
-		goodsInfo,
-		categoryInfo
-	}) {
-		state.goodsInfo = goodsInfo.map(goods => {
+	getGoodsMsg({commit,state}, {goodsInfo,categoryInfo}) {
+		state.goodsInfo = goodsInfo.filter(goods => {
 			goods.goodsCount = 0
-			return goods
+			return goods.goodsState
 		})
 		state.categoryInfo = categoryInfo
 	},
 	// 增加(add) or 减少(reduce)点餐数量
-	changeGoodNumber({
-		commit,
-		state
-	}, data) {
-		let {
-			id,
-			change
-		} = data
+	changeGoodNumber({commit,state}, data) {
+		let {id,change} = data
 		// 查询索引值
 		let index = state.goodsInfo.findIndex(item => {
 			return item._id == id
@@ -40,30 +28,21 @@ const actions = {
 		}
 	},
 	// 获取餐桌数据
-	getFoodTableMsg({
-		commit,
-		state
-	}, data) {
+	getFoodTableMsg({commit,state}, data) {
 		state.foodTable = data
 		// 持久化存储餐桌数据
 		uni.setStorageSync('foodTable', data)
 
 	},
 	// 改变选择的餐桌
-	changeSelectedFoodTable({
-		commit,
-		state
-	}, data) {
-		let index = state.foodTable.findIndex(item => {
-			return item.foodtable_describe === data
-		})
-		commit('ChangeSelectedFoodTable', index)
+	changeSelectedFoodTable({commit,state}, data) {
+		// 改变餐桌编号
+		state.selectedFoodTable = data.foodtable_describe
+		// 改变餐桌id
+		state.selectedFoodTable_id = data._id
 	},
 	// 添加用户订单输入
-	getOrderData({
-		commit,
-		state
-	}, data) {
+	getOrderData({commit,state}, data) {
 		data = data.reduce((prev, next) => {
 			if (prev.hasOwnProperty(next.O_id)) { // 包含这个属性
 				prev[next.O_id].push(next)
@@ -76,10 +55,7 @@ const actions = {
 		commit('GetOrderData', data)
 	},
 	// 清除信息
-	clearMsg({
-		commit,
-		state
-	}, data) {
+	clearMsg({commit,state}, data) {
 		state.userInfo.userState = false; // 用户登录状态
 		commit('ResetGoodCart')
 	}
@@ -95,21 +71,6 @@ const mutations = {
 	reduceGoodNumber(state, index) {
 		state.goodsInfo[index].goodsCount -= 1
 		uni.setStorageSync('goodsInfo', state.goodsInfo)
-	},
-	// 根据序号_改变选择的餐桌
-	ChangeSelectedFoodTable(state, index) {
-		// 改变餐桌编号
-		console.log(state.foodTable[index])
-		state.selectedFoodTable = state.foodTable[index].foodtable_describe
-		// 改变餐桌id
-		state.selectedFoodTable_id = state.foodTable[index]._id
-	},
-	// 根据id_改变选择的餐桌
-	ChangeSelectedFoodTable_id(state, data) {
-		// 改变餐桌编号
-		state.selectedFoodTable = data.foodtable_describe
-		// 改变餐桌id
-		state.selectedFoodTable_id = data._id
 	},
 	// 添加用户订单输入
 	GetOrderData(state, data) {
@@ -138,10 +99,15 @@ const getters = {
 	// 返回处理好的菜单数据
 	goodsMsg(state) {
 		return state.categoryInfo.reduce((prev, next) => {
-			prev[next.gc_name] = state.goodsInfo.filter((goods) => {
-				return goods.goodsCategory.gc_name === next.gc_name
-			})
-			return prev
+			if(next.gc_state){
+				prev[next.gc_name] = state.goodsInfo.filter((goods) => {
+					return goods.goodsCategory.gc_name === next.gc_name
+				})
+				return prev
+			} else {
+				return prev
+			}
+			
 		}, {})
 	},
 	// 返回购物车的总价
@@ -177,12 +143,13 @@ const getters = {
 		})
 		return res
 	},
-	// 返回菜单编号信息
-	getFoodTableNumber(state) {
-		return state.foodTable.reduce((prev, next) => {
-			prev.push(next.foodtable_describe)
-			return prev
-		}, [])
+	// 返回餐桌信息
+	getFoodTableInfo(state) {
+		return state.foodTable
+		// return state.foodTable.reduce((prev, next) => {
+		// 	prev.push(next.foodtable_describe)
+		// 	return prev
+		// }, [])
 	},
 	// 返回加入购物车的餐份数
 	shoppingCartNumber(state) {

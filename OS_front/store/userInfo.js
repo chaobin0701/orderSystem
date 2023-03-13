@@ -13,7 +13,7 @@ export default {
 			uni.setStorageSync('token', state.token)
 		},
 		// 退出登录
-		saveUserId({
+		logout({
 			commit,
 			state
 		}, data) {

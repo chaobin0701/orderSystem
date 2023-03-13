@@ -52,8 +52,8 @@
 				} else {
 					this.open('success', '登陆成功,跳转至用户中心')
 					this.saveUserInfo({
-						userInfo: result.data.info,
-						token: result.data.token
+						userInfo: result.data.data.info,
+						token: result.data.data.token
 					})
 					setTimeout(() => {
 						uni.switchTab({

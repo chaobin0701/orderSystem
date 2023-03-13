@@ -24,7 +24,7 @@ class foodtableService {
   }
   // 查询所有餐桌
   async findAllFoodtable() {
-    let result = await mongodb.find(TABLENAME, {});
+    let result = await mongodb.find(TABLENAME);
     return result;
   }
 }

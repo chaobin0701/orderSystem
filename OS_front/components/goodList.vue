@@ -19,7 +19,7 @@
           <!-- 右侧 - 商品 -->
           <view class="box" v-for="(good,index) in goodsMsg[category]" :key="index">
             <view class="good-image">
-              <image :src="good.goodsImgs[0].url"></image>
+              <image :src="good.goodsImgs[0].url" :lazy-load="true"></image>
             </view>
             <view class="goods-describe">
               <text class="goodName">{{good.goodsName}}</text>

@@ -14,7 +14,7 @@
 					<view class="info">
 						<image class="header-img" src="@/static/images/logo.png"></image>
 						<view class="get-auth-box">
-							<button class="get-auth-btn" type="default" v-if="!userInfo"
+							<button class="get-auth-btn" type="default" v-if="!token"
 								@click="toLogin">点击登陆</button>
 							<text v-else>欢迎你：{{userInfo.customer_name}}</text>
 						</view>
@@ -110,7 +110,7 @@
 					{
 						path: '/pages/my/suggest', // 跳转路径
 						icon: require('@/static/my/icon-jianyi.png'), //icon图
-						text: '改进建议', //文本
+						text: '退出登录', //文本
 					},
 					{
 						path: 'clear', // 跳转路径 TODO
@@ -126,6 +126,9 @@
 		computed: {
 			userInfo(){
 				 return this.$store.state.userInfo.userInfo
+			},
+			token(){
+				 return this.$store.state.userInfo.token
 			}
 		},
 		methods: {
@@ -146,6 +149,10 @@
 						setTimeout(() => {
 							uni.clearStorage(); //清除缓存
 						}, 1500)
+						break;
+					case '退出登录':
+						this.open('success', '正在退出账号')
+						this.$store.dispatch('userInfo/logout')
 						break;
 					default:
 						this.open('error', '功能尚未开发')

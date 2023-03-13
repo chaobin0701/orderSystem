@@ -24,7 +24,7 @@
 			<!-- 餐桌号 -->
 			<view class="foodTable-number" v-if="EatMode == '堂食'">
 				<text class="number">餐桌号：{{selectedFoodTable}}</text>
-				<picker @change="changeFoodTable" :range="foodTableNumber">
+				<picker @change="changeFoodTable" :range="foodTableInfo" range-key="foodtable_describe">
 					请选择>
 				</picker>
 				</text>
@@ -92,7 +92,7 @@
 			...mapGetters({
 				totalPrice: 'getTotalPrice', // 订单的价格
 				selectedGood: 'getSelectedGood', // 已经添加到订单的餐
-				foodTableNumber: 'getFoodTableNumber', // 获取餐桌编号
+				foodTableInfo: 'getFoodTableInfo', // 获取餐桌编号
 				CartGoods: 'getSelectedGood', // 获已加入购物侧的数据
 				shoppingCartNumber: 'shoppingCartNumber' //购物车内点餐的数量
 			}),
@@ -107,22 +107,11 @@
 				}
 			}
 		},
-		async created() {
-			await this.getFoodTableMsg()
-		},
 		methods: {
 			changeFoodTable(e) {
-				let i = this.foodTableNumber[e.detail.value]
+				let info = this.foodTableInfo[e.detail.value]
 				// 将 i(编号) 传递给vuex
-				this.$store.dispatch('changeSelectedFoodTable', i)
-			},
-			// 获取餐桌数据
-			async getFoodTableMsg() {
-				let {
-					data
-				} = await uni.$http.get('/foodtable')
-				let foodTable = data
-				this.$store.dispatch('getFoodTableMsg', foodTable.data)
+				this.$store.dispatch('changeSelectedFoodTable', info)
 			},
 			// 插入订单的方法
 			async addOrder() {
@@ -136,15 +125,15 @@
 			// 修改订单状态的方法
 			async alterOrderState(data) {
 				return uni.$http.put('/order/modify', {
-					_id:this.orderId,
-					orderState:2
+					_id: this.orderId,
+					orderState: 2
 				})
 			},
 			// 去支付按钮回调
 			async topay() {
 				if (this.EatMode === "外带" || this.selectedFoodTable_id) {
 					let orderInfo = await this.addOrder()
-					this.orderId = orderInfo.data._id
+					this.orderId = orderInfo.data.data._id
 					await this.$refs.payReceiving.open() // 显示弹窗 是否支付
 				} else {
 					await this.$refs.message.open()
