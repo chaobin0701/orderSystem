@@ -41,11 +41,9 @@
     data() {
       return {
         imageList: [
-          'http://maxchao.top/order/static/img/banner-1.jpg',
-          'http://maxchao.top/order/static/img/banner-2.jpg',
-          'http://maxchao.top/order/static/img/banner-3.jpg',
-          'http://maxchao.top/order/static/img/banner-4.jpg',
-          'http://maxchao.top/order/static/img/banner-5.jpg',
+          'http://127.0.0.1:3280/static/banner/home-1.jpg',
+          'http://127.0.0.1:3280/static/banner/home-2.jpg',
+          'http://127.0.0.1:3280/static/banner/home-3.jpg'
         ],
         navList:[
           {image:'scan',text:'扫码点餐'},
@@ -109,7 +107,7 @@
   // 轮播图区域
   .swiper {
     width: 100%;
-    height: 192rpx;
+    height: 320rpx;
 
     image {
       width: 100%;

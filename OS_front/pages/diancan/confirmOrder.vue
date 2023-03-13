@@ -121,8 +121,8 @@
 				let {
 					data
 				} = await uni.$http.get('/foodtable')
-				let foodTable = data.
-				this.$store.dispatch('getFoodTableMsg', foodTable)
+				let foodTable = data
+				this.$store.dispatch('getFoodTableMsg', foodTable.data)
 			},
 			// 插入订单的方法
 			async addOrder() {
@@ -142,7 +142,7 @@
 			},
 			// 去支付按钮回调
 			async topay() {
-				if (this.EatMode === "打包" || this.selectedFoodTable_id) {
+				if (this.EatMode === "外带" || this.selectedFoodTable_id) {
 					let orderInfo = await this.addOrder()
 					this.orderId = orderInfo.data._id
 					await this.$refs.payReceiving.open() // 显示弹窗 是否支付
