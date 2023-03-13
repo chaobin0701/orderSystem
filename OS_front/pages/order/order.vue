@@ -177,7 +177,7 @@
       }
     },
     onShow(){
-      if(uni.getStorageSync('userState')){ // 判断用户是否已经登录
+      if(uni.getStorageSync('token')){ // 判断用户是否已经登录
         this.isLogin = true
        this.getOrderDate() //获取订单信息
        this.$store.dispatch('userInfo/saveUserId',uni.getStorageSync('userId')) // 保存用户id

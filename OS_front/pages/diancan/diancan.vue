@@ -40,13 +40,11 @@
       // 点击结算按钮
       toConfirmOrder() {
         // 判断 : 用户是否登录 
-        if(uni.getStorageSync('userState')){
-          console.log('用户以登录');
+        if(uni.getStorageSync('token')){
           uni.navigateTo({url:'confirmOrder'}) // 跳转至结算页面
         }else {
-          console.log('用户未登录')
           this.$refs.message.open()
-          // uni.switchTab({url:'/pages/user/user'})// 跳转至登录页面
+          uni.switchTab({url:'/pages/user/user'})// 跳转至登录页面
         }
       },
     }

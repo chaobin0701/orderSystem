@@ -129,15 +129,15 @@
 		   * customerId:用户id
 		   * goodsInfo:购物车信息
 		   * */
-		uni.$http.post("order",
-			     orderPrice:this.totalPrice,
-			     diningMethod:this.EatMode,
-			     diningFoodTable:this.selectedFoodTable_id,
-			     customerName:"张三",
-			     customerId:"abcdabcdabcd",
-			     goodsInfo:this.CartGoods,
+		// uni.$http.post("order",
+		// 	     orderPrice:this.totalPrice,
+		// 	     diningMethod:this.EatMode,
+		// 	     diningFoodTable:this.selectedFoodTable_id,
+		// 	     customerName:"张三",
+		// 	     customerId:"abcdabcdabcd",
+		// 	     goodsInfo:this.CartGoods,
 			    
-		   })       
+		//    })       
       },
       // 修改订单状态的方法
       async alterOrderState(data){

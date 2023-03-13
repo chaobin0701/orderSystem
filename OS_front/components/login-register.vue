@@ -11,18 +11,18 @@
       </view>
       <!-- 账户 -->
       <view class="user">
-        <text class="tips" :class="userNumberState ? '':'error'">{{userNumberPrompt}}</text>
+        <text class="tips" :class="customer_accountState ? '':'error'">{{customer_accountPrompt}}</text>
         <view class="userInput">
           <uni-icons type="staff-filled" size="24" color="#25ABBE"></uni-icons>
-          <input type="text" maxlength="12" v-model="userInfo.userNumber">
+          <input type="text" maxlength="12" v-model="userInfo.customer_account">
         </view>
       </view>
       <!-- 密码 -->
-      <view class="password">
+      <view class="customer_pwd">
         <text class="tips">密码 6-12位</text>
         <view class="userPwd">
           <uni-icons type="locked-filled" size="24" color="#25ABBE"></uni-icons>
-          <input type="password" maxlength="20" v-model="userInfo.password">
+          <input type="customer_pwd" maxlength="20" v-model="userInfo.customer_pwd">
         </view>
       </view>
       <!-- 电话 -->
@@ -34,11 +34,11 @@
         </view>
       </view>
       <!-- 姓名 -->
-      <view class="name">
+      <view class="customer_name">
         <text class="tips">姓名</text>
-        <view class="userName">
+        <view class="usercustomer_name">
           <uni-icons type="person-filled" size="24" color="#25ABBE"></uni-icons>
-          <input type="text" maxlength="20" v-model="userInfo.name">
+          <input type="text" maxlength="20" v-model="userInfo.customer_name">
         </view>
       </view>
       <button class="btn-login" @click="registerBtnHandel">
@@ -49,63 +49,61 @@
 </template>
 
 <script>
-import { v4 as uuidv4 } from 'uuid';
   export default {
-    name:"login-register",
+    customer_name:"login-register",
     data() {
       return {
         msgType: '',
         messageText: '',
         userInfo:{ //用户填写的信息
-          userNumber:'',
-          password:'',
+          customer_account:'',
+          customer_pwd:'',
           phoneNumber:'',
-          name:'',
-          sex:'男',
-          T_id:uuidv4().slice(0,21),
+          customer_name:'',
+          customer_sex:'1',
         },
         timer:'',
-        userNumberPrompt:"账号 6-12位",
-        userNumberState:true, //账号是否可用
+        customer_accountPrompt:"账号 6-12位",
+        customer_accountState:true, //账号是否可用
       };
     },
     watch:{
-      'userInfo.userNumber':{
+      'userInfo.customer_account':{
         deep:true,
         handler(newNumber){ //检测账号是否可用
-          clearTimeout(this.timer)
-          this.timer = setTimeout(()=>{
-            if(newNumber.trim().length >= 6){
-              uni.$http.post(`/judgeAccount?account=${newNumber}`)
-              .then(res=>{
-                if(res.data.result == 1){ //账号以存在
-                  this.userNumberPrompt = '账号 6-12位 (账号已存在)'
-                  this.userNumberState = false
-                }else{ //账号可注册
-                  this.userNumberPrompt = '账号 6-12位 (账号可注册)'
-                  this.userNumberState = true
-                }
-              })
-            }else{
-              this.userNumberPrompt = '账号 6-12位'
-              this.userNumberState = true
-            }
-          },500)
+          // clearTimeout(this.timer)
+          // this.timer = setTimeout(()=>{
+          //   if(newNumber.trim().length >= 6){
+          //     uni.$http.post(`/judgeAccount?account=${newNumber}`)
+          //     .then(res=>{
+          //       if(res.data.result == 1){ //账号以存在
+          //         this.customer_accountPrompt = '账号 6-12位 (账号已存在)'
+          //         this.customer_accountState = false
+          //       }else{ //账号可注册
+          //         this.customer_accountPrompt = '账号 6-12位 (账号可注册)'
+          //         this.customer_accountState = true
+          //       }
+          //     })
+          //   }else{
+          //     this.customer_accountPrompt = '账号 6-12位'
+          //     this.customer_accountState = true
+          //   }
+          // },500)
         }
       }
     },
     methods:{
       registerBtnHandel(){
-        if(this.userInfo.userNumber.trim().length < 6 && this.userNumberState){
+        if(this.userInfo.customer_account.trim().length < 6 && this.customer_accountState){
           this.open('error','请输入正确的账号')
           return 
-        }else if(this.userInfo.password.trim().length < 6){
+        }else if(this.userInfo.customer_pwd.trim().length < 6){
           this.open('error','请输入正确的密码')
           return
         }else if(this.userInfo.phoneNumber.trim().length < 6){
           this.open('error','请输入正确的手机号')
           return
-        }else if(this.userInfo.name.trim().length < 1){
+        }else if(this.userInfo.customer_name.trim().length < 1){
           this.open('error','请输入正确的姓名')
           return 
         }
@@ -161,12 +159,12 @@ import { v4 as uuidv4 } from 'uuid';
           padding-left: 15rpx;
           height: 90%;
         }
-        .user,.password,.phone,.name{
+        .user,.customer_pwd,.phone,.customer_name{
           display: flex;
           margin: 20rpx 0;
           height: 120rpx;
           flex-direction: column;
-          .userInput,.userPwd,.userPhone,.userName{
+          .userInput,.userPwd,.userPhone,.usercustomer_name{
             display: flex;
             height: 60rpx;
             box-sizing: border-box;
