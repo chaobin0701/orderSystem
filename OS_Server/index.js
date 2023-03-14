@@ -23,7 +23,12 @@ app.use(
       requestProperty: "auth", //token数据在response中的位置
     })
     .unless({
-      path: ["/api/customer/login", "/api/goods", "/api/goodscategory","/api/foodtable"], // 指定路径不经过 Token 解析
+      path: [
+        "/api/customer/login",
+        "/api/goods",
+        "/api/goodscategory",
+        "/api/foodtable",
+      ], // 指定路径不经过 Token 解析
     })
 );
 
@@ -40,8 +45,11 @@ app.use((err, req, res, next) => {
 
 // 配置路由
 app.use("/api", Route);
-
 // 启动端口
 app.listen(3280, () => {
-  console.log("后端启动了 at https://127.0.0.1:3280");
+  console.log(
+    `后端启动了 at https://127.0.0.1:${
+      process.env.NODE_ENV == "production" ? 8088 : 3280
+    }`
+  );
 });

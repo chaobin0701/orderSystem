@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const config = require("../config");
 const options = config.db;
 const tableConfig = require("../tables");
-const logger = require("../logger");
+const log = require("../logger");
 
 const db = mongoose.connect("mongodb://127.0.0.1:27017/superdeer");
 mongoose.Promise = global.Promise;
@@ -40,20 +40,22 @@ const isConnet = (options) => {
   // 是否可以连接数据库
   // 构建数据库连接链接
   let dbURL = "";
-  if (options.db_pwd) {
-    // 若有密码则写法如下，注意：没密码切勿用此写法
-    dbURL =
-      "mongodb://" +
-      options.db_user +
-      ":" +
-      options.db_pwd +
-      "@" +
-      options.db_host +
-      ":" +
-      options.db_port +
-      "/" +
-      options.db_name +
-      "?authSource=admin";
+  if (process.env.NODE_ENV == "production") {
+    if (options.db_pwd) {
+      // 若有密码则写法如下，注意：没密码切勿用此写法
+      dbURL =
+        "mongodb://" +
+        options.db_user +
+        ":" +
+        options.db_pwd +
+        "@" +
+        options.db_host +
+        ":" +
+        options.db_port +
+        "/" +
+        options.db_name +
+        "?authSource=admin";
+    }
   } else {
     dbURL =
       "mongodb://" +
