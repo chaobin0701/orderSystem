@@ -113,6 +113,21 @@ class GoodsService {
     });
     return result;
   }
+  // 根据商品类型id查询商品
+  async findGoodsByGoodsTypeId(_id) {
+    let result = mongodb.findWhere(
+      "goods",
+      {},
+      {
+        fields: { goodsType_id: _id },
+      }
+    );
+    return result;
+  }
+  // 根据新的商品类型更改商品数据
+  async updateGoodsByNewGoodsType(){
+
+  }
 }
 
 module.exports = new GoodsService();

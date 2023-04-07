@@ -11,7 +11,6 @@ const Route = require("./router"); // api路由模块
 const expressJWT = require("express-jwt"); //将客户端发送过来的JWT字符串，解析还原成JSON 对象的包
 app.use(express.urlencoded({ extended: false })); // 解析 url-encoded格式的表单数据
 app.use(express.json()); // 解析json格式的表单数据
-
 // 文件夹映射
 app.use(config.static.path, express.static(__dirname + "/public"));
 /* JWT配置 */
