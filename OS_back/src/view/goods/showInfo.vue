@@ -1,27 +1,6 @@
 <template>
   <div>
     <MainHeader>
-      <template #right>
-        <el-select
-          v-model="goodsType"
-          placeholder="添加商品"
-          slot="left"
-          size="mini"
-        >
-          <Router-link
-            v-for="(item, index) in goodsTypeInfo"
-            :key="index"
-            :to="`goods/add/${item._id}`"
-          >
-            <el-option
-              :label="item.gt_name"
-              :value="item._id"
-              @click="addGoods(item._id)"
-            >
-            </el-option>
-          </Router-link>
-        </el-select>
-      </template>
       <template #left>
         <el-select
           v-model="currentGoodsCategory"
@@ -35,13 +14,34 @@
           ></el-option>
 
           <el-option
-            v-for="gc in goodsCategoryInfo"
+            v-for="gc in goodsCategoryNames"
             :key="gc"
             :label="gc"
             :value="gc"
             @click="currentGoodsCategory = gc"
           >
           </el-option>
+        </el-select>
+      </template>
+      <template #right>
+        <el-select
+          v-model="goodsCategory"
+          placeholder="添加商品"
+          slot="left"
+          size="mini"
+        >
+          <Router-link
+            v-for="(item, index) in goodsCategoryInfo"
+            :key="index"
+            :to="`goods/manage/add/${item._id}`"
+          >
+            <el-option
+              :label="item.gc_name"
+              :value="item._id"
+              @click="addGoods(item._id)"
+            >
+            </el-option>
+          </Router-link>
         </el-select>
       </template>
     </MainHeader>
@@ -57,19 +57,9 @@
       border
     >
       <el-table-column label="标题" prop="goodsName"></el-table-column>
-      <el-table-column
-        label="类型"
-        prop="goodsCategory.gc_name"
-      ></el-table-column>
-      <el-table-column label="规格" prop="goodsType">
+      <el-table-column label="类型" prop="goodsCategory.gc_name">
         <template slot-scope="{ row }">
-          <el-tag
-            class="mr-2"
-            v-for="(item, index) in row.goodsType.gt_specifications"
-            :key="index"
-          >
-            {{ item.value }}
-          </el-tag>
+          <el-tag>{{ row.goodsCategory.gc_name }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="SKU" prop="_id"></el-table-column>
@@ -123,7 +113,7 @@ import { delGoods } from "@/api/goods";
 export default {
   data() {
     return {
-      goodsType: "",
+      goodsCategory: "",
       pageSize: 10,
       currentIndex: 0,
       currentGoodsCategory: "全部商品",
@@ -138,7 +128,7 @@ export default {
       this.dialogState = "edit";
       this.dialogFormVisible = true;
       this.id = row._id;
-      this.$router.push(`/goods/add/${row.goodsType_id}/${row._id}`);
+      this.$router.push(`/goods/manage/edit/${row._id}`);
     },
     // 删除
     async handleDelete(row) {
@@ -191,23 +181,23 @@ export default {
         return goodsInfo;
       }
     },
-    goodsTypeInfo() {
-      return this.$store.state.goodsTypeInfo;
-    },
     total() {
       return this.goodsInfo.length;
     },
-    goodsCategoryInfo() {
+    goodsCategoryNames() {
       // 全部分类
       let res = this.$store.state.goodsCategoryInfo.map((item) => {
         return item.gc_name;
       });
       return res;
     },
+    goodsCategoryInfo() {
+      // 全部分类
+      return this.$store.state.goodsCategoryInfo;
+    },
   },
   created() {
     this.$store.dispatch("queryGoods");
-    this.$store.dispatch("queryGoodsType");
   },
 };
 </script>

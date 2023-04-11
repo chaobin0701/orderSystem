@@ -84,6 +84,7 @@ export default {
     async payHandle() {
       this.form.goodsInfo = this.goodsCart;
       this.form.orderPrice = this.totalAmount;
+      
       await addOrder(this.form);
       this.$message({
         type: "success",

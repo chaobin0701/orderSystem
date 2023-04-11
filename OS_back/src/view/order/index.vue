@@ -77,9 +77,9 @@
             @click="$router.push(`/orderDetails?_id=${row._id}`)"
             >查看详情</el-button
           >
-          <el-button size="mini" type="danger" @click="handleDelete(row)"
+          <!-- <el-button size="mini" type="danger" @click="handleDelete(row)"
             >删除</el-button
-          >
+          > -->
         </template>
       </el-table-column>
     </el-table>
@@ -96,7 +96,7 @@
 </template>
 
 <script>
-import { queryOrder } from "@/api/order.js";
+import { queryOrder,deleteOrder } from "@/api/order.js";
 import moment from "moment";
 export default {
   name: "order",
@@ -119,7 +119,7 @@ export default {
           type: "warning"
         });
         // todo:删除
-        console.log("todo:删除");
+        // await deleteOrder(row._id)
         this.$message({
           type: "success",
           message: "删除成功!"

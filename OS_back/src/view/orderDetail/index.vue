@@ -39,7 +39,7 @@
         </template>
         <el-tag size="small">{{
           changeColor(orderInfo.orderState) &&
-            changeColor(orderInfo.orderState).state
+          changeColor(orderInfo.orderState).state
         }}</el-tag>
       </el-descriptions-item>
 
@@ -60,6 +60,22 @@
         </template>
         <el-tag>{{ orderInfo.diningMethod }}</el-tag>
       </el-descriptions-item>
+      <template v-if="orderInfo.orderState == 4">
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-trophy"></i>
+            订单评分
+          </template>
+          {{ orderInfo.orderAppraise.score }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-chat-dot-round"></i>
+            订单评价
+          </template>
+          {{ orderInfo.orderAppraise.appraise }}
+        </el-descriptions-item>
+      </template>
     </el-descriptions>
     <!-- 订单_点餐 -->
     <el-table :data="orderInfo.goodsInfo" border style="width: 100%">
@@ -72,7 +88,11 @@
         </template>
       </el-table-column>
       <el-table-column label="菜名" prop="goodsName"></el-table-column>
-      <el-table-column label="类别" prop="gt_name"></el-table-column>
+      <el-table-column label="类别">
+        <template slot-scope="{ row }">
+          <el-tag class="mr-3 mb-3">{{ row.goodsCategory.gc_name }}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="价格" prop="goodsPrice"></el-table-column>
       <el-table-column label="数量" prop="goodsCount"></el-table-column>
     </el-table>
@@ -87,7 +107,7 @@ export default {
   data() {
     return {
       orderInfo: {}, //订单信息
-      moment //处理时间的库
+      moment, //处理时间的库
     };
   },
   methods: {
@@ -101,31 +121,31 @@ export default {
         case "1":
           return {
             state: "待付款",
-            color: "#F56C6C"
+            color: "#F56C6C",
           };
         case "2":
           return {
             state: "待收货",
-            color: "#E6A23C"
+            color: "#E6A23C",
           };
         case "3":
           return {
             state: "待评价",
-            color: "#409EFF"
+            color: "#409EFF",
           };
         case "4":
           return {
             state: "已完成",
-            color: "#67C23A"
+            color: "#67C23A",
           };
       }
-    }
+    },
   },
   async created() {
     let _id = this.$router.history.current.query._id;
     // 通过_id查询订单信息
     this.orderInfo = await this.queryOrderById(_id);
-  }
+  },
 };
 </script>
 

@@ -5,7 +5,6 @@ Vue.use(Vuex); //应用Vuex插件
 import { queryStaff } from "@/api/staff";
 import { queryFoodTable } from "@/api/foodTable";
 import { queryGoodsCategory } from "@/api/goodsCategory";
-import { queryGoodsType } from "@/api/goodsType";
 import { queryGoods } from "@/api/goods";
 
 // 引入模块
@@ -24,11 +23,6 @@ const actions = {
     const result = await queryFoodTable();
     state.foodtableInfo = result.data;
   },
-  // 获取商品类别信息
-  async queryGoodsType({ state }) {
-    const result = await queryGoodsType();
-    state.goodsTypeInfo = result.data;
-  },
   // 获取商品类型信息
   async queryGoodsCategory({ state }) {
     const result = await queryGoodsCategory();
@@ -46,7 +40,6 @@ const state = {
   staffInfo: [],
   foodtableInfo: [],
   categoryInfo: [],
-  goodsTypeInfo: [],
   goodsCategoryInfo: [],
   goodsInfo: []
 };

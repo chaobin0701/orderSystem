@@ -19,8 +19,8 @@
 					<view class="menu-price">
 						<text class="price">实付￥{{goods.goodsPrice * goods.goodsCount}}.00元</text>
 						<view>
-							<text class="price-d">￥{{goods.goodsCount}}.00</text>
-							<text class="number">×{{goods.goodsPrice}}</text>
+							<text class="price-d">￥{{goods.goodsPrice}}.00</text>
+							<text class="number">×{{goods.goodsCount}}</text>
 						</view>
 					</view>
 				</view>

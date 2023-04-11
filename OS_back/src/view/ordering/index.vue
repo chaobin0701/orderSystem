@@ -143,11 +143,17 @@
           class="goodsList w-full max-h-full overflow-auto flex flex-wrap pt-24"
         >
           <div
-            class="goods w-1/6 box-border p-5 flex flex-col items-center cursor-pointer bg-gray-50 hover:bg-gray-300 duration-300"
+            class="goods relative w-1/6 box-border p-5 flex flex-col items-center cursor-pointer bg-gray-50 hover:bg-gray-300 duration-300"
             @click="insertGoods(goods)"
             v-for="(goods, i) in goodsInfo"
             :key="i"
           >
+            <div
+              class="shade absolute left-0 top-0 w-full h-full z-50 text-white font-bold flex justify-center items-center text-2xl"
+              v-if="goods.goodsStock <= 0"
+            >
+              商品已售光
+            </div>
             <img
               v-lazyload="goods.goodsImgs[0] && goods.goodsImgs[0].url"
               class="w-40 h-40"
@@ -233,10 +239,25 @@ export default {
       }
     },
     insertGoods(goods) {
-      // 新添商品
-      this.$store.dispatch("insertGoods", goods);
+      if (goods.goodsStock > 0) {
+        // 新添商品
+       
+        this.$store.dispatch("insertGoods", goods);
+      } else {
+        this.$message({
+          message: "商品已售光",
+          type: "warning",
+        });
+      }
     },
     changeGoodsCount(goods, num) {
+      if (goods.goodsStock < goods.goodsCount + num) {
+        this.$message({
+          message: "所选商品超出库存",
+          type: "warning",
+        });
+        return;
+      }
       if (goods.goodsCount + num > 0) {
         // 改变商品的数量;
         this.$store.dispatch("changeGoodsCount", {
@@ -298,5 +319,8 @@ export default {
 <style scoped>
 .goodsList::-webkit-scrollbar {
   width: 0 !important;
+}
+.shade {
+  background: rgba(0, 0, 0, 0.3);
 }
 </style>

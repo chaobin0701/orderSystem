@@ -131,10 +131,8 @@ export default {
     goodsInfo() {
       // 排除以选择的商品
       return this.$store.state.goodsInfo.filter(item => {
-        let index = this.form.goods_goodsCategory.findIndex(goods => {
-          return goods.goods_id === item._id;
-        });
-        return index < 0;
+       
+        return !item.goodsCategory;
       });
     }
   }

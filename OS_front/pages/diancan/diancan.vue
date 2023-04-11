@@ -2,13 +2,13 @@
   <view class="container">
     <!-- 提示信息弹窗 -->
     <uni-popup ref="message" type="message">
-      <uni-popup-message type="error" message="请先登录账户后下单" :duration="2000">
+      <uni-popup-message type="error" :message="messageText" :duration="2000">
       </uni-popup-message>
     </uni-popup>
     <!-- 搜索 -->
     <search @clickSearch="toSearchGoods"></search>
     <!-- 菜品 -->
-    <good-list></good-list>
+    <good-list @overstep="overstep"></good-list>
     <!-- 结算 -->
     <settlement @trigger="toConfirmOrder" text="去结算"></settlement>
   </view>
@@ -28,25 +28,49 @@
         clickToId: '',
         currentNum: 0,
         topList: [],
-        isLeftClick: false
+        isLeftClick: false,
+		messageText:""
       }
     },
     components:{search,settlement,goodList},
+	onShow() {
+		this.getGoodsMsg()
+	},
     methods: {
       // 点击搜索组件
       toSearchGoods() {
         uni.navigateTo({url:'searchGood'}) // 跳转到搜索页面
       },
+	  // 获取菜单数据
+	  async getGoodsMsg(){
+	  		// 获取商品数据
+	  		let {data:goods} = await  uni.$http.get('/goods')
+	  		goods.data.forEach(item => {
+	  			item.goodsCategory = item.goodsCategory[0]
+	  		})
+	  		// 获取分类数据
+	  		let {data:category} = await uni.$http.get("/goodscategory")
+	  		this.$store.dispatch('getGoodsMsg',{
+	  			goodsInfo:goods.data,
+	  			categoryInfo:category.data
+	  		})
+	  
+	  },
       // 点击结算按钮
       toConfirmOrder() {
         // 判断 : 用户是否登录 
         if(uni.getStorageSync('token')){
           uni.navigateTo({url:'confirmOrder'}) // 跳转至结算页面
         }else {
+			this.messageText = "请登录后下单"
           this.$refs.message.open()
           uni.switchTab({url:'/pages/user/user'})// 跳转至登录页面
         }
       },
+	  overstep(){
+		  this.messageText = "商品数量超出库存"
+		  this.$refs.message.open()
+	  }
     }
   }
 </script>

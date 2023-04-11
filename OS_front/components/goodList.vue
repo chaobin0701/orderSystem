@@ -17,23 +17,28 @@
         <view class="goodsList" v-for="(category,index) in Object.keys(goodsMsg)" :key="index">
           <view class="title" :id="'po'+index">{{category}} </view>
           <!-- 右侧 - 商品 -->
-          <view class="box" v-for="(good,index) in goodsMsg[category]" :key="index">
+          <view class="box" :class="{goodsLose:good.goodsStock <= 0}" v-for="(good,index) in goodsMsg[category]" :key="index">
+			<view class="shade" v-if="good.goodsStock <= 0">
+				商品已售光
+			</view>
             <view class="good-image">
               <image :src="good.goodsImgs[0].url" :lazy-load="true"></image>
             </view>
             <view class="goods-describe">
               <text class="goodName">{{good.goodsName}}</text>
               <text class="goodPrice">￥{{good.goodsPrice}}元/份</text>
-              <!-- 添加按钮 -->
-              <button class="mini-btn" v-if="good.goodsCount == 0" @click="changeGoodNumber(good._id,'add')">+</button>
-              <!-- 布进器按钮 -->
-              <view class="bjq-btn-box" v-else>
-                <button class="mini-btn" @click="changeGoodNumber(good._id,'reduce')">-</button>
-                <text class="good-number">{{good.goodsCount}}</text>
-                <button class="mini-btn" @click="changeGoodNumber(good._id,'add')">+</button>
-              </view>
+             	<!-- 添加按钮 -->
+             	<button class="mini-btn" v-if="good.goodsCount == 0"  @click="changeGoodNumber(good._id,'add')">+</button>
+             	<!-- 布进器按钮 -->
+             	<view class="bjq-btn-box" v-else>
+             	  <button class="mini-btn" @click="changeGoodNumber(good._id,'reduce')">-</button>
+             	  <text class="good-number">{{good.goodsCount}}</text>
+             	  <button class="mini-btn" @click="changeGoodNumber(good._id,'add')">+</button>
+             	</view>
+       
             </view>
           </view>
+		  
         </view>
       </scroll-view>
     </view>
@@ -60,20 +65,11 @@
     },
     methods:{
       // 增加(add) or 减少(reduce)点餐数量
-      changeGoodNumber(id, change) {
-        this.$store.dispatch('changeGoodNumber', {id,change})
-      },
-      // 获取菜单数据
-      async getGoodsMsg(){
-		// 获取商品数据
-		let {data:goods} = await  uni.$http.get('/goods')
-		// 获取分类数据
-		let {data:category} = await uni.$http.get("/goodscategory")
-		this.$store.dispatch('getGoodsMsg',{
-			goodsInfo:goods.data,
-			categoryInfo:category.data
-		})
-		
+      async changeGoodNumber(id, change) {
+        let result = await this.$store.dispatch('changeGoodNumber', {id,change})
+		if(result){
+			this.$emit("overstep")
+		}
       },
       // 点击左侧菜单,调动右侧菜单
       setId(index) {
@@ -115,15 +111,12 @@
       }
     },
     created() {
-      // 发送请求
-      this.getGoodsMsg()
-      .then(()=>{
         // 初始化右侧菜单列表
         this.$nextTick(()=>{
           this.getNodesInfo();
         })
-      })
     },
+
     onReady() {
       let _that = this;
       uni.getSystemInfo({
@@ -136,10 +129,29 @@
 </script>
 
 <style lang="scss">
+	
   // 商品列表
   .goodWrapper {
     display: flex;
     height: 100%;
+	.goodsLose{
+		position: relative;
+	}
+	.shade{
+		position: absolute;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-weight: 800;
+		font-size: 21px;
+		top: 0;
+		left: 0;
+		height: 100%;
+		width: 100%;
+		color: #fff;
+		background: rgba(0, 0,0,.4);
+		z-index: 999;
+	}
     // 分类列表
     .classify-box {
       width: 200rpx;
@@ -272,6 +284,6 @@
         }
       }
     }
-
   }
+
 </style>

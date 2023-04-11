@@ -27,6 +27,8 @@ app.use(
         "/api/goods",
         "/api/goodscategory",
         "/api/foodtable",
+        "/api/customer",
+        "/api/file/upload"
       ], // 指定路径不经过 Token 解析
     })
 );

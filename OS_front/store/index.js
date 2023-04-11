@@ -22,7 +22,10 @@ const actions = {
 		})
 		// 判断是添加还是减少
 		if (change === 'add') {
-			commit('addGoodNumber', index)
+			if(state.goodsInfo[index].goodsStock < state.goodsInfo[index].goodsCount+1){
+				return "超出商品数量"
+			}
+			return commit('addGoodNumber', index)
 		} else {
 			commit('reduceGoodNumber', index)
 		}

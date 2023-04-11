@@ -3,9 +3,10 @@
     <h3>基本信息</h3>
     <div class="item">
       <el-form label-position="top" label-width="100px" :model="form">
-        <el-form-item label="标题">
+        <el-form-item label="商品名称">
           <el-input v-model="form.goodsName"></el-input>
         </el-form-item>
+
         <el-form-item label="图片">
           <el-upload
             action="http://127.0.0.1:3280/api/file/upload"
@@ -22,9 +23,11 @@
             </div>
           </el-upload>
         </el-form-item>
+
         <el-form-item label="描述">
           <el-input v-model="form.goodsDescribe" type="textarea"></el-input>
         </el-form-item>
+
         <el-form-item label="上架">
           <el-switch
             v-model="form.goodsState"
@@ -33,6 +36,7 @@
           >
           </el-switch>
         </el-form-item>
+
         <el-form-item label="类别">
           <el-select
             value=""
@@ -58,62 +62,6 @@
         </el-form-item>
       </el-form>
     </div>
-    <template v-if="goodsTypeInfo.gt_attribute">
-      <h3>属性</h3>
-      <div class="item">
-        <el-form label-position="top" label-width="100px" :model="form">
-          <el-form-item
-            v-for="(item, index) in goodsTypeInfo.gt_attribute"
-            :key="index"
-            :label="item.title"
-          >
-            <el-input
-              v-model="form.goodsType.gt_attribute[index].value"
-              v-if="item.type === 'text'"
-            ></el-input>
-            <template v-else>
-              <el-radio
-                v-for="(x, i) in item.value"
-                :key="i"
-                v-model="form.goodsType.gt_attribute[index].value"
-                :label="x"
-                border
-                >{{ x }}</el-radio
-              >
-            </template>
-          </el-form-item>
-        </el-form>
-      </div>
-    </template>
-
-    <template v-if="goodsTypeInfo.gt_specifications">
-      <h3>规格</h3>
-      <div class="item">
-        <el-form label-position="top" label-width="100px" :model="form">
-          <el-form-item
-            v-for="(item, index) in goodsTypeInfo.gt_specifications"
-            :key="index"
-            :label="item.title"
-          >
-            <el-input
-              v-model="form.goodsType.gt_specifications[index].value"
-              v-if="item.type === 'text'"
-            ></el-input>
-            <template v-else>
-              <el-radio
-                v-for="(x, i) in item.value"
-                :key="i"
-                v-model="form.goodsType.gt_specifications[index].value"
-                :label="x"
-                border
-                >{{ x }}</el-radio
-              >
-            </template>
-          </el-form-item>
-        </el-form>
-      </div>
-    </template>
-
     <h3>售卖信息</h3>
     <div class="item">
       <el-form
@@ -142,12 +90,13 @@
 
 <script>
 import { queryGoods, modifyGoods, addGoods } from "@/api/goods.js";
-import { queryGoodsType } from "@/api/goodsType.js";
+import { queryGoodsCategory } from "@/api/goodsCategory.js";
 export default {
   data() {
     return {
       rules: {}, //表单校验规则
       inputVisible: false,
+      goods_id: "",
       form: {
         goodsName: "",
         goodsState: true,
@@ -157,22 +106,18 @@ export default {
         goodsDescribe: "",
         goodsImgs: [],
         goodsCategory: [],
-        goodsType: {},
-        goodsType_id: this.$route.params.goodsType_id
       },
-      goodsTypeInfo: {}, //商品类别数据
-      goodsType_id: "",
-      goods_id: ""
+      goods_id: "",
     };
   },
   methods: {
     // 提交表单数据
     async onSubmit() {
       let result = null;
-      if (this.goodsType_id && this.goods_id) {
-        result = await modifyGoods(this.form);
-      } else {
+      if (this.$route.params.model === "add") {
         result = await addGoods(this.form);
+      } else if (this.$route.params.model === "edit") {
+        result = await modifyGoods(this.form);
       }
       await this.$store.dispatch("queryGoods");
       this.$router.push("/goods");
@@ -182,31 +127,17 @@ export default {
       const result = await queryGoods(id);
       this.form = result.data[0];
     },
-    // 查询商品类别信息
-    async queryGoodsType(id) {
-      const result = await queryGoodsType(id);
-      // 处理form表单的goodsType
-      const gt_attribute = result.data.gt_attribute.map(item => {
-        return { title: item.title, value: "" };
-      });
-      const gt_specifications = result.data.gt_specifications.map(item => {
-        return { title: item.title, value: "" };
-      });
-      this.form.goodsType = { gt_attribute, gt_specifications };
-      this.goodsTypeInfo = result.data;
-    },
-
     // 选中类别
     selectGoodsCategory(gc) {
       this.form.goodsCategory.push({
         gc_name: gc.gc_name,
         goodsCategory_id: gc._id,
-        goods_id: this.goods_id
+        goods_id: this.goods_id,
       });
     },
     // 计算类型的名称
     computedGoodsCategory(id) {
-      let goodsCategory = this.$store.state.goodsCategoryInfo.find(item => {
+      let goodsCategory = this.$store.state.goodsCategoryInfo.find((item) => {
         return item._id === id;
       });
       return goodsCategory.gc_name;
@@ -220,40 +151,41 @@ export default {
     },
     handleRemove(file, fileList) {
       this.form.goodsImgs = fileList;
-    }
+    },
   },
   async created() {
-    let { goodsType_id, goods_id } = this.$route.params;
-    this.goods_id = goods_id;
-    this.goodsType_id = goodsType_id;
-
-    if (goodsType_id) {
-      await this.queryGoodsType(goodsType_id);
-    }
-    if (goods_id) {
-      await this.queryGoods(goods_id);
+    this.goods_id = this.$route.params.id;
+    if (this.$route.params.model === "add") {
+      let result = await queryGoodsCategory(this.$route.params.id);
+      this.selectGoodsCategory(result.data[0]);
+    } else if (this.$route.params.model === "edit") {
+      await this.queryGoods(this.$route.params.id);
     }
   },
   computed: {
     //商品类型数据
     goodsCategoryInfo() {
       // 排除以选择的类别
-      // return this.$store.state.goodsCategoryInfo.filter(item => {
-      //   // let index = this.form.goodsCategory.findIndex((gc) => {
-      //   //   return gc.goodsCategory_id === item._id;
-      //   // });
-      //   // return index;
-      // });
-    }
-  }
+      return this.$store.state.goodsCategoryInfo.filter((item) => {
+        let index = this.form.goodsCategory.findIndex((gc) => {
+          return gc.goodsCategory_id === item._id;
+        });
+        return index;
+      });
+    },
+  },
 };
 </script>
 
 <style scoped>
+.modifyGoods {
+  background: #f5f5f5;
+}
 .modifyGoods h3 {
   @apply mb-3 mt-3 font-bold text-base;
 }
 .modifyGoods .item {
   @apply bg-white pt-5 pb-5 pr-10 pl-10 rounded-2xl;
+  height: auto;
 }
 </style>

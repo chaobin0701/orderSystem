@@ -65,7 +65,7 @@ export default {
       this.title = row.gc_name;
       this.dialogState = "edit";
       this.dialogFormVisible = true;
-      this.form = row;
+      this.form = JSON.parse(JSON.stringify(row));
     },
     // 删除
     async handleDelete(row) {

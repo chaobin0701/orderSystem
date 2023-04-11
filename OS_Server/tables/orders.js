@@ -63,9 +63,6 @@ module.exports = {
         // 商品属性
         type: String,
         require: [true, "缺少商品类型名称"],
-      },
-      goodsCategory:{
-        type:Object
       }
     },
   ],

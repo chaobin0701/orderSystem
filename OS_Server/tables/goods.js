@@ -36,12 +36,7 @@ module.exports = {
     type: Array,
     default: [],
   },
-  goodsType_id: {
-    type: Schema.Types.ObjectId,
-    required: [true, "缺少商品类别id"],
-  },
-  goodsType: {
-    // 商品类型
-    type: Object,
+  category: {
+    type: String,
   },
 };

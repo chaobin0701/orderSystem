@@ -43,15 +43,6 @@ class GoodsService {
           as: "goods_goodsCategory",
         },
       },
-      // 查询对应的类别信息
-      {
-        $lookup: {
-          from: "goodsType",
-          localField: "goodsType_id",
-          foreignField: "_id",
-          as: "gt_info",
-        },
-      },
       {
         $project: {
           createdAt: 0,
@@ -62,13 +53,14 @@ class GoodsService {
     ]);
     for (let i = 0; i < result.length; i++) {
       const item = result[i];
-      item.gt_name = item.gt_info[0].gt_name;
-      item.goodsCategory = await mongodb.findById(
-        "goodsCategory",
-        item.goods_goodsCategory[0].goodsCategory_id
-      );
-      delete item.gt_info;
-      delete item.goods_goodsCategory;
+      for (let index = 0; index < item.goods_goodsCategory.length; index++) {
+        const G_GC = item.goods_goodsCategory[index];
+        let res = await mongodb.findById(
+          "goodsCategory",
+          G_GC.goodsCategory_id
+        );
+        item.goodsCategory = res;
+      }
     }
 
     return result;
@@ -92,14 +84,6 @@ class GoodsService {
         },
       },
       {
-        $lookup: {
-          from: "goodsType",
-          localField: "goodsType_id",
-          foreignField: "_id",
-          as: "gt_info",
-        },
-      },
-      {
         $project: {
           createdAt: 0,
           updatedAt: 0,
@@ -107,12 +91,9 @@ class GoodsService {
         },
       },
     ]);
-    result.forEach((item) => {
-      item.gt_name = item.gt_info[0].gt_name;
-      delete item.gt_info;
-    });
     return result;
   }
+
   // 根据商品类型id查询商品
   async findGoodsByGoodsTypeId(_id) {
     let result = mongodb.findWhere(
@@ -124,9 +105,17 @@ class GoodsService {
     );
     return result;
   }
-  // 根据新的商品类型更改商品数据
-  async updateGoodsByNewGoodsType(){
 
+  // 根据新的商品类型更改商品数据
+  async updateGoodsByNewGoodsType() {}
+
+  // 商品售出
+  async goodsSell(_id, count) {
+    let goods = await mongodb.findById(TABLENAME, _id);
+    goods.goodsStock -= count;
+    goods.goodsSalesVolume += count;
+    goods.goodsStock = goods.goodsStock < 0 ? 0 : goods.goodsStock;
+    mongodb.update(TABLENAME,{_id},goods)
   }
 }
 

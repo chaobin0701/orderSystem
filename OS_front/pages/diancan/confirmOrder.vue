@@ -135,6 +135,7 @@
 					let orderInfo = await this.addOrder()
 					this.orderId = orderInfo.data.data._id
 					await this.$refs.payReceiving.open() // 显示弹窗 是否支付
+					this.$store.commit("ResetGoodCart")
 				} else {
 					await this.$refs.message.open()
 				}

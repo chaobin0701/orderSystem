@@ -5,7 +5,7 @@ const router = express.Router();
 const file_Handler = require("../controller/file");
 const order_Handler1 = require("../controller/order");
 const dataAnalysis_Handler = require("../controller/dataAnalysis");
-const goodstype_handler = require("../controller/goodsController/goodsType");
+// const goodstype_handler = require("../controller/goodsController/goodsType");
 const goodsCategory_handler = require("../controller/goodsController/goodsCategory");
 const goods_handler = require("../controller/goodsController/goods");
 const staff_handler = require("../controller/staff");
@@ -19,12 +19,6 @@ router.get("/order/", order_Handler1.findAll); // 查询全部订单
 router.get("/order/user", order_Handler1.findOrderByUserId); // 根据用户id查询订单
 router.get("/order/detail", order_Handler1.findOrderById); // 根据订单id查询订单
 router.put("/order/modify", order_Handler1.modifyOrder); // 修改订单状态
-
-/* 商品类型 */
-router.get("/goodstype", goodstype_handler.findAllGoodsCategory);
-router.post("/goodstype", goodstype_handler.saveGoodsType);
-router.put("/goodstype", goodstype_handler.modifyGoodsType);
-router.delete("/goodstype", goodstype_handler.removeGoodsType);
 
 /* 商品类别 */
 router.get("/goodscategory", goodsCategory_handler.findGoodsCategory);

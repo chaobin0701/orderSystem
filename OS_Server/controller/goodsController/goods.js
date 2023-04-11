@@ -70,7 +70,7 @@ class GoodsController {
       }
      response.success(res, result);
     } catch (error) {
-      response.error(res, "服务器错误(查询商品)");
+      response.error(res, "服务器错误(查询商品)",error);
     }
   }
 }

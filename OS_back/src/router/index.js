@@ -48,13 +48,6 @@ let router = new Router({
           icon: "el-icon-s-order"
         },
         {
-          path: "/goodsType",
-          name: "商品类别",
-          title: "商品类别",
-          icon: "el-icon-s-grid",
-          component: () => import("@/view/goodsType/index.vue")
-        },
-        {
           path: "/goods",
           title: "商品管理",
           icon: "el-icon-s-goods",
@@ -66,11 +59,7 @@ let router = new Router({
               component: () => import("@/view/goods/showInfo.vue")
             },
             {
-              path: "add/:goodsType_id",
-              component: () => import("@/view/goods/components/modifyGoods.vue")
-            },
-            {
-              path: "add/:goodsType_id/:goods_id",
+              path: "manage/:model/:id",
               component: () => import("@/view/goods/components/modifyGoods.vue")
             }
           ]

@@ -24,8 +24,8 @@ export function queryOrderById(_id) {
 /**
  * 删除订单
  * */
-export function deleteOrder() {
-  return request("/delete", "post", {});
+export function deleteOrder(_id) {
+  return request("/order", "delete", {_id});
 }
 /**
  * 修改订单

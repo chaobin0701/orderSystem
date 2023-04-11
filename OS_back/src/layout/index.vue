@@ -25,7 +25,6 @@ export default {
   async created() {
     await this.$store.dispatch("queryStaff");
     await this.$store.dispatch("queryFoodTable");
-    await this.$store.dispatch("queryGoodsType");
     await this.$store.dispatch("queryGoodsCategory");
     await this.$store.dispatch("queryGoods");
   }
